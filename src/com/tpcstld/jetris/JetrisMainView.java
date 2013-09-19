@@ -118,7 +118,7 @@ public class JetrisMainView extends View {
 					.getProperty("flickSenstivity"));
 			slackLength = Integer.parseInt(configFile
 					.getProperty("slackLength"));
-			softDropMultipler = Integer.parseInt(configFile
+			softDropMultipler = Double.parseDouble(configFile
 					.getProperty("softDropMultipler"));
 		} catch (FileNotFoundException e) {
 			System.out.println("Missing config.properties. Using defaults.");
@@ -129,7 +129,6 @@ public class JetrisMainView extends View {
 		setOnTouchListener(new OnTouchListener() {
 			float x;
 			float y;
-			float prevX;
 			float prevY;
 			boolean turn;
 			boolean hardDropped;
@@ -146,7 +145,6 @@ public class JetrisMainView extends View {
 						y = arg1.getY();
 						startingX = x;
 						startingY = y;
-						prevX = x;
 						prevY = y;
 						turn = true;
 						hardDropped = false;
@@ -179,7 +177,6 @@ public class JetrisMainView extends View {
 							softDrop = true;
 							turn = false;
 						}
-						prevX = x;
 						prevY = y;
 						coloring();
 						return true;

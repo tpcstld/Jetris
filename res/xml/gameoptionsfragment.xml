@@ -4,4 +4,9 @@
         android:key="default_gravity"
         android:title="@string/defaultgravtitle"
         android:defaultValue="0.05" />
+    
+    <EditTextPreference
+        android:key="default_gravity"
+        android:title="@string/defaultgravtitle"
+        android:defaultValue="0.05" />
 </PreferenceScreen>
