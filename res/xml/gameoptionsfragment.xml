@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+    <EditTextPreference
+        android:key="default_gravity"
+        android:title="@string/defaultgravtitle"
+        android:defaultValue="0.05" />
+</PreferenceScreen>
