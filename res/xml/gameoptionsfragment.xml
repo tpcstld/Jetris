@@ -3,10 +3,11 @@
     <EditTextPreference
         android:key="default_gravity"
         android:title="@string/defaultgravtitle"
+        android:dialogMessage="@string/defaultgravsummary"
         android:defaultValue="0.05" />
     
     <EditTextPreference
-        android:key="default_gravity"
-        android:title="@string/defaultgravtitle"
-        android:defaultValue="0.05" />
+        android:key="FPS"
+        android:title="@string/FPStitle"
+        android:defaultValue="30" />
 </PreferenceScreen>
