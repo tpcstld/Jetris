@@ -1057,6 +1057,7 @@ public class JetrisMainView extends View {
 		lastShape = -1;
 		score = 0;
 		lose = false;
+		getScreenSize = false;
 		pickShape();
 		time.cancel();
 		time = new Timer();
