@@ -18,7 +18,7 @@
         android:text="@string/new_game" />
 
     <Button
-        android:id="@+id/button1"
+        android:id="@+id/FPS_preference_button"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:layout_alignLeft="@+id/newgame"
@@ -29,8 +29,8 @@
     <Button
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:layout_alignLeft="@+id/button1"
-        android:layout_below="@+id/button1"
+        android:layout_alignLeft="@+id/FPS_preference_button"
+        android:layout_below="@+id/FPS_preference_button"
         android:onClick="openSettings"
         android:text="@string/settings" />
 

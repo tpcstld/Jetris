@@ -1,44 +1,42 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android" >
 
-    <EditTextPreference
-        android:id="@+id/default_gravity_preference"
-        android:key="default_gravity"
-        android:title="@string/default_grav_title"
-        android:dialogMessage="@string/default_grav_message"
-        android:numeric="decimal"
-        android:defaultValue="0.05" />
-    
-    <EditTextPreference
-        android:id="@+id/FPS_preference"
-        android:key="FPS"
-        android:title="@string/FPS_title"
-        android:dialogMessage="@string/FPS_message"
-        android:numeric="integer"
-        android:defaultValue="30" />
-    
-    <EditTextPreference
-        android:id="@+id/flick_sensitivity_ preference"
-        android:key="flick_sensitivity"
-        android:title="@string/flick_sensitivity_title"
-        android:dialogMessage="@string/flick_sensitivity_message"
-        android:numeric="integer"
-        android:defaultValue="30" />
-    
-    <EditTextPreference
-        android:id="@+id/slack_length_preference"
-        android:key="slack_length"
-        android:title="@string/slack_length_title"
-        android:dialogMessage="@string/slack_length_message"
-        android:numeric="integer"
-        android:defaultValue="1000" />
-    
-    <EditTextPreference
-        android:id="@+id/soft_drop_multipler_preference"
-        android:key="soft_drop_multipler"
-        android:title="@string/soft_drop_multipler_title"
-        android:dialogMessage="@string/soft_drop_multipler_message"
-        android:numeric="decimal"
-        android:defaultValue="9" />
+    <PreferenceCategory android:title="@string/game_variables_title" >
+        <EditTextPreference
+            android:id="@+id/default_gravity_preference"
+            android:defaultValue="0.05"
+            android:dialogMessage="@string/default_grav_message"
+            android:key="default_gravity"
+            android:numeric="decimal"
+            android:title="@string/default_grav_title" />
+        <EditTextPreference
+            android:id="@+id/FPS_preference"
+            android:defaultValue="30"
+            android:dialogMessage="@string/FPS_message"
+            android:key="FPS"
+            android:numeric="integer"
+            android:title="@string/FPS_title" />
+        <EditTextPreference
+            android:id="@+id/flick_sensitivity_preference"
+            android:defaultValue="30"
+            android:dialogMessage="@string/flick_sensitivity_message"
+            android:key="flick_sensitivity"
+            android:numeric="integer"
+            android:title="@string/flick_sensitivity_title" />
+        <EditTextPreference
+            android:id="@+id/slack_length_preference"
+            android:defaultValue="1000"
+            android:dialogMessage="@string/slack_length_message"
+            android:key="slack_length"
+            android:numeric="integer"
+            android:title="@string/slack_length_title" />
+        <EditTextPreference
+            android:id="@+id/soft_drop_multipler_preference"
+            android:defaultValue="9"
+            android:dialogMessage="@string/soft_drop_multipler_message"
+            android:key="soft_drop_multipler"
+            android:numeric="decimal"
+            android:title="@string/soft_drop_multipler_title" />
+    </PreferenceCategory>
 
 </PreferenceScreen>

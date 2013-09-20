@@ -24,7 +24,7 @@
         \n
         Units: Frames/Second \n
         From 1 to 60 (Default: 30) </string>
-    <string name="flick_sensitivity_title">Flicking Sensitivity</string>
+    <string name="flick_sensitivity_title">Flick Sensitivity</string>
     <string name="flick_sensitivity_message">
         Controls the sensitivity threshold of the flick gestures. \n
         A larger number means that a faster swipe is need for it to register as a gesture. \n

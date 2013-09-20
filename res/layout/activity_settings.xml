@@ -8,4 +8,57 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context=".Settings" >
 
+    <Button
+        android:id="@+id/FPS_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/default_gravity_button"
+        android:layout_alignRight="@+id/default_gravity_button"
+        android:layout_below="@+id/default_gravity_button"
+        android:text="@string/FPS_title" />
+
+    <Button
+        android:id="@+id/flick_sensitivity_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/FPS_button"
+        android:layout_alignRight="@+id/FPS_button"
+        android:layout_below="@+id/FPS_button"
+        android:text="@string/flick_sensitivity_title" />
+
+    <Button
+        android:id="@+id/slack_length_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/flick_sensitivity_button"
+        android:layout_alignRight="@+id/flick_sensitivity_button"
+        android:layout_below="@+id/flick_sensitivity_button"
+        android:text="@string/slack_length_title" />
+
+    <Button
+        android:id="@+id/soft_drop_multipler_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/slack_length_button"
+        android:layout_alignRight="@+id/slack_length_button"
+        android:layout_below="@+id/slack_length_button"
+        android:text="@string/soft_drop_multipler_title" />
+
+    <Button
+        android:id="@+id/default_gravity_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentRight="true"
+        android:layout_below="@+id/textView1"
+        android:text="@string/default_grav_title" />
+
+    <TextView
+        android:id="@+id/textView1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:text="@string/game_variables_title" />
+
 </RelativeLayout>

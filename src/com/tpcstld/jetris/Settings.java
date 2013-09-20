@@ -8,6 +8,7 @@ import android.support.v4.app.NavUtils;
 import android.annotation.SuppressLint;
 import android.annotation.TargetApi;
 import android.os.Build;
+import android.preference.EditTextPreference;
 
 public class Settings extends Activity {
 
@@ -18,9 +19,12 @@ public class Settings extends Activity {
 		setContentView(R.layout.activity_settings);
 		// Show the Up button in the action bar.
 		setupActionBar();
-		getFragmentManager().beginTransaction()
+		
+		
+		/*getFragmentManager().beginTransaction()
 				.replace(android.R.id.content, new GameOptionsFragment())
-				.commit();
+				.commit();*/
+		
 	}
 
 	/**
