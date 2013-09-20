@@ -8,11 +8,23 @@
     <string name="instructions">Instructions</string>
     <string name="title_activity_instructions">Instructions</string>
     <string name="settings">Settings</string>
-    
-    <string name="defaultgravtitle">Default Gravity</string>
-    <string name="defaultgravsummary">0.0 to 20.0</string>
-    <string name="FPStitle">Frame Rate</string>
-    <string name="flickSensitivitytitle">Flicking Sensitivity</string>
+    <string name="game_variables_title">Game Variables</string>
+    <string name="default_grav_title">Default Gravity</string>
+    <string name="default_grav_message ">
+        Controls the base drop speed of the blocks. \n
+        Units: Lines/Frame \n
+        From 0.0 to 20.0 (Default: 0.05) </string>
+    <string name="FPS_title">Frame Rate</string>
+    <string name="FPS_message">
+        Controls the frame rate of the game.\n
+        Units: Frames/Second \n
+        A faster frame rate increases the base drop speed of the blocks.\n
+        From 1 to 60 (Default: 30) </string>
+    <string name="flick_sensitivity_title">Flicking Sensitivity</string>
+    <string name="flick_sensitivity_message">
+        Controls the sensitivity thresholdof the flick gestures. \n
+        Units: Pixels/Frame
+    </string>
     <string name="slacklengthtitle">Slack Time</string>
     <string name="softDropMultiplertitle">Soft Drop Speed</string>
     
