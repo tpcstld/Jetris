@@ -113,6 +113,7 @@ public class JetrisMainView extends View {
 			configFile.load(new FileInputStream("config.properties"));
 			defaultGravity = Double.parseDouble(configFile
 					.getProperty("defaultGravity"));
+			System.out.println("DG= " + defaultGravity);
 			FPS = 1000 / Integer.parseInt(configFile.getProperty("FPS"));
 			flickSensitivity = Integer.parseInt(configFile
 					.getProperty("flickSenstivity"));
@@ -121,7 +122,7 @@ public class JetrisMainView extends View {
 			softDropMultipler = Double.parseDouble(configFile
 					.getProperty("softDropMultipler"));
 		} catch (FileNotFoundException e) {
-			System.out.println("Missing config.properties. Using defaults.");
+			System.err.println("Missing config.properties. Using defaults.");
 		} catch (IOException e) {
 			e.printStackTrace();
 		}

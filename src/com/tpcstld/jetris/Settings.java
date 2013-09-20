@@ -15,7 +15,10 @@ public class Settings extends Activity {
 
 	@SuppressLint("NewApi")
 	public void openDefaultGravityDialog(View view) {
-		DialogFragment fragment = new GameOptionsFragment();
+		DialogFragment fragment = new GameOptionsDialog();
+		Bundle args = new Bundle();
+		args.putString("option", "defaultGravity");
+		fragment.setArguments(args);
 		fragment.show(getFragmentManager(), "missiles");
 	}
 	@SuppressLint("NewApi")
