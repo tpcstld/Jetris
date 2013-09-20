@@ -5,6 +5,8 @@
     <string name="hello_world">Hello world!</string>
     <string name="new_game">New Game</string>
     <string name="title_activity_jetris_main">Jetris</string>
+    <string name="ok">OK</string>
+    <string name="cancel">Cancel</string>
     <string name="instructions">Instructions</string>
     <string name="title_activity_instructions">Instructions</string>
     <string name="settings">Settings</string>
@@ -12,7 +14,7 @@
     <string name="default_grav_title">Base Drop Speed</string>
     <string name="default_grav_message">
         Controls the base drop speed of the blocks. \n
-        A larger number means a faster drop speed.
+        A larger number means a faster drop speed. \n
         \n
         Units: Lines/Frame \n
         From 0.0 to 20.0 (Default: 0.05) </string>

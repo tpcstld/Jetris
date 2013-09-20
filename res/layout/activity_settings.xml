@@ -51,7 +51,8 @@
         android:layout_alignParentLeft="true"
         android:layout_alignParentRight="true"
         android:layout_below="@+id/textView1"
-        android:text="@string/default_grav_title" />
+        android:text="@string/default_grav_title"
+        android:onClick="openDefaultGravityDialog" />
 
     <TextView
         android:id="@+id/textView1"

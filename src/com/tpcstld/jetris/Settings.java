@@ -1,17 +1,23 @@
 package com.tpcstld.jetris;
 
-import android.os.Bundle;
-import android.app.Activity;
-import android.view.Menu;
-import android.view.MenuItem;
-import android.support.v4.app.NavUtils;
 import android.annotation.SuppressLint;
 import android.annotation.TargetApi;
+import android.app.Activity;
+import android.app.DialogFragment;
 import android.os.Build;
-import android.preference.EditTextPreference;
+import android.os.Bundle;
+import android.support.v4.app.NavUtils;
+import android.view.Menu;
+import android.view.MenuItem;
+import android.view.View;
 
 public class Settings extends Activity {
 
+	@SuppressLint("NewApi")
+	public void openDefaultGravityDialog(View view) {
+		DialogFragment fragment = new GameOptionsFragment();
+		fragment.show(getFragmentManager(), "missiles");
+	}
 	@SuppressLint("NewApi")
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
