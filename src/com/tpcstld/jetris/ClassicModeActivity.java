@@ -44,20 +44,27 @@ public class ClassicModeActivity extends Activity {
 		}
 		
 		try {
-			FPS = 1000 / Integer.parseInt(settings.getString("FPS",
+			FPS = 1000 / (int) Double.parseDouble(settings.getString("FPS",
 				String.valueOf(FPS)));
 		} catch (Exception e) {
 			System.err.println("Error getting FPS. Reverting to default value.");
 		}
 		try {
-			flickSensitivity = Integer.parseInt(settings.getString("flickSensitivity",
+			flickSensitivity = (int) Double.parseDouble(settings.getString("flickSensitivity",
 				String.valueOf(flickSensitivity)));
 		} catch (Exception e) {
 			System.err.println("Error getting flickSenstivity. Reverting to default value.");
 		}
-		
-		slackLength = settings.getInt("slackLength", 1000);
-		softDropMultipler = settings.getFloat("softDropMultipler", (float) 9);
+		try {
+			slackLength = (int) Double.parseDouble(settings.getString("slackLength", String.valueOf(slackLength)));
+		} catch (Exception e) {
+			System.err.println("Error getting slackLength. Reverting to default value.");
+		}
+		try {
+			softDropMultipler = Double.parseDouble(settings.getString("softDropMultipler", String.valueOf(softDropMultipler)));
+		} catch (Exception e) {
+			System.err.println("Error getting softDropMultipler. Reverting to default value.");
+		}
 
 		mainView = new MainGame(this);
 		mainView.setBackgroundColor(Color.WHITE);
