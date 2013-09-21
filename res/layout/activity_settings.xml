@@ -62,15 +62,22 @@
             android:layout_below="@+id/timer_variables_text_view"
             android:onClick="openSlackLength"
             android:text="@string/slack_length_title" />
-        
+        <Button
+            android:id="@+id/count_down_time_button"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/slack_length_button"
+            android:onClick="openCountDownTime"
+            android:text="@string/count_down_time_title" />
+
         <TextView
             android:id="@+id/sensitivity_text_view"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/slack_length_button"
+            android:layout_below="@+id/count_down_time_button"
             android:layout_centerHorizontal="true"
             android:text="@string/sensitivity_title" />
-        
+
         <Button
             android:id="@+id/flick_sensitivity_button"
             android:layout_width="fill_parent"
@@ -94,6 +101,7 @@
             android:layout_below="@+id/drag_sensitivity_button"
             android:layout_centerHorizontal="true"
             android:text="@string/misc_title" />
+
         <Button
             android:id="@+id/FPS_button"
             android:layout_width="fill_parent"

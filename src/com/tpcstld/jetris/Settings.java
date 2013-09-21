@@ -74,11 +74,21 @@ public class Settings extends Activity {
 		args.putString("option", "dragSensitivity");
 		args.putInt("message", R.string.drag_sensitivity_message);
 		args.putInt("title", R.string.drag_sensitivity_title);
-		args.putInt("inputOption", InputType.TYPE_CLASS_NUMBER | InputType.TYPE_NUMBER_FLAG_DECIMAL);
+		args.putInt("inputOption", InputType.TYPE_CLASS_NUMBER);
 		fragment.setArguments(args);
 		fragment.show(getFragmentManager(), " ");
 	}
 	
+	public void openCountDownTime(View view) {
+		DialogFragment fragment = new CustomDialog();
+		Bundle args = new Bundle();
+		args.putString("option", "countDownTime");
+		args.putInt("message", R.string.count_down_time_message);
+		args.putInt("title", R.string.count_down_time_title);
+		args.putInt("inputOption", InputType.TYPE_CLASS_NUMBER);
+		fragment.setArguments(args);
+		fragment.show(getFragmentManager(), " ");
+	}
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);

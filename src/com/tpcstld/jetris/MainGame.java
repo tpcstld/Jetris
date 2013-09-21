@@ -18,9 +18,11 @@ public class MainGame extends View {
 
 	// Internal Options
 	static int test = 0;
-	static int numSquaresX = 16; // Total number of columns
-	static int numSquaresY = 22; // total number of rows
-	static double textScaleSize = 0.8; // Text scaling
+	static final int numSquaresX = 16; // Total number of columns
+	static final int numSquaresY = 22; // total number of rows
+	static final double textScaleSize = 0.8; // Text scaling
+	static final int numClearList = 5; // The number of moves tracked in
+										// clearList
 
 	// External Options
 	static double defaultGravity = StartGameActivity.defaultGravity;
@@ -29,13 +31,16 @@ public class MainGame extends View {
 	static int dragSensitivity = StartGameActivity.dragSensitivity;
 	static int slackLength = StartGameActivity.slackLength;
 	static double softDropSpeed = StartGameActivity.softDropSpeed;
-	static long countDownTime = StartGameActivity.countDownTime;
+	static long countDownTime = 120;
 
 	// Game Mode
 	static String gameMode = "";
 
+	// Timers
 	static Timer time = new Timer(true); // This is the slack timer
-	static long currentCountDownTime = countDownTime * 1000;
+	static long currentCountDownTime = countDownTime * 1000; // Time remaining
+																// on time
+																// attack mode
 	static CountDownTimer countDown = new CountDownTimer(currentCountDownTime,
 			500) {
 
@@ -62,7 +67,7 @@ public class MainGame extends View {
 	static boolean pause = false; // Whether or not the pause is currently
 									// paused
 	static boolean lose = false; // Whether or not the game is still in progress
-	static boolean win = false; //Whether or not the game is finished
+	static boolean win = false; // Whether or not the game is finished
 	static boolean holdOnce = false; // Whether or not the block has already
 										// been held once
 	static boolean hardDrop = false; // Whether or not harddropping is active
@@ -123,6 +128,7 @@ public class MainGame extends View {
 											// variable
 	static boolean startNewGame = true; // Whether it should be a new game or
 										// not
+	static String[] clearList = new String[numClearList];
 
 	// Blocks Data:
 	// 0 = empty space
@@ -142,6 +148,7 @@ public class MainGame extends View {
 		slackLength = StartGameActivity.slackLength;
 		softDropSpeed = StartGameActivity.softDropSpeed;
 		dragSensitivity = StartGameActivity.dragSensitivity;
+		countDownTime = StartGameActivity.countDownTime;
 
 		// Create the object to receive touch input
 		setOnTouchListener(new OnTouchListener() {
@@ -712,7 +719,7 @@ public class MainGame extends View {
 			}
 			lose = false;
 			for (int xx = 0; xx < numberOfBlocksWidth; xx++) {
-				if (blocks[xx][2] == 2) {
+				if (blocks[xx][1] == 2) {
 					lose = true;
 					countDown.cancel();
 					break;
@@ -1045,8 +1052,8 @@ public class MainGame extends View {
 
 	public static void coloring() {
 		detectShape();
-		for (int xx = 0; xx < MainGame.playLocationX.length; xx++)
-			MainGame.colors[MainGame.playLocationX[xx]][MainGame.playLocationY[xx]] = MainGame.lastShape;
+		for (int xx = 0; xx < playLocationX.length; xx++)
+			colors[playLocationX[xx]][playLocationY[xx]] = lastShape;
 	}
 
 	public static void displayBoxShape(int[][] x, int y) {
@@ -1087,6 +1094,13 @@ public class MainGame extends View {
 		}
 	}
 
+	public static void addToClearList(String text) {
+		for (int xx = clearList.length - 1; xx >= 1; xx--) {
+			clearList[xx] = new String(clearList[xx - 1]);
+		}
+		clearList[0] = new String(text);
+	}
+
 	public static void pauseGame(boolean changeTo) {
 		pause = changeTo;
 		if (pause && gameMode.equals("Time Attack")) {
@@ -1117,6 +1131,7 @@ public class MainGame extends View {
 	}
 
 	public static void newGame() {
+		// Reset Variables
 		for (int xx = 0; xx < numberOfBlocksWidth; xx++) {
 			for (int yy = 0; yy < numberOfBlocksLength; yy++) {
 				blocks[xx][yy] = 0;
@@ -1147,14 +1162,19 @@ public class MainGame extends View {
 		for (int xx = 0; xx < 7; xx++) {
 			shapeList.add(xx);
 		}
+		for (int xx = 0; xx < clearList.length; xx++) {
+			clearList[xx] = "";
+		}
 		score = 0;
+		difficult = false;
+		lastDifficult = false;
 		pause = false;
 		win = false;
 		lose = false;
 		time.cancel();
 		time = new Timer();
 		countDownText = "";
-		currentCountDownTime = countDownTime;
+		currentCountDownTime = countDownTime * 1000;
 		countDown.cancel();
 		if (gameMode.equals("Time Attack")) {
 			countDown = new CountDownTimer(currentCountDownTime, 500) {
@@ -1176,9 +1196,10 @@ public class MainGame extends View {
 					countDownText = "Time Left: " + minutes + ":"
 							+ String.format("%02d", seconds);
 				}
-			}; // Countdown timer for time attack mode
+			};
 			countDown.start();
 		}
+		// Pick the new shape
 		pickShape();
 	}
 
