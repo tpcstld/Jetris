@@ -1,5 +1,6 @@
 package com.tpcstld.jetris;
 
+import java.util.ArrayList;
 import java.util.Random;
 import java.util.Timer;
 
@@ -65,8 +66,8 @@ public class MainGame extends View {
 	static int nextShape1 = -1; // The NEXT3 shaped on the playing field.
 	static int holdShape = -1; // The shape currently being held.
 	static int lastShape = -1; // The CURRENT shape on the playing field.
-	static int pickShapeCounter = 0; // Number of blocks picked from the current
-										// bag
+	// A list containing the shapes left in the current bag
+	static ArrayList<Integer> shapeList = new ArrayList<Integer>();
 	static int shape = 0; // The current shape of the block
 	static int combo = 0; // The current combo
 	static int scoreInfoYStarting; // Where the score box starts (y)
@@ -85,8 +86,6 @@ public class MainGame extends View {
 	static int[][] next3Blocks = new int[numberOfHoldShapeWidth][numberOfHoldShapeLength];
 	static int[] playLocationX = new int[4]; // X-coords of the blocks in play
 	static int[] playLocationY = new int[4]; // Y-coords of the blocks in play
-	static int[] timesShapeDrawn = new int[7]; // How many times a block has
-												// been drawn in a bag
 	static double gravity = defaultGravity; // The current gravity of the game
 	static double totalGrav = 0; // The current gravity ticker
 	static long clock = System.currentTimeMillis(); // Tracks the real time for
@@ -351,18 +350,9 @@ public class MainGame extends View {
 	// nextShape1 == The NEXT3 shape on the playing field.
 	public static void pickShape() {
 		if (thisShape == -1) {
-			thisShape = r.nextInt(7);
-			timesShapeDrawn[thisShape]++;
-			while (nextShape == thisShape | nextShape == -1) {
-				nextShape = r.nextInt(7);
-			}
-			timesShapeDrawn[nextShape]++;
-			while (nextShape1 == thisShape | nextShape1 == nextShape
-					| nextShape1 == -1) {
-				nextShape1 = r.nextInt(7);
-			}
-			timesShapeDrawn[nextShape1]++;
-			pickShapeCounter = 3;
+			thisShape = shapeList.remove(r.nextInt(shapeList.size()));
+			nextShape = shapeList.remove(r.nextInt(shapeList.size()));
+			nextShape1 = shapeList.remove(r.nextInt(shapeList.size()));
 		}
 		if (thisShape == 0) {
 			for (int xx = 3; xx <= 6; xx++)
@@ -405,18 +395,12 @@ public class MainGame extends View {
 		lastShape = thisShape;
 		thisShape = nextShape;
 		nextShape = nextShape1;
-		nextShape1 = r.nextInt(7);
+		nextShape1 = shapeList.remove(r.nextInt(shapeList.size()));
 
-		if (timesShapeDrawn[nextShape1] > 0)
-			while (timesShapeDrawn[nextShape1] > 0) {
-				nextShape1 = r.nextInt(7);
+		if (shapeList.size() <= 0) {
+			for (int xx = 0; xx < 7; xx++) {
+				shapeList.add(xx);
 			}
-		timesShapeDrawn[nextShape1]++;
-		pickShapeCounter++;
-		if (pickShapeCounter >= 7) {
-			pickShapeCounter = 0;
-			for (int xx = 0; xx < timesShapeDrawn.length; xx++)
-				timesShapeDrawn[xx] = 0;
 		}
 
 		displayBoxShape(nextBlocks, thisShape);
@@ -1040,20 +1024,20 @@ public class MainGame extends View {
 		next3Blocks = new int[numberOfHoldShapeWidth][numberOfHoldShapeLength];
 		playLocationX = new int[4];
 		playLocationY = new int[4];
-		timesShapeDrawn = new int[7];
-		pickShapeCounter = 0;
 		thisShape = -1;
 		nextShape = -1;
 		nextShape1 = -1;
 		holdShape = -1;
 		shape = -1;
 		lastShape = -1;
+		for (int xx = 0; xx < 7; xx++) {
+			shapeList.add(xx);
+		}
 		score = 0;
 		lose = false;
 		getScreenSize = false;
 		time.cancel();
 		time = new Timer();
-
 		pickShape();
 	}
 
