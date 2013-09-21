@@ -26,28 +26,36 @@ public class MainGame extends View {
 	static double defaultGravity = StartGameActivity.defaultGravity;
 	static int FPS = StartGameActivity.FPS;
 	static int flickSensitivity = StartGameActivity.flickSensitivity;
+	static int dragSensitivity = StartGameActivity.dragSensitivity;
 	static int slackLength = StartGameActivity.slackLength;
 	static double softDropSpeed = StartGameActivity.softDropSpeed;
-	static long countDownTime = 120000;
+	static long countDownTime = 10000;
 
 	// Game Mode
 	static String gameMode = "";
 
 	static Timer time = new Timer(true); // This is the slack timer
 	static long currentCountDownTime = countDownTime;
-	static CountDownTimer countDown = new CountDownTimer(currentCountDownTime, 1000) {
+	static CountDownTimer countDown = new CountDownTimer(currentCountDownTime, 500) {
 
 		@Override
 		public void onFinish() {
 			lose = true;
+			countDownText = "Time Left: " + 0 + ":" + String.format("%02d", 0);
+			System.out.println("LOST THE GAME 1");
 		}
 
 		@Override
 		public void onTick(long timeLeft) {
+			currentCountDownTime = timeLeft;
 			int minutes = (int) timeLeft / 60000;
 			int seconds = (int) timeLeft % 60000 / 1000;
-			currentCountDownTime = timeLeft;
+			System.out.println(timeLeft);
 			countDownText = "Time Left: " + minutes + ":" + String.format("%02d", seconds);
+			/*if (currentCountDownTime <= 0) {
+				lose = true;
+				System.out.println("LOST THE GAME 2");
+			}*/
 		}
 	}; // Countdown timer for time attack mode
 	static String countDownText = ""; // Text for displaying the time left
@@ -125,6 +133,7 @@ public class MainGame extends View {
 	public MainGame(Context context) {
 		super(context);
 
+		gameMode = StartGameActivity.gameMode;
 		System.out.println(gameMode);
 		// Get the screensize and get the external variables.
 		getScreenSize = true;
@@ -133,6 +142,7 @@ public class MainGame extends View {
 		flickSensitivity = StartGameActivity.flickSensitivity;
 		slackLength = StartGameActivity.slackLength;
 		softDropSpeed = StartGameActivity.softDropSpeed;
+		dragSensitivity = StartGameActivity.dragSensitivity;
 
 		// Create the object to receive touch input
 		setOnTouchListener(new OnTouchListener() {
@@ -181,7 +191,7 @@ public class MainGame extends View {
 							startingX = x;
 							moveLeft();
 							turn = false;
-						} else if (y - startingY > squareSide & !hardDropped) {
+						} else if (y - startingY > dragSensitivity & !hardDropped) {
 							gravity = softDropSpeed;
 							softDrop = true;
 							turn = false;
@@ -678,7 +688,7 @@ public class MainGame extends View {
 			for (int xx = 0; xx < numberOfBlocksWidth; xx++) {
 				if (blocks[xx][2] == 2) {
 					lose = true;
-					// TODO set lose message
+					countDown.cancel();
 					break;
 				}
 			}
@@ -1055,7 +1065,6 @@ public class MainGame extends View {
 		pause = !pause;
 		if (pause && gameMode.equals("Time Attack")) {
 			countDown.cancel();
-			System.out.println("stopping timer");
 		} else if (!pause && gameMode.equals("Time Attack")) {
 			countDown.start();
 		}
@@ -1097,7 +1106,7 @@ public class MainGame extends View {
 		time.cancel();
 		time = new Timer();
 		countDownText = "";
-		System.out.println("TIMER STARTED.");
+		currentCountDownTime = countDownTime;
 		countDown.cancel();
 		if (gameMode.equals("Time Attack")) {
 			countDown.start();

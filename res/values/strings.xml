@@ -5,43 +5,41 @@
     <string name="title_activity_jetris_main">Jetris</string>
     <string name="ok">OK</string>
     <string name="cancel">Cancel</string>
-    
     <string name="new_marathon_game">New Marathon Game</string>
-   	<string name="new_time_attack_game">New Time Attack Game</string>
+    <string name="new_time_attack_game">New Time Attack Game</string>
     <string name="load_game">Load Game</string>
     <string name="instructions">Instructions</string>
     <string name="title_activity_instructions">Instructions</string>
     <string name="settings">Settings</string>
-    
-    
     <string name="action_pause">Pause/Unpause</string>
     <string name="game_variables_title">Game Variables (Advanced)</string>
     <string name="default_grav_title">Base Drop Speed</string>
-    <string name="default_grav_message">        Controls the base drop speed of the blocks. \n
-        A larger number means a faster drop speed. \n
+    <string name="default_grav_message">        The base drop speed of the blocks. \n
         Units: Lines/Frame \n
         From 0.0 to 20.0 (Default: 0.05) </string>
     <string name="FPS_title">Frame Rate</string>
-    <string name="FPS_message">        Controls the frame rate of the game.\n
-        A larger number means a faster frame rate. \n
+    <string name="FPS_message">        The frame rate of the game.\n
         Note: A faster frame rate increases the base drop speed of the blocks.\n
         Units: Frames/Second \n
         From 1 to 60 (Default: 30) </string>
     <string name="flick_sensitivity_title">Flick Sensitivity</string>
-    <string name="flick_sensitivity_message">        Controls the sensitivity threshold of the flick gestures. \n
-        A larger number means that a faster swipe is need for it to register as a gesture. \n
+    <string name="flick_sensitivity_message">        The sensitivity threshold of the flick gestures. \n
 		Units: Velocity of Swipe (Pixels/Detection Cycle) \n
         From 1 to Infinity (Default: 30) </string>
     <string name="slack_length_title">Delay Time</string>
-    <string name="slack_length_message">        Controls the delay before a block locks in place. \n
-        A larger number means a longer delay. \n
+    <string name="slack_length_message">        The delay before a block locks in place. \n
         Units: Milliseconds \n
         From 0 to Infinity (Default: 1000) </string>
     <string name="soft_drop_speed_title">Soft Drop Speed</string>
-    <string name="soft_drop_speed_message">        Controls the drop speed of the block while soft dropping. \n
-        A larger number means a faster soft drop speed. \n
-        Units: None \n
-        From 1.0 to Infinity (Default: 9) </string>
+    <string name="soft_drop_speed_message">        The drop speed of the block while soft dropping. \n
+        Units: Lines/Frame \n
+        From 0.0 to 20.0 (Default: 0.45) </string>
+    <string name="drag_sensitivity_title">Drag Sensitivity</string>
+    <string name="drag_sensitivity_message">
+        The length needed to drag before the "drag gesture" is recognized. \n
+        Units: Pixels
+        From 0 to Infinity (Default: 60)
+    </string>
     <string name="instructions_info">        Controls:\n
         \t	Move Left/Right: Drag Left/Right \n
         \t	Hard Drop: Swipe Down \n

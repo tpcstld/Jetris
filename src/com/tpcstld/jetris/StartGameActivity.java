@@ -19,7 +19,9 @@ public class StartGameActivity extends Activity {
 								// value)
 	static int flickSensitivity = 30; // How sensitive is the flick gesture
 	static int slackLength = 1000; // How long the stack goes on for in
+	static String gameMode = "";
 	static double softDropSpeed = 9; // How fast soft dropping is
+	static int dragSensitivity = 60;
 
 	
 	@Override
@@ -63,12 +65,17 @@ public class StartGameActivity extends Activity {
 		} catch (Exception e) {
 			System.err.println("Error getting softDropSpeed. Reverting to default value.");
 		}
+		try {
+			dragSensitivity = Integer.parseInt(settings.getString("dragSensitivity", String.valueOf(dragSensitivity)));
+		} catch (Exception e) {
+			System.err.println("Error getting dragSensitivity. Reverting to default value.");
+		}
 		//Start a new game if the appropriate button is pressed.
 		Intent intent = getIntent();
 		boolean startNewGame = intent.getBooleanExtra("startNewGame", true);
 		MainGame.startNewGame = startNewGame;
 		if (startNewGame) {
-			String gameMode = intent.getStringExtra("gameMode");
+			gameMode = intent.getStringExtra("gameMode");
 			MainGame.gameMode = gameMode;
 		}
 		mainView = new MainGame(this);
@@ -107,7 +114,7 @@ public class StartGameActivity extends Activity {
 			NavUtils.navigateUpFromSameTask(this);
 			return true;
 		case R.id.pause:
-			MainGame.pause = !MainGame.pause;
+			MainGame.pauseGame();
 		}
 		return super.onOptionsItemSelected(item);
 	}

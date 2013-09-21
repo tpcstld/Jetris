@@ -66,4 +66,14 @@
         android:layout_centerHorizontal="true"
         android:text="@string/game_variables_title" />
 
+    <Button
+        android:id="@+id/drag_sensitivity_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/soft_drop_multiplier_button"
+        android:layout_alignRight="@+id/soft_drop_multiplier_button"
+        android:layout_below="@+id/soft_drop_multiplier_button"
+        android:onClick="openDragSensitivity"
+        android:text="@string/drag_sensitivity_title" />
+
 </RelativeLayout>
