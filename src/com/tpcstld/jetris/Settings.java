@@ -15,7 +15,6 @@ import android.view.View;
 
 public class Settings extends Activity {
 
-	@SuppressLint("NewApi")
 	public void openDefaultGravityDialog(View view) {
 		DialogFragment fragment = new CustomDialog();
 		Bundle args = new Bundle();
@@ -27,7 +26,6 @@ public class Settings extends Activity {
 		fragment.show(getFragmentManager(), " ");
 	}
 	
-	@SuppressLint("NewApi")
 	public void openFPSDialog(View view) {
 		DialogFragment fragment = new CustomDialog();
 		Bundle args = new Bundle();
@@ -39,7 +37,6 @@ public class Settings extends Activity {
 		fragment.show(getFragmentManager(), " ");
 	}
 	
-	@SuppressLint("NewApi")
 	public void openFlickSensitivity(View view) {
 		DialogFragment fragment = new CustomDialog();
 		Bundle args = new Bundle();
@@ -50,7 +47,7 @@ public class Settings extends Activity {
 		fragment.setArguments(args);
 		fragment.show(getFragmentManager(), " ");
 	}
-	@SuppressLint("NewApi")
+	
 	public void openSlackLength(View view) {
 		DialogFragment fragment = new CustomDialog();
 		Bundle args = new Bundle();
@@ -62,7 +59,6 @@ public class Settings extends Activity {
 		fragment.show(getFragmentManager(), " ");
 	}
 	
-	@SuppressLint("NewApi")
 	public void openSoftDropMultiplier(View view) {
 		DialogFragment fragment = new CustomDialog();
 		Bundle args = new Bundle();
@@ -73,18 +69,13 @@ public class Settings extends Activity {
 		fragment.setArguments(args);
 		fragment.show(getFragmentManager(), " ");
 	}
-	@SuppressLint("NewApi")
+	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_settings);
 		// Show the Up button in the action bar.
 		setupActionBar();
-		
-		
-		/*getFragmentManager().beginTransaction()
-				.replace(android.R.id.content, new GameOptionsFragment())
-				.commit();*/
 		
 	}
 
