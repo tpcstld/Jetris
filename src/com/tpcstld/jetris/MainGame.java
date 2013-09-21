@@ -21,17 +21,21 @@ public class MainGame extends View {
 	static int numSquaresX = 16; // Total number of columns
 	static int numSquaresY = 22; // total number of rows
 	static double textScaleSize = 0.8; // Text scaling
+	
 
 	// External Options
-	static double defaultGravity = ClassicModeActivity.defaultGravity;
-	static int FPS = ClassicModeActivity.FPS;
-	static int flickSensitivity = ClassicModeActivity.flickSensitivity;
-	static int slackLength = ClassicModeActivity.slackLength;
-	static double softDropSpeed = ClassicModeActivity.softDropSpeed;
+	static double defaultGravity = StartGameActivity.defaultGravity;
+	static int FPS = StartGameActivity.FPS;
+	static int flickSensitivity = StartGameActivity.flickSensitivity;
+	static int slackLength = StartGameActivity.slackLength;
+	static double softDropSpeed = StartGameActivity.softDropSpeed;
+	
+	//Game Mode
+	static String gameMode = "";
 
 	static Timer time = new Timer(true); // This is the slack timer
 	static CountDownTimer countDown; // Countdown timer for time attack mode
-	static String countDownText = "";
+	static String countDownText = ""; //Text for displaying the time left
 	
 	static boolean slack = false; // Whether or not slack is currently active
 	static boolean pause = false; // Whether or not the pause is currently
@@ -109,11 +113,11 @@ public class MainGame extends View {
 
 		//Get the screensize and get the external variables.
 		getScreenSize = true;
-		defaultGravity = ClassicModeActivity.defaultGravity;
-		FPS = ClassicModeActivity.FPS;
-		flickSensitivity = ClassicModeActivity.flickSensitivity;
-		slackLength = ClassicModeActivity.slackLength;
-		softDropSpeed = ClassicModeActivity.softDropSpeed;
+		defaultGravity = StartGameActivity.defaultGravity;
+		FPS = StartGameActivity.FPS;
+		flickSensitivity = StartGameActivity.flickSensitivity;
+		slackLength = StartGameActivity.slackLength;
+		softDropSpeed = StartGameActivity.softDropSpeed;
 		
 		//Create the object to receive touch input
 		setOnTouchListener(new OnTouchListener() {

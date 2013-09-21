@@ -32,13 +32,13 @@ public class MainActivity extends Activity {
 
 	// Opens the main game activity when the new game button is pressed
 	public void newGame(View view) {
-		Intent intent = new Intent(this, ClassicModeActivity.class);
+		Intent intent = new Intent(this, StartGameActivity.class);
 		intent.putExtra("startNewGame", true);
 		startActivity(intent);
 	}
 	
 	public void loadGame(View view) {
-		Intent intent = new Intent(this, ClassicModeActivity.class);
+		Intent intent = new Intent(this, StartGameActivity.class);
 		intent.putExtra("startNewGame", false);
 		startActivity(intent);
 	}

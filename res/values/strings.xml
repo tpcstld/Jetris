@@ -2,15 +2,18 @@
 <resources>
 
     <string name="app_name">Jetris</string>
-    <string name="hello_world">Hello world!</string>
-    <string name="new_game">New Marathon Game</string>
-    <string name="load_game">Load Game</string>
     <string name="title_activity_jetris_main">Jetris</string>
     <string name="ok">OK</string>
     <string name="cancel">Cancel</string>
+    
+    <string name="new_marathon_game">New Marathon Game</string>
+   	<string name="new_time_attack_game">New Time Attack Game</string>
+    <string name="load_game">Load Game</string>
     <string name="instructions">Instructions</string>
     <string name="title_activity_instructions">Instructions</string>
     <string name="settings">Settings</string>
+    
+    
     <string name="action_pause">Pause/Unpause</string>
     <string name="game_variables_title">Game Variables (Advanced)</string>
     <string name="default_grav_title">Base Drop Speed</string>

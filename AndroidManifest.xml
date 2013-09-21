@@ -24,7 +24,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name="com.tpcstld.jetris.ClassicModeActivity"
+            android:name="com.tpcstld.jetris.StartGameActivity"
             android:label="@string/title_activity_jetris_main"
             android:parentActivityName="com.tpcstld.jetris.MainActivity"
             android:screenOrientation="portrait" >

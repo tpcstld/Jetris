@@ -11,7 +11,7 @@ import android.support.v4.app.NavUtils;
 import android.view.Menu;
 import android.view.MenuItem;
 
-public class ClassicModeActivity extends Activity {
+public class StartGameActivity extends Activity {
 
 	MainGame mainView;
 	static double defaultGravity = 0.05; // The default gravity of the game
