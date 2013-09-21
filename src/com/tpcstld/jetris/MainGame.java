@@ -103,7 +103,11 @@ public class MainGame extends View {
 	public MainGame(Context context) {
 		super(context);
 
-		System.out.println("DG: " + defaultGravity);
+		defaultGravity = ClassicModeActivity.defaultGravity;
+		FPS = ClassicModeActivity.FPS;
+		flickSensitivity = ClassicModeActivity.flickSensitivity;
+		slackLength = ClassicModeActivity.slackLength;
+		softDropMultipler = ClassicModeActivity.softDropMultipler;
 		setOnTouchListener(new OnTouchListener() {
 			float x;
 			float y;

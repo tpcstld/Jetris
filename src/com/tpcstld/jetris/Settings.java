@@ -35,6 +35,18 @@ public class Settings extends Activity {
 		fragment.setArguments(args);
 		fragment.show(getFragmentManager(), " ");
 	}
+	
+	@SuppressLint("NewApi")
+	public void openFlickSensitivity(View view) {
+		DialogFragment fragment = new GameOptionsDialog();
+		Bundle args = new Bundle();
+		args.putString("option", "flickSensitivity");
+		args.putInt("message", R.string.flick_sensitivity_message);
+		args.putInt("title", R.string.flick_sensitivity_title);
+		fragment.setArguments(args);
+		fragment.show(getFragmentManager(), " ");
+	}
+	
 	@SuppressLint("NewApi")
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {

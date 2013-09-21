@@ -25,7 +25,8 @@
         android:layout_alignLeft="@+id/FPS_button"
         android:layout_alignRight="@+id/FPS_button"
         android:layout_below="@+id/FPS_button"
-        android:text="@string/flick_sensitivity_title" />
+        android:text="@string/flick_sensitivity_title"
+        android:onClick="openFlickSensitivity" />
 
     <Button
         android:id="@+id/slack_length_button"
