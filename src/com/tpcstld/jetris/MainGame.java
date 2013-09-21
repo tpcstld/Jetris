@@ -41,7 +41,8 @@ public class MainGame extends View {
 		@Override
 		public void onFinish() {
 			lose = true;
-			countDownText = "Time Left: " + 0 + ":" + String.format("%02d", 0);
+			countDownText = "Time Left: " + 0 + ":"
+					+ String.format("%02d", 0);
 			System.out.println("LOST THE GAME 1");
 		}
 
@@ -51,13 +52,11 @@ public class MainGame extends View {
 			int minutes = (int) timeLeft / 60000;
 			int seconds = (int) timeLeft % 60000 / 1000;
 			System.out.println(timeLeft);
-			countDownText = "Time Left: " + minutes + ":" + String.format("%02d", seconds);
-			/*if (currentCountDownTime <= 0) {
-				lose = true;
-				System.out.println("LOST THE GAME 2");
-			}*/
+			countDownText = "Time Left: " + minutes + ":"
+					+ String.format("%02d", seconds);
 		}
-	}; // Countdown timer for time attack mode
+	}; // Countdown timer for time attack mode;
+	
 	static String countDownText = ""; // Text for displaying the time left
 	static boolean slack = false; // Whether or not slack is currently active
 	static boolean pause = false; // Whether or not the pause is currently
@@ -132,7 +131,6 @@ public class MainGame extends View {
 
 	public MainGame(Context context) {
 		super(context);
-
 		gameMode = StartGameActivity.gameMode;
 		System.out.println(gameMode);
 		// Get the screensize and get the external variables.
@@ -191,7 +189,8 @@ public class MainGame extends View {
 							startingX = x;
 							moveLeft();
 							turn = false;
-						} else if (y - startingY > dragSensitivity & !hardDropped) {
+						} else if (y - startingY > dragSensitivity
+								& !hardDropped) {
 							gravity = softDropSpeed;
 							softDrop = true;
 							turn = false;
@@ -618,10 +617,10 @@ public class MainGame extends View {
 				hardDrop = false;
 				totalGrav = 0.0;
 				gravity = defaultGravity;
-				
+
 				lastDifficult = difficult;
 				difficult = false;
-				
+
 				// Scoring System
 				int addScore = 0;
 				if (currentDrop == 1 & tSpin & !kick) {
@@ -1066,9 +1065,30 @@ public class MainGame extends View {
 		if (pause && gameMode.equals("Time Attack")) {
 			countDown.cancel();
 		} else if (!pause && gameMode.equals("Time Attack")) {
+			countDown = new CountDownTimer(currentCountDownTime, 500) {
+
+				@Override
+				public void onFinish() {
+					lose = true;
+					countDownText = "Time Left: " + 0 + ":"
+							+ String.format("%02d", 0);
+					System.out.println("LOST THE GAME 1");
+				}
+
+				@Override
+				public void onTick(long timeLeft) {
+					currentCountDownTime = timeLeft;
+					int minutes = (int) timeLeft / 60000;
+					int seconds = (int) timeLeft % 60000 / 1000;
+					System.out.println(timeLeft);
+					countDownText = "Time Left: " + minutes + ":"
+							+ String.format("%02d", seconds);
+				}
+			}; // Countdown timer for time attack mode
 			countDown.start();
 		}
 	}
+
 	public static void newGame() {
 		for (int xx = 0; xx < numberOfBlocksWidth; xx++) {
 			for (int yy = 0; yy < numberOfBlocksLength; yy++) {
@@ -1109,6 +1129,26 @@ public class MainGame extends View {
 		currentCountDownTime = countDownTime;
 		countDown.cancel();
 		if (gameMode.equals("Time Attack")) {
+			countDown = new CountDownTimer(currentCountDownTime, 500) {
+
+				@Override
+				public void onFinish() {
+					lose = true;
+					countDownText = "Time Left: " + 0 + ":"
+							+ String.format("%02d", 0);
+					System.out.println("LOST THE GAME 1");
+				}
+
+				@Override
+				public void onTick(long timeLeft) {
+					currentCountDownTime = timeLeft;
+					int minutes = (int) timeLeft / 60000;
+					int seconds = (int) timeLeft % 60000 / 1000;
+					System.out.println(timeLeft);
+					countDownText = "Time Left: " + minutes + ":"
+							+ String.format("%02d", seconds);
+				}
+			}; // Countdown timer for time attack mode
 			countDown.start();
 		}
 		pickShape();
