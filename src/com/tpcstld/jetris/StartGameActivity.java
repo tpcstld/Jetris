@@ -21,6 +21,7 @@ public class StartGameActivity extends Activity {
 	static int slackLength = 1000; // How long the stack goes on for in
 	static double softDropSpeed = 9; // How fast soft dropping is
 
+	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -65,11 +66,7 @@ public class StartGameActivity extends Activity {
 		//Start a new game if the appropriate button is pressed.
 		Intent intent = getIntent();
 		boolean startNewGame = intent.getBooleanExtra("startNewGame", true);
-		if (startNewGame) {
-			MainGame.startNewGame = true;
-		} else {
-			MainGame.startNewGame = false;
-		}
+		MainGame.startNewGame = startNewGame;
 		mainView = new MainGame(this);
 		mainView.setBackgroundColor(Color.WHITE);
 		setContentView(mainView);
