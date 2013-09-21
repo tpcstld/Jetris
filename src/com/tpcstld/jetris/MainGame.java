@@ -91,7 +91,7 @@ public class MainGame extends View {
 													// fps
 	static boolean getScreenSize = false; // Initial getting screen size
 											// variable
-	static boolean startNewGame = true;
+	static boolean startNewGame = true;	//Whether it should be a new game or not
 
 	// Blocks Data:
 	// 0 = empty space
@@ -102,6 +102,7 @@ public class MainGame extends View {
 	public MainGame(Context context) {
 		super(context);
 
+		getScreenSize = true;
 		defaultGravity = ClassicModeActivity.defaultGravity;
 		FPS = ClassicModeActivity.FPS;
 		flickSensitivity = ClassicModeActivity.flickSensitivity;
@@ -192,7 +193,7 @@ public class MainGame extends View {
 	@Override
 	public void onDraw(Canvas canvas) {
 
-		if (!getScreenSize) {
+		if (getScreenSize) {
 			int width = this.getMeasuredWidth();
 			int height = this.getMeasuredHeight();
 			System.out.println(width + " " + height);
@@ -205,7 +206,7 @@ public class MainGame extends View {
 			scoreInfoYStarting = squareSide * 3;
 			mainFieldShiftX = squareSide;
 			mainFieldShiftY = squareSide;
-			getScreenSize = true;
+			getScreenSize = false;
 			paint.setTextSize((float) (squareSide * textScaleSize));
 		}
 		paint.setColor(Color.BLACK);
@@ -1048,7 +1049,6 @@ public class MainGame extends View {
 		}
 		score = 0;
 		lose = false;
-		getScreenSize = false;
 		time.cancel();
 		time = new Timer();
 		pickShape();
