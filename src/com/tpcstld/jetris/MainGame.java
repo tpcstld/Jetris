@@ -22,30 +22,11 @@ public class MainGame extends View {
 	static double textScaleSize = 0.8; // Text scaling
 
 	// External Options
-	static double defaultGravity = ClassicModeActivity.defaultGravity; // The
-																		// default
-																		// gravity
-																		// of
-																		// the
-																		// game
-	static int FPS = ClassicModeActivity.FPS; // Frames per second of the game
-												// (1000/given
-	// value)
-	static int flickSensitivity = ClassicModeActivity.flickSensitivity; // How
-																		// sensitive
-																		// is
-																		// the
-																		// flick
-																		// gesture
-	static int slackLength = ClassicModeActivity.slackLength; // How long the
-																// stack goes on
-																// for in
-	// milliseconds
-	static double softDropMultipler = ClassicModeActivity.softDropMultipler; // How
-																				// fast
-																				// soft
-																				// dropping
-																				// is
+	static double defaultGravity = ClassicModeActivity.defaultGravity;
+	static int FPS = ClassicModeActivity.FPS;
+	static int flickSensitivity = ClassicModeActivity.flickSensitivity;
+	static int slackLength = ClassicModeActivity.slackLength;
+	static double softDropMultipler = ClassicModeActivity.softDropMultipler;
 
 	static Timer time = new Timer(true);
 	static boolean slack = false; // Whether or not slack is currently active
@@ -112,7 +93,6 @@ public class MainGame extends View {
 													// fps
 	static boolean getScreenSize = false; // Initial getting screen size
 											// variable
-	
 
 	// Blocks Data:
 	// 0 = empty space
@@ -507,7 +487,7 @@ public class MainGame extends View {
 			detectShape();
 			coloring();
 			// Detection of whether the block can still fall down.
-			if (true /* !slack */) {
+			if (true) {
 				for (int xx = 0; xx < playLocationY.length; xx++)
 					if (playLocationY[xx] + 1 >= numberOfBlocksLength)
 						move = false;
@@ -522,10 +502,7 @@ public class MainGame extends View {
 			if (!move && !hardDrop && !slackOnce) {
 				slackOnce = true;
 				slack = true;
-				// move = true;
 				time.schedule(new Slack(), slackLength);
-				System.out.println("slack" + test);
-				test++;
 			}
 			// Slack Procedure Ends.
 			if (!move && !slack) {
@@ -641,18 +618,16 @@ public class MainGame extends View {
 				// Scoring System end.
 
 				pickShape();
-			} else {
-				if (move /* !slack */) {
-					//If slack is still activated
-					if (slack) {
-						time.cancel();
-						time = new Timer();
-					}
-					slackOnce = false;
-					for (int xx = 0; xx < playLocationX.length; xx++) {
-						blocks[playLocationX[xx]][playLocationY[xx]] = 0;
-						blocks[playLocationX[xx]][playLocationY[xx] + 1] = 1;
-					}
+			} else if (move) {
+				// If slack is still activated
+				if (slack) {
+					time.cancel();
+					time = new Timer();
+				}
+				slackOnce = false;
+				for (int xx = 0; xx < playLocationX.length; xx++) {
+					blocks[playLocationX[xx]][playLocationY[xx]] = 0;
+					blocks[playLocationX[xx]][playLocationY[xx] + 1] = 1;
 				}
 			}
 			if (move && !slack) {
@@ -817,7 +792,7 @@ public class MainGame extends View {
 			if (turnSuccess)
 				shape = 17;
 		}
-		//Reset slack if turn is successful
+		// Reset slack if turn is successful
 		if (turnSuccess) {
 			slackOnce = false;
 			time.cancel();
@@ -901,7 +876,7 @@ public class MainGame extends View {
 			if (turnSuccess)
 				shape = 17;
 		}
-		//Reset slack if turn is successful
+		// Reset slack if turn is successful
 		if (turnSuccess) {
 			slackOnce = false;
 			time.cancel();
@@ -1072,9 +1047,10 @@ public class MainGame extends View {
 		score = 0;
 		lose = false;
 		getScreenSize = false;
-		pickShape();
 		time.cancel();
 		time = new Timer();
+
+		pickShape();
 	}
 
 }
