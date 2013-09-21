@@ -3,7 +3,7 @@
 
     <string name="app_name">Jetris</string>
     <string name="hello_world">Hello world!</string>
-    <string name="new_game">New Game</string>
+    <string name="new_game">New Marathon Game</string>
     <string name="load_game">Load Game</string>
     <string name="title_activity_jetris_main">Jetris</string>
     <string name="ok">OK</string>

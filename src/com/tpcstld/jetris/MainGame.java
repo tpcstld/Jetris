@@ -8,6 +8,7 @@ import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
+import android.os.CountDownTimer;
 import android.view.MotionEvent;
 import android.view.View;
 
@@ -28,7 +29,10 @@ public class MainGame extends View {
 	static int slackLength = ClassicModeActivity.slackLength;
 	static double softDropSpeed = ClassicModeActivity.softDropSpeed;
 
-	static Timer time = new Timer(true);
+	static Timer time = new Timer(true); // This is the slack timer
+	static CountDownTimer countDown; // Countdown timer for time attack mode
+	static String countDownText = "";
+	
 	static boolean slack = false; // Whether or not slack is currently active
 	static boolean pause = false; // Whether or not the pause is currently
 									// paused
@@ -91,7 +95,8 @@ public class MainGame extends View {
 													// fps
 	static boolean getScreenSize = false; // Initial getting screen size
 											// variable
-	static boolean startNewGame = true;	//Whether it should be a new game or not
+	static boolean startNewGame = true; // Whether it should be a new game or
+										// not
 
 	// Blocks Data:
 	// 0 = empty space
@@ -102,12 +107,15 @@ public class MainGame extends View {
 	public MainGame(Context context) {
 		super(context);
 
+		//Get the screensize and get the external variables.
 		getScreenSize = true;
 		defaultGravity = ClassicModeActivity.defaultGravity;
 		FPS = ClassicModeActivity.FPS;
 		flickSensitivity = ClassicModeActivity.flickSensitivity;
 		slackLength = ClassicModeActivity.slackLength;
 		softDropSpeed = ClassicModeActivity.softDropSpeed;
+		
+		//Create the object to receive touch input
 		setOnTouchListener(new OnTouchListener() {
 			float x;
 			float y;
@@ -193,6 +201,7 @@ public class MainGame extends View {
 	@Override
 	public void onDraw(Canvas canvas) {
 
+		//Get the screen size and adjust the game screen proportionally if needed.
 		if (getScreenSize) {
 			int width = this.getMeasuredWidth();
 			int height = this.getMeasuredHeight();
@@ -442,7 +451,7 @@ public class MainGame extends View {
 				for (int xx = 3; xx <= 6; xx++)
 					blocks[xx][0] = 1;
 				shape = 1;
-				
+
 			} else if (lastShape == 1) {
 				for (int xx = 3; xx <= 5; xx++)
 					blocks[xx][1] = 1;
