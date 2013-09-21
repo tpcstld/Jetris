@@ -40,8 +40,8 @@
         \n
         Units: Milliseconds \n
         From 0 to Infinity (Default: 1000) </string>
-    <string name="soft_drop_multipler_title">Soft Drop Speed</string>
-    <string name="soft_drop_multipler_message">
+    <string name="soft_drop_multiplier_title">Soft Drop Speed</string>
+    <string name="soft_drop_multiplier_message">
         Controls the drop speed of the block while soft dropping. \n
         A larger number means a faster soft drop speed. \n
         This is a multipler of the base drop speed. \n

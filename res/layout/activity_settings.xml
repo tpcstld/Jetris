@@ -35,16 +35,18 @@
         android:layout_alignLeft="@+id/flick_sensitivity_button"
         android:layout_alignRight="@+id/flick_sensitivity_button"
         android:layout_below="@+id/flick_sensitivity_button"
-        android:text="@string/slack_length_title" />
+        android:text="@string/slack_length_title"
+        android:onClick="openSlackLength" />
 
     <Button
-        android:id="@+id/soft_drop_multipler_button"
+        android:id="@+id/soft_drop_multiplier_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignLeft="@+id/slack_length_button"
         android:layout_alignRight="@+id/slack_length_button"
         android:layout_below="@+id/slack_length_button"
-        android:text="@string/soft_drop_multipler_title" />
+        android:text="@string/soft_drop_multiplier_title"
+        android:onClick="openSoftDropMultiplier" />
 
     <Button
         android:id="@+id/default_gravity_button"

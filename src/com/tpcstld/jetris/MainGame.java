@@ -26,7 +26,7 @@ public class MainGame extends View {
 	static int FPS = ClassicModeActivity.FPS;
 	static int flickSensitivity = ClassicModeActivity.flickSensitivity;
 	static int slackLength = ClassicModeActivity.slackLength;
-	static double softDropMultipler = ClassicModeActivity.softDropMultipler;
+	static double softDropMultiplier = ClassicModeActivity.softDropMultiplier;
 
 	static Timer time = new Timer(true);
 	static boolean slack = false; // Whether or not slack is currently active
@@ -107,7 +107,7 @@ public class MainGame extends View {
 		FPS = ClassicModeActivity.FPS;
 		flickSensitivity = ClassicModeActivity.flickSensitivity;
 		slackLength = ClassicModeActivity.slackLength;
-		softDropMultipler = ClassicModeActivity.softDropMultipler;
+		softDropMultiplier = ClassicModeActivity.softDropMultiplier;
 		setOnTouchListener(new OnTouchListener() {
 			float x;
 			float y;
@@ -155,7 +155,7 @@ public class MainGame extends View {
 							moveLeft();
 							turn = false;
 						} else if (y - startingY > squareSide & !hardDropped) {
-							gravity = defaultGravity * softDropMultipler;
+							gravity = defaultGravity * softDropMultiplier;
 							softDrop = true;
 							turn = false;
 						}

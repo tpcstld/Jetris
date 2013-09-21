@@ -46,7 +46,27 @@ public class Settings extends Activity {
 		fragment.setArguments(args);
 		fragment.show(getFragmentManager(), " ");
 	}
+	@SuppressLint("NewApi")
+	public void openSlackLength(View view) {
+		DialogFragment fragment = new GameOptionsDialog();
+		Bundle args = new Bundle();
+		args.putString("option", "slackLength");
+		args.putInt("message", R.string.slack_length_message);
+		args.putInt("title", R.string.slack_length_title);
+		fragment.setArguments(args);
+		fragment.show(getFragmentManager(), " ");
+	}
 	
+	@SuppressLint("NewApi")
+	public void openSoftDropMultiplier(View view) {
+		DialogFragment fragment = new GameOptionsDialog();
+		Bundle args = new Bundle();
+		args.putString("option", "softDropMultiplier");
+		args.putInt("message", R.string.soft_drop_multiplier_message);
+		args.putInt("title", R.string.soft_drop_multiplier_title);
+		fragment.setArguments(args);
+		fragment.show(getFragmentManager(), " ");
+	}
 	@SuppressLint("NewApi")
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {

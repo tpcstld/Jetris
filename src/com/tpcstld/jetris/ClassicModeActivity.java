@@ -21,7 +21,7 @@ public class ClassicModeActivity extends Activity {
 								// value)
 	static int flickSensitivity = 30; // How sensitive is the flick gesture
 	static int slackLength = 1000; // How long the stack goes on for in
-	static double softDropMultipler = 9; // How fast soft dropping is
+	static double softDropMultiplier = 9; // How fast soft dropping is
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -61,7 +61,7 @@ public class ClassicModeActivity extends Activity {
 			System.err.println("Error getting slackLength. Reverting to default value.");
 		}
 		try {
-			softDropMultipler = Double.parseDouble(settings.getString("softDropMultipler", String.valueOf(softDropMultipler)));
+			softDropMultiplier = Double.parseDouble(settings.getString("softDropMultipler", String.valueOf(softDropMultiplier)));
 		} catch (Exception e) {
 			System.err.println("Error getting softDropMultipler. Reverting to default value.");
 		}
