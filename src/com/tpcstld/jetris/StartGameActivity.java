@@ -22,6 +22,7 @@ public class StartGameActivity extends Activity {
 	static String gameMode = "";
 	static double softDropSpeed = 9; // How fast soft dropping is
 	static int dragSensitivity = 60;
+	public static long countDownTime = 120;
 
 	
 	@Override
@@ -69,6 +70,11 @@ public class StartGameActivity extends Activity {
 			dragSensitivity = Integer.parseInt(settings.getString("dragSensitivity", String.valueOf(dragSensitivity)));
 		} catch (Exception e) {
 			System.err.println("Error getting dragSensitivity. Reverting to default value.");
+		}
+		try {
+			countDownTime = Long.parseLong(settings.getString("countDownTime", String.valueOf(countDownTime)));
+		} catch (Exception e) {
+			System.err.println("Error getting countDownTime. Reverting to default value.");
 		}
 		//Start a new game if the appropriate button is pressed.
 		Intent intent = getIntent();

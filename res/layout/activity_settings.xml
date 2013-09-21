@@ -48,23 +48,14 @@
         android:text="@string/soft_drop_speed_title"
         android:onClick="openSoftDropMultiplier" />
 
-    <Button
-        android:id="@+id/default_gravity_button"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentRight="true"
-        android:layout_below="@+id/textView1"
-        android:text="@string/default_grav_title"
-        android:onClick="openDefaultGravityDialog" />
-
     <TextView
         android:id="@+id/textView1"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
-        android:text="@string/game_variables_title" />
+        android:text="@string/game_variables_title"
+        android:textSize="20sp" />
 
     <Button
         android:id="@+id/drag_sensitivity_button"
@@ -75,5 +66,24 @@
         android:layout_below="@+id/soft_drop_multiplier_button"
         android:onClick="openDragSensitivity"
         android:text="@string/drag_sensitivity_title" />
+
+    <Button
+        android:id="@+id/default_gravity_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/textView1"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="90dp"
+        android:onClick="openDefaultGravityDialog"
+        android:text="@string/default_grav_title" />
+
+    <TextView
+        android:id="@+id/textView2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/textView1"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="22dp"
+        android:text="@string/timer_variables_title" />
 
 </RelativeLayout>

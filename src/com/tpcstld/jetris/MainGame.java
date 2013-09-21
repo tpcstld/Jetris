@@ -29,13 +29,13 @@ public class MainGame extends View {
 	static int dragSensitivity = StartGameActivity.dragSensitivity;
 	static int slackLength = StartGameActivity.slackLength;
 	static double softDropSpeed = StartGameActivity.softDropSpeed;
-	static long countDownTime = 10000;
+	static long countDownTime = StartGameActivity.countDownTime;
 
 	// Game Mode
 	static String gameMode = "";
 
 	static Timer time = new Timer(true); // This is the slack timer
-	static long currentCountDownTime = countDownTime;
+	static long currentCountDownTime = countDownTime * 1000;
 	static CountDownTimer countDown = new CountDownTimer(currentCountDownTime,
 			500) {
 
