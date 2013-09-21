@@ -2,6 +2,7 @@ package com.tpcstld.jetris;
 
 import android.annotation.TargetApi;
 import android.app.Activity;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.Build;
@@ -9,6 +10,7 @@ import android.os.Bundle;
 import android.support.v4.app.NavUtils;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 
 public class ClassicModeActivity extends Activity {
 
@@ -27,7 +29,6 @@ public class ClassicModeActivity extends Activity {
 		// Show the Up button in the action bar.
 		setupActionBar();
 
-		System.out.println("");
 		// Set up and display the main game screen
 
 		// Get the settings
@@ -62,7 +63,14 @@ public class ClassicModeActivity extends Activity {
 		} catch (Exception e) {
 			System.err.println("Error getting softDropSpeed. Reverting to default value.");
 		}
-
+		//Start a new game if the appropriate button is pressed.
+		Intent intent = getIntent();
+		boolean startNewGame = intent.getBooleanExtra("startNewGame", true);
+		if (startNewGame) {
+			MainGame.startNewGame = true;
+		} else {
+			MainGame.startNewGame = false;
+		}
 		mainView = new MainGame(this);
 		mainView.setBackgroundColor(Color.WHITE);
 		setContentView(mainView);
@@ -81,7 +89,7 @@ public class ClassicModeActivity extends Activity {
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		// Inflate the menu; this adds items to the action bar if it is present.
-		getMenuInflater().inflate(R.menu.jetris_main, menu);
+		getMenuInflater().inflate(R.menu.game_main, menu);
 		return true;
 	}
 
@@ -98,8 +106,12 @@ public class ClassicModeActivity extends Activity {
 			//
 			NavUtils.navigateUpFromSameTask(this);
 			return true;
+		case R.id.pause:
+			MainGame.pause = !MainGame.pause;
 		}
 		return super.onOptionsItemSelected(item);
 	}
 
+	public void pauseGame(View view) {
+	}
 }

@@ -14,7 +14,7 @@ public class MainActivity extends Activity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
 	}
-
+	
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		// Inflate the menu; this adds items to the action bar if it is present.
@@ -33,6 +33,13 @@ public class MainActivity extends Activity {
 	// Opens the main game activity when the new game button is pressed
 	public void newGame(View view) {
 		Intent intent = new Intent(this, ClassicModeActivity.class);
+		intent.putExtra("startNewGame", true);
+		startActivity(intent);
+	}
+	
+	public void loadGame(View view) {
+		Intent intent = new Intent(this, ClassicModeActivity.class);
+		intent.putExtra("startNewGame", false);
 		startActivity(intent);
 	}
 	

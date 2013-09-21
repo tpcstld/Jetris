@@ -91,6 +91,7 @@ public class MainGame extends View {
 													// fps
 	static boolean getScreenSize = false; // Initial getting screen size
 											// variable
+	static boolean startNewGame = true;
 
 	// Blocks Data:
 	// 0 = empty space
@@ -183,7 +184,9 @@ public class MainGame extends View {
 			}
 
 		});
-		newGame();
+		if (startNewGame) {
+			newGame();
+		}
 	}
 
 	@Override
@@ -322,6 +325,15 @@ public class MainGame extends View {
 								+ nextShapeY3Starting + squareSide
 								+ mainFieldShiftY, paint);
 		}
+
+		if (pause) {
+			paint.setColor(Color.BLACK);
+			paint.setTextSize((float) (squareSide * 4));
+			int length = this.getMeasuredHeight();
+			canvas.drawText("PAUSED", mainFieldShiftX / 2, mainFieldShiftY
+					+ length / 2, paint);
+			paint.setTextSize((float) (squareSide * textScaleSize));
+		}
 		invalidate();
 	}
 
@@ -429,21 +441,22 @@ public class MainGame extends View {
 				for (int xx = 3; xx <= 6; xx++)
 					blocks[xx][0] = 1;
 				shape = 1;
+				
 			} else if (lastShape == 1) {
 				for (int xx = 3; xx <= 5; xx++)
-					blocks[xx][0] = 1;
-				blocks[5][1] = 1;
-				shape = 3;
+					blocks[xx][1] = 1;
+				blocks[3][0] = 1;
+				shape = 5;
 			} else if (lastShape == 2) {
 				for (int xx = 3; xx <= 5; xx++)
-					blocks[xx][0] = 1;
-				blocks[3][1] = 1;
-				shape = 7;
+					blocks[xx][1] = 1;
+				blocks[5][0] = 1;
+				shape = 9;
 			} else if (lastShape == 3) {
 				for (int xx = 3; xx <= 5; xx++)
-					blocks[xx][0] = 1;
-				blocks[4][1] = 1;
-				shape = 11;
+					blocks[xx][1] = 1;
+				blocks[4][0] = 1;
+				shape = 13;
 			} else if (lastShape == 4) {
 				blocks[4][0] = 1;
 				blocks[5][0] = 1;
@@ -457,10 +470,10 @@ public class MainGame extends View {
 				blocks[5][1] = 1;
 				shape = 17;
 			} else if (lastShape == 6) {
-				blocks[3][0] = 1;
 				blocks[4][0] = 1;
-				blocks[3][1] = 1;
+				blocks[5][0] = 1;
 				blocks[4][1] = 1;
+				blocks[5][1] = 1;
 				shape = 19;
 			}
 		}
@@ -1029,6 +1042,7 @@ public class MainGame extends View {
 		holdShape = -1;
 		shape = -1;
 		lastShape = -1;
+		shapeList = new ArrayList<Integer>();
 		for (int xx = 0; xx < 7; xx++) {
 			shapeList.add(xx);
 		}

@@ -18,20 +18,30 @@
         android:text="@string/new_game" />
 
     <Button
-        android:id="@+id/FPS_preference_button"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignLeft="@+id/newgame"
-        android:layout_below="@+id/newgame"
-        android:onClick="openInstructions"
-        android:text="@string/instructions" />
-
-    <Button
+        android:id="@+id/button1"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:layout_alignLeft="@+id/FPS_preference_button"
         android:layout_below="@+id/FPS_preference_button"
         android:onClick="openSettings"
         android:text="@string/settings" />
+
+    <Button
+        android:id="@+id/loadgame"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/newgame"
+        android:layout_below="@+id/newgame"
+        android:onClick="loadGame"
+        android:text="@string/load_game" />
+
+    <Button
+        android:id="@+id/FPS_preference_button"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/loadgame"
+        android:layout_below="@+id/loadgame"
+        android:onClick="openInstructions"
+        android:text="@string/instructions" />
 
 </RelativeLayout>
