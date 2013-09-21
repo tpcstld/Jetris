@@ -9,15 +9,6 @@
     tools:context=".MainActivity" >
 
     <Button
-        android:id="@+id/newgame"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignParentTop="true"
-        android:layout_centerHorizontal="true"
-        android:onClick="newGame"
-        android:text="@string/new_game" />
-
-    <Button
         android:id="@+id/button1"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
@@ -27,15 +18,6 @@
         android:text="@string/settings" />
 
     <Button
-        android:id="@+id/loadgame"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignLeft="@+id/newgame"
-        android:layout_below="@+id/newgame"
-        android:onClick="loadGame"
-        android:text="@string/load_game" />
-
-    <Button
         android:id="@+id/FPS_preference_button"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
@@ -43,5 +25,32 @@
         android:layout_below="@+id/loadgame"
         android:onClick="openInstructions"
         android:text="@string/instructions" />
+
+    <Button
+        android:id="@+id/newtimeattackgame"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/newmarathongame"
+        android:layout_centerHorizontal="true"
+        android:onClick="newTimeAttackGame"
+        android:text="@string/new_time_attack_game" />
+
+    <Button
+        android:id="@+id/loadgame"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/newtimeattackgame"
+        android:layout_below="@+id/newtimeattackgame"
+        android:onClick="loadGame"
+        android:text="@string/load_game" />
+
+    <Button
+        android:id="@+id/newmarathongame"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/newtimeattackgame"
+        android:layout_alignParentTop="true"
+        android:onClick="newMarathonGame"
+        android:text="@string/new_marathon_game" />
 
 </RelativeLayout>

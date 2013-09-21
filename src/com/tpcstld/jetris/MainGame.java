@@ -21,7 +21,6 @@ public class MainGame extends View {
 	static int numSquaresX = 16; // Total number of columns
 	static int numSquaresY = 22; // total number of rows
 	static double textScaleSize = 0.8; // Text scaling
-	
 
 	// External Options
 	static double defaultGravity = StartGameActivity.defaultGravity;
@@ -29,14 +28,29 @@ public class MainGame extends View {
 	static int flickSensitivity = StartGameActivity.flickSensitivity;
 	static int slackLength = StartGameActivity.slackLength;
 	static double softDropSpeed = StartGameActivity.softDropSpeed;
-	
-	//Game Mode
+	static long countDownTime = 120000;
+
+	// Game Mode
 	static String gameMode = "";
 
 	static Timer time = new Timer(true); // This is the slack timer
-	static CountDownTimer countDown; // Countdown timer for time attack mode
-	static String countDownText = ""; //Text for displaying the time left
-	
+	static long currentCountDownTime = countDownTime;
+	static CountDownTimer countDown = new CountDownTimer(currentCountDownTime, 1000) {
+
+		@Override
+		public void onFinish() {
+			lose = true;
+		}
+
+		@Override
+		public void onTick(long timeLeft) {
+			int minutes = (int) timeLeft / 60000;
+			int seconds = (int) timeLeft % 60000 / 1000;
+			currentCountDownTime = timeLeft;
+			countDownText = "Time Left: " + minutes + ":" + String.format("%02d", seconds);
+		}
+	}; // Countdown timer for time attack mode
+	static String countDownText = ""; // Text for displaying the time left
 	static boolean slack = false; // Whether or not slack is currently active
 	static boolean pause = false; // Whether or not the pause is currently
 									// paused
@@ -111,15 +125,16 @@ public class MainGame extends View {
 	public MainGame(Context context) {
 		super(context);
 
-		//Get the screensize and get the external variables.
+		System.out.println(gameMode);
+		// Get the screensize and get the external variables.
 		getScreenSize = true;
 		defaultGravity = StartGameActivity.defaultGravity;
 		FPS = StartGameActivity.FPS;
 		flickSensitivity = StartGameActivity.flickSensitivity;
 		slackLength = StartGameActivity.slackLength;
 		softDropSpeed = StartGameActivity.softDropSpeed;
-		
-		//Create the object to receive touch input
+
+		// Create the object to receive touch input
 		setOnTouchListener(new OnTouchListener() {
 			float x;
 			float y;
@@ -205,7 +220,8 @@ public class MainGame extends View {
 	@Override
 	public void onDraw(Canvas canvas) {
 
-		//Get the screen size and adjust the game screen proportionally if needed.
+		// Get the screen size and adjust the game screen proportionally if
+		// needed.
 		if (getScreenSize) {
 			int width = this.getMeasuredWidth();
 			int height = this.getMeasuredHeight();
@@ -225,6 +241,10 @@ public class MainGame extends View {
 		paint.setColor(Color.BLACK);
 		canvas.drawText("Score: " + score, holdShapeXStarting + mainFieldShiftX
 				- squareSide, scoreInfoYStarting + mainFieldShiftY, paint);
+
+		canvas.drawText(countDownText, holdShapeXStarting + mainFieldShiftX
+				- squareSide,
+				scoreInfoYStarting + mainFieldShiftY + squareSide, paint);
 
 		// Gravity falling mechanic.
 		// totalGrav is incremented by gravity every tick.
@@ -588,7 +608,10 @@ public class MainGame extends View {
 				hardDrop = false;
 				totalGrav = 0.0;
 				gravity = defaultGravity;
-
+				
+				lastDifficult = difficult;
+				difficult = false;
+				
 				// Scoring System
 				int addScore = 0;
 				if (currentDrop == 1 & tSpin & !kick) {
@@ -1028,6 +1051,15 @@ public class MainGame extends View {
 		}
 	}
 
+	public static void pauseGame() {
+		pause = !pause;
+		if (pause && gameMode.equals("Time Attack")) {
+			countDown.cancel();
+			System.out.println("stopping timer");
+		} else if (!pause && gameMode.equals("Time Attack")) {
+			countDown.start();
+		}
+	}
 	public static void newGame() {
 		for (int xx = 0; xx < numberOfBlocksWidth; xx++) {
 			for (int yy = 0; yy < numberOfBlocksLength; yy++) {
@@ -1064,6 +1096,12 @@ public class MainGame extends View {
 		lose = false;
 		time.cancel();
 		time = new Timer();
+		countDownText = "";
+		System.out.println("TIMER STARTED.");
+		countDown.cancel();
+		if (gameMode.equals("Time Attack")) {
+			countDown.start();
+		}
 		pickShape();
 	}
 

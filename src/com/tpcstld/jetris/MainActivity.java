@@ -31,9 +31,19 @@ public class MainActivity extends Activity {
 	}
 
 	// Opens the main game activity when the new game button is pressed
-	public void newGame(View view) {
+	public void newMarathonGame(View view) {
+		
 		Intent intent = new Intent(this, StartGameActivity.class);
 		intent.putExtra("startNewGame", true);
+		intent.putExtra("gameMode", "Marathon");
+		startActivity(intent);
+	}
+	
+	public void newTimeAttackGame(View view) {
+		
+		Intent intent = new Intent(this, StartGameActivity.class);
+		intent.putExtra("startNewGame", true);
+		intent.putExtra("gameMode", "Time Attack");
 		startActivity(intent);
 	}
 	

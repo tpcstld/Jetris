@@ -67,6 +67,10 @@ public class StartGameActivity extends Activity {
 		Intent intent = getIntent();
 		boolean startNewGame = intent.getBooleanExtra("startNewGame", true);
 		MainGame.startNewGame = startNewGame;
+		if (startNewGame) {
+			String gameMode = intent.getStringExtra("gameMode");
+			MainGame.gameMode = gameMode;
+		}
 		mainView = new MainGame(this);
 		mainView.setBackgroundColor(Color.WHITE);
 		setContentView(mainView);
@@ -109,7 +113,7 @@ public class StartGameActivity extends Activity {
 	}
 
 	protected void onPause() {
-		MainGame.pause = true;
+		MainGame.pauseGame();
 		super.onPause();
 	}
 }
