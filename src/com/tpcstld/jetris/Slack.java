@@ -9,7 +9,7 @@ public class Slack extends TimerTask {
 
 	@Override
 	public void run() {
-		JetrisMainView.slack = false;              
+		MainGame.slack = false;              
 	}
 
 }

@@ -23,7 +23,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name="com.tpcstld.jetris.JetrisMain"
+            android:name="com.tpcstld.jetris.ClassicModeActivity"
             android:label="@string/title_activity_jetris_main"
             android:parentActivityName="com.tpcstld.jetris.MainActivity" >
             <meta-data

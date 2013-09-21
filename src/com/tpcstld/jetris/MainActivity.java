@@ -2,6 +2,7 @@ package com.tpcstld.jetris;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -13,6 +14,7 @@ public class MainActivity extends Activity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
+		SharedPreferences settings = getSharedPreferences("settings", 0);
 	}
 
 	@Override
@@ -32,7 +34,7 @@ public class MainActivity extends Activity {
 
 	// Opens the main game activity when the new game button is pressed
 	public void newGame(View view) {
-		Intent intent = new Intent(this, JetrisMain.class);
+		Intent intent = new Intent(this, ClassicModeActivity.class);
 		startActivity(intent);
 	}
 	

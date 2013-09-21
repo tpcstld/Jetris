@@ -1,6 +1,5 @@
 package com.tpcstld.jetris;
 
-import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
@@ -11,6 +10,7 @@ import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.DialogFragment;
 import android.content.DialogInterface;
+import android.content.SharedPreferences;
 import android.content.res.AssetManager;
 import android.content.res.Resources;
 import android.os.Bundle;
@@ -21,19 +21,22 @@ public class GameOptionsDialog extends DialogFragment {
 
 	@Override
 	public Dialog onCreateDialog(Bundle savedInstanceState) {
-		// Use the Builder class for convenient dialog construction
-
+		
+		//Initialize variables
 		AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
 		final String currentOption = getArguments().getString("option");
-		
+		String defaultValue = "";
+		final EditText input = new EditText(getActivity());
+
+		//Get the default value, just in case
 		Resources resource = getActivity().getResources();
 		final AssetManager assetManager = resource.getAssets();
 		final Properties configFile = new Properties();
-		String value = "";
+
 		try {
 			InputStream is = assetManager.open("config.properties");
 			configFile.load(is);
-			value = configFile.getProperty(currentOption);
+			defaultValue = configFile.getProperty(currentOption);
 			is.close();
 		} catch (FileNotFoundException e) {
 			// TODO Auto-generated catch block
@@ -44,28 +47,30 @@ public class GameOptionsDialog extends DialogFragment {
 			e.printStackTrace();
 		}
 
-		final EditText input = new EditText(getActivity());
-		
-		
+		//Get the settings preference object
+		final SharedPreferences settings = getActivity().getSharedPreferences(
+				"settings", 0);
+
+		//Get the current value of the variable
+		String value = settings.getString(currentOption, defaultValue);
+
+		//Make the dialog
 		builder.setView(input)
+				//Set the message of the dialog
 				.setMessage(R.string.default_grav_message)
+				//Set what the OK button does
 				.setPositiveButton(R.string.ok,
 						new DialogInterface.OnClickListener() {
 							public void onClick(DialogInterface dialog, int id) {
-								System.out.println(input.getText().toString());
-								InputStream is;
-								try {
-									is = assetManager.open("config.properties");
-									configFile.load(is);
-									configFile.setProperty(currentOption, input.getText().toString());
-									is.close();
-								} catch (IOException e) {
-									// TODO Auto-generated catch block
-									e.printStackTrace();
-								}
-								// FIRE ZE MISSILES!
+								//Update the settings
+								SharedPreferences.Editor editor = settings
+										.edit();
+								editor.putString(currentOption, input.getText()
+										.toString());
+								editor.commit();
 							}
 						})
+				//Set what the cancel button does
 				.setNegativeButton(R.string.cancel,
 						new DialogInterface.OnClickListener() {
 							public void onClick(DialogInterface dialog, int id) {

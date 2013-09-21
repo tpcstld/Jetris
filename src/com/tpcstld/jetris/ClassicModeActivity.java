@@ -13,20 +13,42 @@ import android.support.v4.app.NavUtils;
 import android.view.Menu;
 import android.view.MenuItem;
 
-public class JetrisMain extends Activity {
+public class ClassicModeActivity extends Activity {
 
-	JetrisMainView mainView;
-	
+	MainGame mainView;
+	static double defaultGravity = 0.09; // The default gravity of the game
+	static int FPS = 1000 / 30; // Frames per second of the game (1000/given
+								// value)
+	static int flickSensitivity = 30; // How sensitive is the flick gesture
+	static int slackLength = 1000; // How long the stack goes on for in
+	static double softDropMultipler = 9; // How fast soft dropping is
+
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_jetris_main);
 		// Show the Up button in the action bar.
 		setupActionBar();
-		SharedPreferences sharedPrefs = PreferenceManager.getDefaultSharedPreferences(this);
+
 		System.out.println("");
-		//Set up and display the main game screen
-		mainView = new JetrisMainView(this);
+		// Set up and display the main game screen
+
+		// Get the settings
+		SharedPreferences settings = getSharedPreferences("settings", 0);
+		
+		defaultGravity = Double.parseDouble(settings.getString(
+				"defaultGravity", String.valueOf(defaultGravity)));
+		
+		FPS = 1000 / Integer.parseInt(settings.getString("FPS",
+				String.valueOf(FPS)));
+
+		flickSensitivity = Integer.parseInt(settings.getString("flickSensitivity",
+				String.valueOf(flickSensitivity)));
+		
+		slackLength = settings.getInt("slackLength", 1000);
+		softDropMultipler = settings.getFloat("softDropMultipler", (float) 9);
+
+		mainView = new MainGame(this);
 		mainView.setBackgroundColor(Color.WHITE);
 		setContentView(mainView);
 	}
