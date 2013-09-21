@@ -112,6 +112,8 @@ public class ClassicModeActivity extends Activity {
 		return super.onOptionsItemSelected(item);
 	}
 
-	public void pauseGame(View view) {
+	protected void onPause() {
+		MainGame.pause = true;
+		super.onPause();
 	}
 }
