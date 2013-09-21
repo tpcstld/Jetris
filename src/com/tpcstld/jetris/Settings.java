@@ -8,6 +8,7 @@ import android.content.SharedPreferences;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.NavUtils;
+import android.text.InputType;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -16,54 +17,59 @@ public class Settings extends Activity {
 
 	@SuppressLint("NewApi")
 	public void openDefaultGravityDialog(View view) {
-		DialogFragment fragment = new GameOptionsDialog();
+		DialogFragment fragment = new CustomDialog();
 		Bundle args = new Bundle();
 		args.putString("option", "defaultGravity");
 		args.putInt("message", R.string.default_grav_message);
 		args.putInt("title", R.string.default_grav_title);
+		args.putInt("inputOption", InputType.TYPE_CLASS_NUMBER);
 		fragment.setArguments(args);
 		fragment.show(getFragmentManager(), " ");
 	}
 	
 	@SuppressLint("NewApi")
 	public void openFPSDialog(View view) {
-		DialogFragment fragment = new GameOptionsDialog();
+		DialogFragment fragment = new CustomDialog();
 		Bundle args = new Bundle();
 		args.putString("option", "FPS");
 		args.putInt("message", R.string.FPS_message);
 		args.putInt("title", R.string.FPS_title);
+		args.putInt("inputOption", InputType.TYPE_CLASS_NUMBER);
 		fragment.setArguments(args);
 		fragment.show(getFragmentManager(), " ");
 	}
 	
 	@SuppressLint("NewApi")
 	public void openFlickSensitivity(View view) {
-		DialogFragment fragment = new GameOptionsDialog();
+		DialogFragment fragment = new CustomDialog();
 		Bundle args = new Bundle();
 		args.putString("option", "flickSensitivity");
 		args.putInt("message", R.string.flick_sensitivity_message);
 		args.putInt("title", R.string.flick_sensitivity_title);
+		args.putInt("inputOption", InputType.TYPE_CLASS_NUMBER);
 		fragment.setArguments(args);
 		fragment.show(getFragmentManager(), " ");
 	}
 	@SuppressLint("NewApi")
 	public void openSlackLength(View view) {
-		DialogFragment fragment = new GameOptionsDialog();
+		DialogFragment fragment = new CustomDialog();
 		Bundle args = new Bundle();
 		args.putString("option", "slackLength");
 		args.putInt("message", R.string.slack_length_message);
 		args.putInt("title", R.string.slack_length_title);
+		args.putInt("inputOption", InputType.TYPE_CLASS_NUMBER);
 		fragment.setArguments(args);
 		fragment.show(getFragmentManager(), " ");
 	}
 	
 	@SuppressLint("NewApi")
 	public void openSoftDropMultiplier(View view) {
-		DialogFragment fragment = new GameOptionsDialog();
+		DialogFragment fragment = new CustomDialog();
 		Bundle args = new Bundle();
 		args.putString("option", "softDropMultiplier");
 		args.putInt("message", R.string.soft_drop_multiplier_message);
 		args.putInt("title", R.string.soft_drop_multiplier_title);
+		args.putInt("inputOption", InputType.TYPE_CLASS_NUMBER);
 		fragment.setArguments(args);
 		fragment.show(getFragmentManager(), " ");
 	}

@@ -17,7 +17,7 @@ import android.os.Bundle;
 import android.widget.EditText;
 
 @SuppressLint("NewApi")
-public class GameOptionsDialog extends DialogFragment {
+public class CustomDialog extends DialogFragment {
 
 	@Override
 	public Dialog onCreateDialog(Bundle savedInstanceState) {
@@ -27,9 +27,10 @@ public class GameOptionsDialog extends DialogFragment {
 		final String currentOption = getArguments().getString("option");
 		final int message = getArguments().getInt("message");
 		final int title = getArguments().getInt("title");
+		final int inputOption = getArguments().getInt("inputOption");
 		String defaultValue = "";
 		final EditText input = new EditText(getActivity());
-
+		input.setInputType(inputOption);
 		// Get the default value, just in case
 		Resources resource = getActivity().getResources();
 		final AssetManager assetManager = resource.getAssets();
