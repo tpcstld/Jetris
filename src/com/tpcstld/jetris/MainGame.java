@@ -1087,8 +1087,8 @@ public class MainGame extends View {
 		}
 	}
 
-	public static void pauseGame() {
-		pause = !pause;
+	public static void pauseGame(boolean changeTo) {
+		pause = changeTo;
 		if (pause && gameMode.equals("Time Attack")) {
 			countDown.cancel();
 		} else if (!pause && gameMode.equals("Time Attack")) {

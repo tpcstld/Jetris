@@ -12,7 +12,8 @@
     <string name="instructions">Instructions</string>
     <string name="title_activity_instructions">Instructions</string>
     <string name="settings">Settings</string>
-    <string name="action_pause">Pause/Unpause</string>
+    <string name="action_pause">Pause</string>
+    <string name="action_unpause">Unpause</string>
     <string name="game_variables_title">Game Variables (Advanced)</string>
     <string name="default_grav_title">Base Drop Speed</string>
     <string name="default_grav_message">        The base drop speed of the blocks. \n

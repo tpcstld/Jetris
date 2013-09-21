@@ -78,6 +78,7 @@ public class StartGameActivity extends Activity {
 			gameMode = intent.getStringExtra("gameMode");
 			MainGame.gameMode = gameMode;
 		}
+		//Change the pause/unpause text
 		mainView = new MainGame(this);
 		mainView.setBackgroundColor(Color.WHITE);
 		setContentView(mainView);
@@ -97,6 +98,12 @@ public class StartGameActivity extends Activity {
 	public boolean onCreateOptionsMenu(Menu menu) {
 		// Inflate the menu; this adds items to the action bar if it is present.
 		getMenuInflater().inflate(R.menu.game_main, menu);
+		MenuItem item = menu.findItem(R.id.pause);
+		if (MainGame.pause) {
+			item.setTitle(R.string.action_unpause);
+		} else if (!MainGame.pause){
+			item.setTitle(R.string.action_pause);
+		}
 		return true;
 	}
 
@@ -113,16 +120,23 @@ public class StartGameActivity extends Activity {
 			//
 			NavUtils.navigateUpFromSameTask(this);
 			return true;
-		case R.id.pause:
-			MainGame.pauseGame();
-		case R.id.newgame:
-			MainGame.newGame();
 		}
 		return super.onOptionsItemSelected(item);
 	}
 
+	public void pauseGame(MenuItem item) {
+		MainGame.pauseGame(!MainGame.pause);
+		if (MainGame.pause) {
+			item.setTitle(R.string.action_unpause);
+		} else if (!MainGame.pause){
+			item.setTitle(R.string.action_pause);
+		}
+	}
+	public void newGame(MenuItem item) {
+		MainGame.newGame();
+	}
 	protected void onPause() {
-		MainGame.pauseGame();
+		MainGame.pauseGame(true);
 		super.onPause();
 	}
 }
