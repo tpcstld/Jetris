@@ -45,7 +45,7 @@
         android:layout_alignLeft="@+id/slack_length_button"
         android:layout_alignRight="@+id/slack_length_button"
         android:layout_below="@+id/slack_length_button"
-        android:text="@string/soft_drop_multiplier_title"
+        android:text="@string/soft_drop_speed_title"
         android:onClick="openSoftDropMultiplier" />
 
     <Button

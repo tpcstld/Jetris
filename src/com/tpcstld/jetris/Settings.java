@@ -19,7 +19,7 @@ public class Settings extends Activity {
 		args.putString("option", "defaultGravity");
 		args.putInt("message", R.string.default_grav_message);
 		args.putInt("title", R.string.default_grav_title);
-		args.putInt("inputOption", InputType.TYPE_CLASS_NUMBER);
+		args.putInt("inputOption", InputType.TYPE_CLASS_NUMBER | InputType.TYPE_NUMBER_FLAG_DECIMAL);
 		fragment.setArguments(args);
 		fragment.show(getFragmentManager(), " ");
 	}
@@ -60,10 +60,10 @@ public class Settings extends Activity {
 	public void openSoftDropMultiplier(View view) {
 		DialogFragment fragment = new CustomDialog();
 		Bundle args = new Bundle();
-		args.putString("option", "softDropMultiplier");
-		args.putInt("message", R.string.soft_drop_multiplier_message);
-		args.putInt("title", R.string.soft_drop_multiplier_title);
-		args.putInt("inputOption", InputType.TYPE_CLASS_NUMBER);
+		args.putString("option", "softDropSpeed");
+		args.putInt("message", R.string.soft_drop_speed_message);
+		args.putInt("title", R.string.soft_drop_speed_title);
+		args.putInt("inputOption", InputType.TYPE_CLASS_NUMBER | InputType.TYPE_NUMBER_FLAG_DECIMAL);
 		fragment.setArguments(args);
 		fragment.show(getFragmentManager(), " ");
 	}
