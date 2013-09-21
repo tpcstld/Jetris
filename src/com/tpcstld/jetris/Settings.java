@@ -57,7 +57,7 @@ public class Settings extends Activity {
 		fragment.show(getFragmentManager(), " ");
 	}
 	
-	public void openSoftDropMultiplier(View view) {
+	public void openSoftDropSpeed(View view) {
 		DialogFragment fragment = new CustomDialog();
 		Bundle args = new Bundle();
 		args.putString("option", "softDropSpeed");

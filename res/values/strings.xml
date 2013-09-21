@@ -18,7 +18,10 @@
     <string name="action_unpause">Unpause</string>
     
     <string name="game_variables_title">Game Variables (Advanced)</string>
+    <string name="speeds_title">Speed Variables</string>
     <string name="timer_variables_title">Timer Variables</string>
+    <string name="sensitivity_title">Sensitivity Variables</string>
+    <string name="misc_title">Miscellaneous Variables</string>
     
     <string name="default_grav_title">Base Drop Speed</string>
     <string name="default_grav_message">        The base drop speed of the blocks. \n

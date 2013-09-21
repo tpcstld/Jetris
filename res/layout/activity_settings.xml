@@ -1,89 +1,107 @@
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:paddingBottom="@dimen/activity_vertical_margin"
-    android:paddingLeft="@dimen/activity_horizontal_margin"
-    android:paddingRight="@dimen/activity_horizontal_margin"
-    android:paddingTop="@dimen/activity_vertical_margin"
-    tools:context=".Settings" >
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent" >
 
-    <Button
-        android:id="@+id/FPS_button"
-        android:layout_width="wrap_content"
+    <RelativeLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_alignLeft="@+id/default_gravity_button"
-        android:layout_alignRight="@+id/default_gravity_button"
-        android:layout_below="@+id/default_gravity_button"
-        android:text="@string/FPS_title"
-        android:onClick="openFPSDialog" />
+        android:paddingBottom="@dimen/activity_vertical_margin"
+        android:paddingLeft="@dimen/activity_horizontal_margin"
+        android:paddingRight="@dimen/activity_horizontal_margin"
+        android:paddingTop="@dimen/activity_vertical_margin" >
 
-    <Button
-        android:id="@+id/flick_sensitivity_button"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignLeft="@+id/FPS_button"
-        android:layout_alignRight="@+id/FPS_button"
-        android:layout_below="@+id/FPS_button"
-        android:text="@string/flick_sensitivity_title"
-        android:onClick="openFlickSensitivity" />
+        <TextView
+            android:id="@+id/game_variables_text_view"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
+            android:layout_centerHorizontal="true"
+            android:text="@string/game_variables_title"
+            android:textAlignment="center"
+            android:textSize="20sp" />
 
-    <Button
-        android:id="@+id/slack_length_button"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignLeft="@+id/flick_sensitivity_button"
-        android:layout_alignRight="@+id/flick_sensitivity_button"
-        android:layout_below="@+id/flick_sensitivity_button"
-        android:text="@string/slack_length_title"
-        android:onClick="openSlackLength" />
+        <TextView
+            android:id="@+id/speeds_view"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/game_variables_text_view"
+            android:layout_centerHorizontal="true"
+            android:text="@string/speeds_title"
+            android:textAlignment="center"
+            android:textSize="16sp" />
 
-    <Button
-        android:id="@+id/soft_drop_multiplier_button"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignLeft="@+id/slack_length_button"
-        android:layout_alignRight="@+id/slack_length_button"
-        android:layout_below="@+id/slack_length_button"
-        android:text="@string/soft_drop_speed_title"
-        android:onClick="openSoftDropMultiplier" />
+        <Button
+            android:id="@+id/default_gravity_button"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/speeds_view"
+            android:layout_centerHorizontal="true"
+            android:onClick="openDefaultGravityDialog"
+            android:text="@string/default_grav_title" />
 
-    <TextView
-        android:id="@+id/textView1"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentTop="true"
-        android:layout_centerHorizontal="true"
-        android:text="@string/game_variables_title"
-        android:textSize="20sp" />
+        <Button
+            android:id="@+id/soft_drop_speed_button"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/default_gravity_button"
+            android:onClick="openSoftDropSpeed"
+            android:text="@string/soft_drop_speed_title" />
 
-    <Button
-        android:id="@+id/drag_sensitivity_button"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignLeft="@+id/soft_drop_multiplier_button"
-        android:layout_alignRight="@+id/soft_drop_multiplier_button"
-        android:layout_below="@+id/soft_drop_multiplier_button"
-        android:onClick="openDragSensitivity"
-        android:text="@string/drag_sensitivity_title" />
+        <TextView
+            android:id="@+id/timer_variables_text_view"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/soft_drop_speed_button"
+            android:layout_centerHorizontal="true"
+            android:text="@string/timer_variables_title" />
 
-    <Button
-        android:id="@+id/default_gravity_button"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/textView1"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="90dp"
-        android:onClick="openDefaultGravityDialog"
-        android:text="@string/default_grav_title" />
+        <Button
+            android:id="@+id/slack_length_button"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/timer_variables_text_view"
+            android:onClick="openSlackLength"
+            android:text="@string/slack_length_title" />
+        
+        <TextView
+            android:id="@+id/sensitivity_text_view"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/slack_length_button"
+            android:layout_centerHorizontal="true"
+            android:text="@string/sensitivity_title" />
+        
+        <Button
+            android:id="@+id/flick_sensitivity_button"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/sensitivity_text_view"
+            android:onClick="openFlickSensitivity"
+            android:text="@string/flick_sensitivity_title" />
 
-    <TextView
-        android:id="@+id/textView2"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/textView1"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="22dp"
-        android:text="@string/timer_variables_title" />
+        <Button
+            android:id="@+id/drag_sensitivity_button"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/flick_sensitivity_button"
+            android:onClick="openDragSensitivity"
+            android:text="@string/drag_sensitivity_title" />
 
-</RelativeLayout>
+        <TextView
+            android:id="@+id/misc_text_view"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/drag_sensitivity_button"
+            android:layout_centerHorizontal="true"
+            android:text="@string/misc_title" />
+        <Button
+            android:id="@+id/FPS_button"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/misc_text_view"
+            android:onClick="openFPSDialog"
+            android:text="@string/FPS_title" />
+    </RelativeLayout>
+    <!-- Here you put the rest of your current view -->
+
+</ScrollView>
