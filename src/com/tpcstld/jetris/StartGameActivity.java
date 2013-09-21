@@ -115,6 +115,8 @@ public class StartGameActivity extends Activity {
 			return true;
 		case R.id.pause:
 			MainGame.pauseGame();
+		case R.id.newgame:
+			MainGame.newGame();
 		}
 		return super.onOptionsItemSelected(item);
 	}

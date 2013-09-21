@@ -7,6 +7,7 @@
     <string name="cancel">Cancel</string>
     <string name="new_marathon_game">New Marathon Game</string>
     <string name="new_time_attack_game">New Time Attack Game</string>
+    <string name="new_game">New Game</string>
     <string name="load_game">Load Game</string>
     <string name="instructions">Instructions</string>
     <string name="title_activity_instructions">Instructions</string>

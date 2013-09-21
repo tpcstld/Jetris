@@ -36,13 +36,13 @@ public class MainGame extends View {
 
 	static Timer time = new Timer(true); // This is the slack timer
 	static long currentCountDownTime = countDownTime;
-	static CountDownTimer countDown = new CountDownTimer(currentCountDownTime, 500) {
+	static CountDownTimer countDown = new CountDownTimer(currentCountDownTime,
+			500) {
 
 		@Override
 		public void onFinish() {
 			lose = true;
-			countDownText = "Time Left: " + 0 + ":"
-					+ String.format("%02d", 0);
+			countDownText = "Time Left: " + 0 + ":" + String.format("%02d", 0);
 			System.out.println("LOST THE GAME 1");
 		}
 
@@ -56,12 +56,13 @@ public class MainGame extends View {
 					+ String.format("%02d", seconds);
 		}
 	}; // Countdown timer for time attack mode;
-	
+
 	static String countDownText = ""; // Text for displaying the time left
 	static boolean slack = false; // Whether or not slack is currently active
 	static boolean pause = false; // Whether or not the pause is currently
 									// paused
 	static boolean lose = false; // Whether or not the game is still in progress
+	static boolean win = false; //Whether or not the game is finished
 	static boolean holdOnce = false; // Whether or not the block has already
 										// been held once
 	static boolean hardDrop = false; // Whether or not harddropping is active
@@ -258,7 +259,7 @@ public class MainGame extends View {
 		// Gravity falling mechanic.
 		// totalGrav is incremented by gravity every tick.
 		// when totalGrav is higher than 1, the shape moves down 1 block.
-		if (!lose & !pause) {
+		if (!lose & !pause & !win) {
 			if (thisShape >= 0) {
 				long temp = System.currentTimeMillis();
 				long dtime = temp - clock;
@@ -368,14 +369,40 @@ public class MainGame extends View {
 								+ nextShapeY3Starting + squareSide
 								+ mainFieldShiftY, paint);
 		}
-
-		if (pause) {
+		// Displaying the big text if needed
+		if (lose) {
+			// Change the font settings
+			paint.setColor(Color.RED);
+			paint.setTextSize((float) (squareSide * 4));
+			paint.setShadowLayer((float) 5, 0, 0, Color.BLACK);
+			paint.setTextAlign(Paint.Align.CENTER);
+			int length = this.getMeasuredHeight();
+			int width = this.getMeasuredWidth();
+			// Display and align the needed text
+			canvas.drawText("GAME", width / 2, mainFieldShiftY + length / 3,
+					paint);
+			canvas.drawText("OVER", width / 2,
+					mainFieldShiftY + length * 2 / 3, paint);
+			// Revert text settings to normal
+			paint.setShadowLayer((float) 0, 0, 0, Color.BLACK);
+			paint.setTextSize((float) (squareSide * textScaleSize));
+			paint.setTextAlign(Paint.Align.LEFT);
+		} else if (win) {
+		} else if (pause) {
+			// Change the font settings
 			paint.setColor(Color.BLACK);
 			paint.setTextSize((float) (squareSide * 4));
+			paint.setShadowLayer((float) 5, 0, 0, Color.BLACK);
+			paint.setTextAlign(Paint.Align.CENTER);
 			int length = this.getMeasuredHeight();
-			canvas.drawText("PAUSED", mainFieldShiftX / 2, mainFieldShiftY
-					+ length / 2, paint);
+			int width = this.getMeasuredWidth();
+			// Display and align the needed text
+			canvas.drawText("PAUSED", width / 2, mainFieldShiftY + length / 2,
+					paint);
+			// Revert text settings to normal
+			paint.setShadowLayer((float) 0, 0, 0, Color.BLACK);
 			paint.setTextSize((float) (squareSide * textScaleSize));
+			paint.setTextAlign(Paint.Align.LEFT);
 		}
 		invalidate();
 	}
@@ -525,7 +552,7 @@ public class MainGame extends View {
 	}
 
 	public static void shapeDown() {
-		if (!lose & !pause) {
+		if (!lose & !pause & !win) {
 			boolean move = true;
 			detectShape();
 			coloring();
@@ -1102,7 +1129,6 @@ public class MainGame extends View {
 				}
 			}
 		}
-		pause = false;
 		blocks = new int[numberOfBlocksWidth][numberOfBlocksLength];
 		colors = new int[numberOfBlocksWidth][numberOfBlocksLength];
 		holdBlocks = new int[numberOfHoldShapeWidth][numberOfHoldShapeLength];
@@ -1122,6 +1148,8 @@ public class MainGame extends View {
 			shapeList.add(xx);
 		}
 		score = 0;
+		pause = false;
+		win = false;
 		lose = false;
 		time.cancel();
 		time = new Timer();
