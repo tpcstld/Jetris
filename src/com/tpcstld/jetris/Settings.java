@@ -19,8 +19,21 @@ public class Settings extends Activity {
 		DialogFragment fragment = new GameOptionsDialog();
 		Bundle args = new Bundle();
 		args.putString("option", "defaultGravity");
+		args.putInt("message", R.string.default_grav_message);
+		args.putInt("title", R.string.default_grav_title);
 		fragment.setArguments(args);
-		fragment.show(getFragmentManager(), "missiles");
+		fragment.show(getFragmentManager(), " ");
+	}
+	
+	@SuppressLint("NewApi")
+	public void openFPSDialog(View view) {
+		DialogFragment fragment = new GameOptionsDialog();
+		Bundle args = new Bundle();
+		args.putString("option", "FPS");
+		args.putInt("message", R.string.FPS_message);
+		args.putInt("title", R.string.FPS_title);
+		fragment.setArguments(args);
+		fragment.show(getFragmentManager(), " ");
 	}
 	@SuppressLint("NewApi")
 	@Override

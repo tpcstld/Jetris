@@ -15,7 +15,8 @@
         android:layout_alignLeft="@+id/default_gravity_button"
         android:layout_alignRight="@+id/default_gravity_button"
         android:layout_below="@+id/default_gravity_button"
-        android:text="@string/FPS_title" />
+        android:text="@string/FPS_title"
+        android:onClick="openFPSDialog" />
 
     <Button
         android:id="@+id/flick_sensitivity_button"

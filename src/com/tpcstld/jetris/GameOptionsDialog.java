@@ -21,14 +21,16 @@ public class GameOptionsDialog extends DialogFragment {
 
 	@Override
 	public Dialog onCreateDialog(Bundle savedInstanceState) {
-		
-		//Initialize variables
+
+		// Initialize variables
 		AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
 		final String currentOption = getArguments().getString("option");
+		final int message = getArguments().getInt("message");
+		final int title = getArguments().getInt("title");
 		String defaultValue = "";
 		final EditText input = new EditText(getActivity());
 
-		//Get the default value, just in case
+		// Get the default value, just in case
 		Resources resource = getActivity().getResources();
 		final AssetManager assetManager = resource.getAssets();
 		final Properties configFile = new Properties();
@@ -47,22 +49,22 @@ public class GameOptionsDialog extends DialogFragment {
 			e.printStackTrace();
 		}
 
-		//Get the settings preference object
+		// Get the settings preference object
 		final SharedPreferences settings = getActivity().getSharedPreferences(
 				"settings", 0);
 
-		//Get the current value of the variable
+		// Get the current value of the variable
 		String value = settings.getString(currentOption, defaultValue);
 
-		//Make the dialog
+		// Make the dialog
 		builder.setView(input)
-				//Set the message of the dialog
-				.setMessage(R.string.default_grav_message)
-				//Set what the OK button does
+				// Set the message of the dialog
+				.setMessage(message)
+				// Set what the OK button does
 				.setPositiveButton(R.string.ok,
 						new DialogInterface.OnClickListener() {
 							public void onClick(DialogInterface dialog, int id) {
-								//Update the settings
+								// Update the settings
 								SharedPreferences.Editor editor = settings
 										.edit();
 								editor.putString(currentOption, input.getText()
@@ -70,13 +72,13 @@ public class GameOptionsDialog extends DialogFragment {
 								editor.commit();
 							}
 						})
-				//Set what the cancel button does
+				// Set what the cancel button does
 				.setNegativeButton(R.string.cancel,
 						new DialogInterface.OnClickListener() {
 							public void onClick(DialogInterface dialog, int id) {
 								// User cancelled the dialog
 							}
-						}).setTitle(R.string.default_grav_title);
+						}).setTitle(title);
 		// Create the AlertDialog object and return it
 		input.setText(value);
 		input.setSelection(value.length());

@@ -16,7 +16,7 @@ import android.view.MenuItem;
 public class ClassicModeActivity extends Activity {
 
 	MainGame mainView;
-	static double defaultGravity = 0.09; // The default gravity of the game
+	static double defaultGravity = 0.05; // The default gravity of the game
 	static int FPS = 1000 / 30; // Frames per second of the game (1000/given
 								// value)
 	static int flickSensitivity = 30; // How sensitive is the flick gesture
@@ -36,14 +36,25 @@ public class ClassicModeActivity extends Activity {
 		// Get the settings
 		SharedPreferences settings = getSharedPreferences("settings", 0);
 		
-		defaultGravity = Double.parseDouble(settings.getString(
+		try {
+			defaultGravity = Double.parseDouble(settings.getString(
 				"defaultGravity", String.valueOf(defaultGravity)));
+		} catch (Exception e) {
+			System.err.println("Error getting defaultGravity. Reverting to default value.");
+		}
 		
-		FPS = 1000 / Integer.parseInt(settings.getString("FPS",
+		try {
+			FPS = 1000 / Integer.parseInt(settings.getString("FPS",
 				String.valueOf(FPS)));
-
-		flickSensitivity = Integer.parseInt(settings.getString("flickSensitivity",
+		} catch (Exception e) {
+			System.err.println("Error getting FPS. Reverting to default value.");
+		}
+		try {
+			flickSensitivity = Integer.parseInt(settings.getString("flickSensitivity",
 				String.valueOf(flickSensitivity)));
+		} catch (Exception e) {
+			System.err.println("Error getting flickSenstivity. Reverting to default value.");
+		}
 		
 		slackLength = settings.getInt("slackLength", 1000);
 		softDropMultipler = settings.getFloat("softDropMultipler", (float) 9);
