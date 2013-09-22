@@ -21,8 +21,6 @@ public class MainGame extends View {
 	static final int numSquaresX = 16; // Total number of columns
 	static final int numSquaresY = 22; // total number of rows
 	static final double textScaleSize = 0.8; // Text scaling
-	static final int numClearList = 5; // The number of moves tracked in
-										// clearList
 
 	// External Options
 	static double defaultGravity = StartGameActivity.defaultGravity;
@@ -48,7 +46,6 @@ public class MainGame extends View {
 		public void onFinish() {
 			lose = true;
 			countDownText = "Time Left: " + 0 + ":" + String.format("%02d", 0);
-			System.out.println("LOST THE GAME 1");
 		}
 
 		@Override
@@ -56,7 +53,6 @@ public class MainGame extends View {
 			currentCountDownTime = timeLeft;
 			int minutes = (int) timeLeft / 60000;
 			int seconds = (int) timeLeft % 60000 / 1000;
-			System.out.println(timeLeft);
 			countDownText = "Time Left: " + minutes + ":"
 					+ String.format("%02d", seconds);
 		}
@@ -95,6 +91,7 @@ public class MainGame extends View {
 	static int nextShapeYStarting; // Where the first next box starts (y)
 	static int nextShapeY2Starting; // Where the second next box starts (y)
 	static int nextShapeY3Starting; // Where the third next box starts (y)
+	static int clearInfoYStarting; // Where the clear info text starts (y)
 	static int thisShape = -1; // The NEXT shape on the playing field.
 	static int nextShape = -1; // The NEXT2 shape on the playing field.
 	static int nextShape1 = -1; // The NEXT3 shaped on the playing field.
@@ -128,7 +125,7 @@ public class MainGame extends View {
 											// variable
 	static boolean startNewGame = true; // Whether it should be a new game or
 										// not
-	static String[] clearList = new String[numClearList];
+	static ArrayList<String> clearInfo = new ArrayList<String>();
 
 	// Blocks Data:
 	// 0 = empty space
@@ -139,7 +136,6 @@ public class MainGame extends View {
 	public MainGame(Context context) {
 		super(context);
 		gameMode = StartGameActivity.gameMode;
-		System.out.println(gameMode);
 		// Get the screensize and get the external variables.
 		getScreenSize = true;
 		defaultGravity = StartGameActivity.defaultGravity;
@@ -231,7 +227,7 @@ public class MainGame extends View {
 		});
 		if (startNewGame) {
 			newGame();
-		}
+		} 
 	}
 
 	@Override
@@ -242,26 +238,32 @@ public class MainGame extends View {
 		if (getScreenSize) {
 			int width = this.getMeasuredWidth();
 			int height = this.getMeasuredHeight();
-			System.out.println(width + " " + height);
 			squareSide = (int) Math.min(width / numSquaresX, height
 					/ numSquaresY);
 			holdShapeXStarting = squareSide * (numberOfBlocksWidth + 1);
 			nextShapeYStarting = squareSide * 5;
 			nextShapeY2Starting = squareSide * 8;
 			nextShapeY3Starting = squareSide * 11;
+			clearInfoYStarting = squareSide * 15;
 			scoreInfoYStarting = squareSide * 3;
-			mainFieldShiftX = squareSide;
+			mainFieldShiftX = squareSide / 2;
 			mainFieldShiftY = squareSide;
 			getScreenSize = false;
 			paint.setTextSize((float) (squareSide * textScaleSize));
 		}
 		paint.setColor(Color.BLACK);
 		canvas.drawText("Score: " + score, holdShapeXStarting + mainFieldShiftX
-				- squareSide, scoreInfoYStarting + mainFieldShiftY, paint);
+				- squareSide / 2, scoreInfoYStarting + mainFieldShiftY, paint);
 
 		canvas.drawText(countDownText, holdShapeXStarting + mainFieldShiftX
-				- squareSide,
+				- squareSide / 2,
 				scoreInfoYStarting + mainFieldShiftY + squareSide, paint);
+
+		for (int xx = 0; xx < clearInfo.size(); xx++) {
+			canvas.drawText(clearInfo.get(xx), holdShapeXStarting
+					+ mainFieldShiftX - squareSide / 2, clearInfoYStarting + mainFieldShiftY
+					+ squareSide * xx, paint);
+		}
 
 		// Gravity falling mechanic.
 		// totalGrav is incremented by gravity every tick.
@@ -652,11 +654,34 @@ public class MainGame extends View {
 				totalGrav = 0.0;
 				gravity = defaultGravity;
 
-				lastDifficult = difficult;
-				difficult = false;
+				// Scoring Information System Startup
+				if (currentDrop > 0) {
+					clearInfo.clear();
+					if (currentDrop == 1) {
+						clearInfo.add("Single");
+					} else if (currentDrop == 2) {
+						clearInfo.add("Double");
+					} else if (currentDrop == 3) {
+						clearInfo.add("Triple");
+					} else if (currentDrop == 4) {
+						clearInfo.add("Tetris");
+					}
+					if (tSpin) {
+						clearInfo.add("T-spin");
+						if (kick) {
+							clearInfo.add("Kicked");
+						}
+					}
+				}
 
 				// Scoring System
 				int addScore = 0;
+
+				if (currentDrop > 0) {
+					lastDifficult = difficult;
+					difficult = false;
+				}
+				
 				if (currentDrop == 1 & tSpin & !kick) {
 					addScore = 800;
 					difficult = true;
@@ -684,16 +709,25 @@ public class MainGame extends View {
 					difficult = true;
 				}
 
-				if (lastDifficult & difficult) {
+				if (lastDifficult & difficult & currentDrop > 0) {
 					addScore = (int) (addScore * 1.5);
+					clearInfo.add("Back to Back");
 				}
-				addScore = addScore + 50 * combo;
-				if (currentDrop != 0) {
+
+				
+				if (currentDrop > 0) {
+					if (combo > 0) {
+						clearInfo.add(combo + " Chain");
+						addScore = addScore + 50 * combo;
+					}
 					combo = combo + 1;
 				} else {
 					combo = 0;
 				}
 
+				if (addScore > 0) {
+					clearInfo.add("+" + addScore);
+				}
 				score = score + addScore;
 				// Scoring System end.
 
@@ -1094,13 +1128,6 @@ public class MainGame extends View {
 		}
 	}
 
-	public static void addToClearList(String text) {
-		for (int xx = clearList.length - 1; xx >= 1; xx--) {
-			clearList[xx] = new String(clearList[xx - 1]);
-		}
-		clearList[0] = new String(text);
-	}
-
 	public static void pauseGame(boolean changeTo) {
 		pause = changeTo;
 		if (pause && gameMode.equals("Time Attack")) {
@@ -1113,7 +1140,6 @@ public class MainGame extends View {
 					lose = true;
 					countDownText = "Time Left: " + 0 + ":"
 							+ String.format("%02d", 0);
-					System.out.println("LOST THE GAME 1");
 				}
 
 				@Override
@@ -1121,7 +1147,6 @@ public class MainGame extends View {
 					currentCountDownTime = timeLeft;
 					int minutes = (int) timeLeft / 60000;
 					int seconds = (int) timeLeft % 60000 / 1000;
-					System.out.println(timeLeft);
 					countDownText = "Time Left: " + minutes + ":"
 							+ String.format("%02d", seconds);
 				}
@@ -1162,10 +1187,8 @@ public class MainGame extends View {
 		for (int xx = 0; xx < 7; xx++) {
 			shapeList.add(xx);
 		}
-		for (int xx = 0; xx < clearList.length; xx++) {
-			clearList[xx] = "";
-		}
 		score = 0;
+		clearInfo.clear();
 		difficult = false;
 		lastDifficult = false;
 		pause = false;
@@ -1184,7 +1207,6 @@ public class MainGame extends View {
 					lose = true;
 					countDownText = "Time Left: " + 0 + ":"
 							+ String.format("%02d", 0);
-					System.out.println("LOST THE GAME 1");
 				}
 
 				@Override
@@ -1192,7 +1214,6 @@ public class MainGame extends View {
 					currentCountDownTime = timeLeft;
 					int minutes = (int) timeLeft / 60000;
 					int seconds = (int) timeLeft % 60000 / 1000;
-					System.out.println(timeLeft);
 					countDownText = "Time Left: " + minutes + ":"
 							+ String.format("%02d", seconds);
 				}
