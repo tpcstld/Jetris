@@ -44,7 +44,7 @@ public class MainGame extends View {
 
 		@Override
 		public void onFinish() {
-			lose = true;
+			win = true;
 			countDownText = "Time Left: " + 0 + ":" + String.format("%02d", 0);
 		}
 
@@ -251,6 +251,7 @@ public class MainGame extends View {
 			getScreenSize = false;
 			paint.setTextSize((float) (squareSide * textScaleSize));
 		}
+		
 		paint.setColor(Color.BLACK);
 		canvas.drawText("Score: " + score, holdShapeXStarting + mainFieldShiftX
 				- squareSide / 2, scoreInfoYStarting + mainFieldShiftY, paint);
@@ -299,20 +300,25 @@ public class MainGame extends View {
 			// Setting the color of the blocks
 			if (x == 0)
 				paint.setColor(Color.CYAN);
+				// @@@@
 			else if (x == 1)
 				paint.setColor(Color.BLUE);
 			else if (x == 2)
-				paint.setColor(Color.DKGRAY);
+				//@@@
+				//@
+				paint.setColor(getResources().getColor(R.color.orange));
 			else if (x == 3)
 				paint.setColor(Color.MAGENTA);
 			else if (x == 4)
+				// @@
+				//@@
 				paint.setColor(Color.GREEN);
 			else if (x == 5)
 				paint.setColor(Color.RED);
 			else if (x == 6)
+				//@@
+				//@@
 				paint.setColor(Color.YELLOW);
-			else if (x == 7)
-				paint.setColor(Color.GRAY);
 
 			for (int xx = 0; xx < numberOfBlocksWidth; xx++)
 				for (int yy = 2; yy < numberOfBlocksLength; yy++)
@@ -397,6 +403,22 @@ public class MainGame extends View {
 			paint.setTextSize((float) (squareSide * textScaleSize));
 			paint.setTextAlign(Paint.Align.LEFT);
 		} else if (win) {
+			// Change the font settings
+			paint.setColor(Color.GREEN);
+			paint.setTextSize((float) (squareSide * 4));
+			paint.setShadowLayer((float) 5, 0, 0, Color.BLACK);
+			paint.setTextAlign(Paint.Align.CENTER);
+			int length = this.getMeasuredHeight();
+			int width = this.getMeasuredWidth();
+			// Display and align the needed text
+			canvas.drawText("TIME'S", width / 2, mainFieldShiftY + length / 3,
+					paint);
+			canvas.drawText("UP", width / 2,
+					mainFieldShiftY + length * 2 / 3, paint);
+			// Revert text settings to normal
+			paint.setShadowLayer((float) 0, 0, 0, Color.BLACK);
+			paint.setTextSize((float) (squareSide * textScaleSize));
+			paint.setTextAlign(Paint.Align.LEFT);
 		} else if (pause) {
 			// Change the font settings
 			paint.setColor(Color.BLACK);
@@ -1137,7 +1159,7 @@ public class MainGame extends View {
 
 				@Override
 				public void onFinish() {
-					lose = true;
+					win = true;
 					countDownText = "Time Left: " + 0 + ":"
 							+ String.format("%02d", 0);
 				}
@@ -1204,7 +1226,7 @@ public class MainGame extends View {
 
 				@Override
 				public void onFinish() {
-					lose = true;
+					win = true;
 					countDownText = "Time Left: " + 0 + ":"
 							+ String.format("%02d", 0);
 				}
