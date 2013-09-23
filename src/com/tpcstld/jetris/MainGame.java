@@ -30,6 +30,7 @@ public class MainGame extends View {
 	static int slackLength = StartGameActivity.slackLength;
 	static double softDropSpeed = StartGameActivity.softDropSpeed;
 	static long countDownTime = 120;
+	static int textColor = Color.BLACK; // Text Color
 
 	// Game Mode
 	static String gameMode = "";
@@ -145,6 +146,7 @@ public class MainGame extends View {
 		softDropSpeed = StartGameActivity.softDropSpeed;
 		dragSensitivity = StartGameActivity.dragSensitivity;
 		countDownTime = StartGameActivity.countDownTime;
+		textColor = StartGameActivity.textColor;
 
 		// Create the object to receive touch input
 		setOnTouchListener(new OnTouchListener() {
@@ -252,7 +254,7 @@ public class MainGame extends View {
 			paint.setTextSize((float) (squareSide * textScaleSize));
 		}
 		
-		paint.setColor(Color.BLACK);
+		paint.setColor(textColor);
 		canvas.drawText("Score: " + score, holdShapeXStarting + mainFieldShiftX
 				- squareSide / 2, scoreInfoYStarting + mainFieldShiftY, paint);
 
@@ -421,7 +423,7 @@ public class MainGame extends View {
 			paint.setTextAlign(Paint.Align.LEFT);
 		} else if (pause) {
 			// Change the font settings
-			paint.setColor(Color.BLACK);
+			paint.setColor(textColor);
 			paint.setTextSize((float) (squareSide * 4));
 			paint.setShadowLayer((float) 5, 0, 0, Color.BLACK);
 			paint.setTextAlign(Paint.Align.CENTER);

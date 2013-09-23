@@ -17,7 +17,7 @@ import android.os.Bundle;
 import android.widget.EditText;
 
 @SuppressLint("NewApi")
-public class CustomDialog extends DialogFragment {
+public class TextDialog extends DialogFragment {
 
 	@Override
 	public Dialog onCreateDialog(Bundle savedInstanceState) {

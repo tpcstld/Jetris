@@ -23,10 +23,13 @@ public class StartGameActivity extends Activity {
 	static double softDropSpeed = 9; // How fast soft dropping is
 	static int dragSensitivity = 60;
 	public static long countDownTime = 120;
+	public static int textColor = Color.BLACK;
 
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
+		SharedPreferences settings = getSharedPreferences("settings", 0);
+		setTheme(Constants.getTheme(settings));
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_jetris_main);
 		// Show the Up button in the action bar.
@@ -35,7 +38,6 @@ public class StartGameActivity extends Activity {
 		// Set up and display the main game screen
 
 		// Get the settings
-		SharedPreferences settings = getSharedPreferences("settings", 0);
 		
 		try {
 			defaultGravity = Double.parseDouble(settings.getString(
@@ -43,7 +45,6 @@ public class StartGameActivity extends Activity {
 		} catch (Exception e) {
 			System.err.println("Error getting defaultGravity. Reverting to default value.");
 		}
-		
 		try {
 			FPS = 1000 / (int) Double.parseDouble(settings.getString("FPS",
 				String.valueOf(FPS)));
@@ -76,6 +77,12 @@ public class StartGameActivity extends Activity {
 		} catch (Exception e) {
 			System.err.println("Error getting countDownTime. Reverting to default value.");
 		}
+		int theme = Constants.getTheme(settings);
+		if (theme == R.style.LightTheme) {
+			textColor = Color.BLACK;
+		} else if (theme == R.style.DarkTheme) {
+			textColor = Color.WHITE;
+		}
 		//Start a new game if the appropriate button is pressed.
 		Intent intent = getIntent();
 		boolean startNewGame = intent.getBooleanExtra("startNewGame", true);
@@ -86,7 +93,7 @@ public class StartGameActivity extends Activity {
 		}
 		//Change the pause/unpause text
 		mainView = new MainGame(this);
-		mainView.setBackgroundColor(Color.WHITE);
+		//mainView.setBackgroundColor(Color.WHITE);
 		setContentView(mainView);
 	}
 

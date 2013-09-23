@@ -11,8 +11,7 @@
     <application
         android:allowBackup="true"
         android:icon="@drawable/ic_launcher"
-        android:label="@string/app_name"
-        android:theme="@style/AppTheme" >
+        android:label="@string/app_name" >
         <activity
             android:name="com.tpcstld.jetris.MainActivity"
             android:label="@string/app_name"
@@ -42,7 +41,7 @@
                 android:value="com.tpcstld.jetris.MainActivity" />
         </activity>
         <activity
-            android:name="com.tpcstld.jetris.Instructions"
+            android:name="com.tpcstld.jetris.InstructionsActivity"
             android:label="@string/title_activity_instructions"
             android:parentActivityName="com.tpcstld.jetris.MainActivity"
             android:screenOrientation="portrait" >

@@ -109,6 +109,15 @@
             android:layout_below="@+id/misc_text_view"
             android:onClick="openFPSDialog"
             android:text="@string/FPS_title" />
+        
+        <Button
+            android:id="@+id/theme_button"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/FPS_button"
+            android:onClick="openFPSDialog"
+            android:text="@string/theme_title" />
+        
     </RelativeLayout>
     <!-- Here you put the rest of your current view -->
 

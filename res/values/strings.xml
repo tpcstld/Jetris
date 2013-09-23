@@ -48,6 +48,8 @@
     <string name="count_down_time_message">       	The starting time of Time Attack. \n
        	Units: Seconds \n
        	From 0 to Infinity (Default: 120) </string>
+    <string name="theme_title">Theme</string>   	
+    
     <string name="controls_info">        Controls:\n
         \t  Move Left/Right: Drag Left/Right \n
         \t	Hard Drop: Swipe Down \n

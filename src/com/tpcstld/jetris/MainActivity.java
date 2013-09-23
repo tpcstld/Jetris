@@ -2,15 +2,21 @@ package com.tpcstld.jetris;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 
 public class MainActivity extends Activity {
+	
+	final String lightTheme = "light";
+	final String darkTheme = "dark";
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
+		SharedPreferences settings = getSharedPreferences("settings", 0);
+		setTheme(Constants.getTheme(settings));
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
 	}
@@ -19,6 +25,7 @@ public class MainActivity extends Activity {
 	public boolean onCreateOptionsMenu(Menu menu) {
 		// Inflate the menu; this adds items to the action bar if it is present.
 		getMenuInflater().inflate(R.menu.main, menu);
+		
 		return true;
 	}
 	
@@ -60,7 +67,7 @@ public class MainActivity extends Activity {
 	}
 	
 	public void openInstructions(View view) {
-		Intent intent = new Intent(this, Instructions.class);
+		Intent intent = new Intent(this, InstructionsActivity.class);
 		startActivity(intent);
 	}
 }

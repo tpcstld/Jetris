@@ -6,12 +6,15 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.support.v4.app.NavUtils;
 import android.annotation.TargetApi;
+import android.content.SharedPreferences;
 import android.os.Build;
 
-public class Instructions extends Activity {
+public class InstructionsActivity extends Activity {
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
+		SharedPreferences settings = getSharedPreferences("settings", 0);
+		setTheme(Constants.getTheme(settings));
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_instructions);
 		// Show the Up button in the action bar.

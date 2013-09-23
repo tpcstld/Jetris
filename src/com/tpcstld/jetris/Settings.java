@@ -3,8 +3,10 @@ package com.tpcstld.jetris;
 import android.annotation.TargetApi;
 import android.app.Activity;
 import android.app.DialogFragment;
+import android.content.SharedPreferences;
 import android.os.Build;
 import android.os.Bundle;
+import android.preference.PreferenceActivity;
 import android.support.v4.app.NavUtils;
 import android.text.InputType;
 import android.view.Menu;
@@ -14,7 +16,7 @@ import android.view.View;
 public class Settings extends Activity {
 
 	public void openDefaultGravityDialog(View view) {
-		DialogFragment fragment = new CustomDialog();
+		DialogFragment fragment = new TextDialog();
 		Bundle args = new Bundle();
 		args.putString("option", "defaultGravity");
 		args.putInt("message", R.string.default_grav_message);
@@ -25,7 +27,7 @@ public class Settings extends Activity {
 	}
 	
 	public void openFPSDialog(View view) {
-		DialogFragment fragment = new CustomDialog();
+		DialogFragment fragment = new TextDialog();
 		Bundle args = new Bundle();
 		args.putString("option", "FPS");
 		args.putInt("message", R.string.FPS_message);
@@ -36,7 +38,7 @@ public class Settings extends Activity {
 	}
 	
 	public void openFlickSensitivity(View view) {
-		DialogFragment fragment = new CustomDialog();
+		DialogFragment fragment = new TextDialog();
 		Bundle args = new Bundle();
 		args.putString("option", "flickSensitivity");
 		args.putInt("message", R.string.flick_sensitivity_message);
@@ -47,7 +49,7 @@ public class Settings extends Activity {
 	}
 	
 	public void openSlackLength(View view) {
-		DialogFragment fragment = new CustomDialog();
+		DialogFragment fragment = new TextDialog();
 		Bundle args = new Bundle();
 		args.putString("option", "slackLength");
 		args.putInt("message", R.string.slack_length_message);
@@ -58,7 +60,7 @@ public class Settings extends Activity {
 	}
 	
 	public void openSoftDropSpeed(View view) {
-		DialogFragment fragment = new CustomDialog();
+		DialogFragment fragment = new TextDialog();
 		Bundle args = new Bundle();
 		args.putString("option", "softDropSpeed");
 		args.putInt("message", R.string.soft_drop_speed_message);
@@ -69,7 +71,7 @@ public class Settings extends Activity {
 	}
 	
 	public void openDragSensitivity(View view) {
-		DialogFragment fragment = new CustomDialog();
+		DialogFragment fragment = new TextDialog();
 		Bundle args = new Bundle();
 		args.putString("option", "dragSensitivity");
 		args.putInt("message", R.string.drag_sensitivity_message);
@@ -80,7 +82,7 @@ public class Settings extends Activity {
 	}
 	
 	public void openCountDownTime(View view) {
-		DialogFragment fragment = new CustomDialog();
+		DialogFragment fragment = new TextDialog();
 		Bundle args = new Bundle();
 		args.putString("option", "countDownTime");
 		args.putInt("message", R.string.count_down_time_message);
@@ -91,6 +93,8 @@ public class Settings extends Activity {
 	}
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
+		SharedPreferences settings = getSharedPreferences("settings", 0);
+		setTheme(Constants.getTheme(settings));
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_settings);
 		// Show the Up button in the action bar.
