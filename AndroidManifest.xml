@@ -32,7 +32,7 @@
                 android:value="com.tpcstld.jetris.MainActivity" />
         </activity>
         <activity
-            android:name="com.tpcstld.jetris.Settings"
+            android:name="com.tpcstld.jetris.SettingsActivity"
             android:label="@string/title_activity_settings"
             android:parentActivityName="com.tpcstld.jetris.MainActivity"
             android:screenOrientation="portrait" >

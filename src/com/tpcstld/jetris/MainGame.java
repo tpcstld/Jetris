@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Random;
 import java.util.Timer;
 
+
 import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Color;
@@ -33,7 +34,7 @@ public class MainGame extends View {
 	static int textColor = Color.BLACK; // Text Color
 
 	// Game Mode
-	static String gameMode = "";
+	public static String gameMode = "";
 
 	// Timers
 	static Timer time = new Timer(true); // This is the slack timer
@@ -61,7 +62,7 @@ public class MainGame extends View {
 
 	static String countDownText = ""; // Text for displaying the time left
 	static boolean slack = false; // Whether or not slack is currently active
-	static boolean pause = false; // Whether or not the pause is currently
+	public static boolean pause = false; // Whether or not the pause is currently
 									// paused
 	static boolean lose = false; // Whether or not the game is still in progress
 	static boolean win = false; // Whether or not the game is finished
@@ -124,7 +125,7 @@ public class MainGame extends View {
 													// fps
 	static boolean getScreenSize = false; // Initial getting screen size
 											// variable
-	static boolean startNewGame = true; // Whether it should be a new game or
+	public static boolean startNewGame = true; // Whether it should be a new game or
 										// not
 	static ArrayList<String> clearInfo = new ArrayList<String>();
 
@@ -140,6 +141,7 @@ public class MainGame extends View {
 		// Get the screensize and get the external variables.
 		getScreenSize = true;
 		defaultGravity = StartGameActivity.defaultGravity;
+		gravity = defaultGravity;
 		FPS = StartGameActivity.FPS;
 		flickSensitivity = StartGameActivity.flickSensitivity;
 		slackLength = StartGameActivity.slackLength;
@@ -679,7 +681,7 @@ public class MainGame extends View {
 				gravity = defaultGravity;
 
 				// Scoring Information System Startup
-				if (currentDrop > 0) {
+				if (currentDrop > 0 || tSpin) {
 					clearInfo.clear();
 					if (currentDrop == 1) {
 						clearInfo.add("Single");

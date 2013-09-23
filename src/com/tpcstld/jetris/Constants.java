@@ -4,8 +4,8 @@ import android.content.SharedPreferences;
 
 public class Constants {
 
-	public final static String LIGHT_THEME = "light";
-	public final static String DARK_THEME = "dark";
+	public final static String LIGHT_THEME = "Light";
+	public final static String DARK_THEME = "Dark";
 	
 	public static int getTheme(SharedPreferences settings) {
 		String theme = settings.getString("theme", Constants.LIGHT_THEME);
@@ -14,6 +14,6 @@ public class Constants {
 		} else if (theme.equals(Constants.DARK_THEME)) {
 			return R.style.DarkTheme;
 		}
-		return 0;
+		return R.style.LightTheme;
 	}
 }

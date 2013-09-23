@@ -1,0 +1,18 @@
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android" >
+
+    <com.tpcstld.jetris.TextPreference
+        android:defaultValue="30"
+        android:inputType="number"
+        android:key="FPS"
+        android:summary="@string/FPS_message"
+        android:title="@string/FPS_title" />
+    
+    <ListPreference
+        android:defaultValue="Light"
+        android:summary="@string/theme_summary"
+        android:entries="@array/theme_value"
+        android:entryValues="@array/theme_value"
+        android:key="theme"
+        android:title="@string/theme_title" />
+
+</PreferenceScreen>

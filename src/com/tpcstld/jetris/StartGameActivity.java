@@ -7,28 +7,31 @@ import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.v4.app.NavUtils;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import com.tpcstld.jetris.R;
+
 public class StartGameActivity extends Activity {
 
 	MainGame mainView;
-	static double defaultGravity = 0.05; // The default gravity of the game
-	static int FPS = 1000 / 30; // Frames per second of the game (1000/given
+	public static double defaultGravity = 0.05; // The default gravity of the game
+	public static int FPS = 1000 / 30; // Frames per second of the game (1000/given
 								// value)
-	static int flickSensitivity = 30; // How sensitive is the flick gesture
-	static int slackLength = 1000; // How long the stack goes on for in
-	static String gameMode = "";
-	static double softDropSpeed = 9; // How fast soft dropping is
-	static int dragSensitivity = 60;
+	public static int flickSensitivity = 30; // How sensitive is the flick gesture
+	public static int slackLength = 1000; // How long the stack goes on for in
+	public static String gameMode = "";
+	public static double softDropSpeed = 9; // How fast soft dropping is
+	public static int dragSensitivity = 60;
 	public static long countDownTime = 120;
 	public static int textColor = Color.BLACK;
 
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
-		SharedPreferences settings = getSharedPreferences("settings", 0);
+		SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(this);
 		setTheme(Constants.getTheme(settings));
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_jetris_main);
