@@ -46,7 +46,7 @@ public class MainActivity extends Activity {
 
 		Intent intent = new Intent(this, StartGameActivity.class);
 		intent.putExtra("startNewGame", true);
-		intent.putExtra("gameMode", "Marathon");
+		intent.putExtra("gameMode", Constants.MARATHON_MODE);
 		startActivity(intent);
 	}
 
@@ -54,7 +54,7 @@ public class MainActivity extends Activity {
 
 		Intent intent = new Intent(this, StartGameActivity.class);
 		intent.putExtra("startNewGame", true);
-		intent.putExtra("gameMode", "Time Attack");
+		intent.putExtra("gameMode", Constants.TIME_ATTACK_MODE);
 		startActivity(intent);
 	}
 

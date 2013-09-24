@@ -1,0 +1,10 @@
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android" >
+
+    <com.tpcstld.jetris.TextPreference
+        android:defaultValue="120"
+        android:inputType="number"
+        android:key="countDownTime"
+        android:summary="@string/count_down_time_message"
+        android:title="@string/count_down_time_title" />
+
+</PreferenceScreen>

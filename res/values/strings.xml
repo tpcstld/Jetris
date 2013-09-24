@@ -16,61 +16,71 @@
     <string name="action_unpause">Unpause</string>
     <string name="game_variables_title">Game Variables (Advanced)</string>
     <string name="speeds_title">Speed Variables</string>
+    <string name="marathon_title">Marathon Variables</string>
+    <string name="time_attack_title">Time Attack Variables</string>
     <string name="timer_variables_title">Timer Variables</string>
     <string name="sensitivity_title">Sensitivity Variables</string>
     <string name="misc_title">Miscellaneous Variables</string>
     <string name="default_grav_title">Base Drop Speed</string>
-    <string name="default_grav_message">        The base drop speed of the blocks. \n
-        Units: Lines/Frame \n
-        From 0.0 to 20.0 (Default: 0.05) </string>
+    <string name="default_grav_message">The base drop speed of the blocks.
+        \nUnits: Lines/33 Milliseconds
+        \nFrom 0.0 to 20.0 (Default: 0.05) </string>
+    <string name="lines_per_level_title">Lines Per Level</string>
+    <string name="lines_per_level_message">The number of lines needed to clear to advance a level.
+        \nUnits: Lines
+        \nFrom 1 to Infinity (Default: 10)</string>
+    <string name="gravity_add_per_level_title">Drop Speed per Level</string>
+    <string name="gravity_add_per_level_message">The speed added to the base drop speed per level.
+        \nUnits: Lines/33 Milliseconds
+        \nFrom 0.0 to 20.0 (Default: 0.1)</string>
     <string name="FPS_title">Frame Rate</string>
-    <string name="FPS_message">        The frame rate of the game.\n
-        Note: A faster frame rate increases the base drop speed of the blocks.\n
-        Units: Frames/Second \n
-        From 1 to 60 (Default: 30) </string>
+    <string name="FPS_message">The frame rate of the game.
+        \nNote: A faster frame rate increases the base drop speed of the blocks.
+        \nUnits: Frames/Second
+        \nFrom 1 to 60 (Default: 30) </string>
     <string name="flick_sensitivity_title">Flick Sensitivity</string>
-    <string name="flick_sensitivity_message">        The sensitivity threshold of the flick gestures. \n
-		Units: Velocity of Swipe (Pixels/Detection Cycle) \n
-        From 1 to Infinity (Default: 30) </string>
+    <string name="flick_sensitivity_message">The sensitivity threshold of the flick gestures.
+		\nUnits: Velocity of Swipe (Pixels/Detection Cycle)
+        \nFrom 1 to Infinity (Default: 30) </string>
     <string name="slack_length_title">Delay</string>
-    <string name="slack_length_message">        The delay before a block locks in place. \n
-        Units: Milliseconds \n
-        From 0 to Infinity (Default: 1000) </string>
+    <string name="slack_length_message">The delay before a block locks in place.
+        \nUnits: Milliseconds
+        \nFrom 0 to Infinity (Default: 1000) </string>
     <string name="soft_drop_speed_title">Soft Drop Speed</string>
-    <string name="soft_drop_speed_message">        The drop speed of the block while soft dropping. \n
-        Units: Lines/Frame \n
-        From 0.0 to 20.0 (Default: 0.45) </string>
+    <string name="soft_drop_speed_message">The drop speed of the block while soft dropping.
+        \nUnits: Lines/Frame
+        \nFrom 0.0 to 20.0 (Default: 0.45) </string>
     <string name="drag_sensitivity_title">Drag Sensitivity</string>
-    <string name="drag_sensitivity_message">        The length needed to drag before the "drag gesture" is recognized. \n
-        Units: Pixels\n
-        From 0 to Infinity (Default: 60) </string>
+    <string name="drag_sensitivity_message">The length needed to drag before the "drag gesture" is recognized.
+        \nUnits: Pixels
+        \nFrom 0 to Infinity (Default: 60) </string>
     <string name="count_down_time_title">Time Attack</string>
-    <string name="count_down_time_message">       	The starting time of Time Attack. \n
-       	Units: Seconds \n
-       	From 0 to Infinity (Default: 120) </string>
+    <string name="count_down_time_message">The starting time of Time Attack.
+       	\nUnits: Seconds
+       	\nFrom 0 to Infinity (Default: 120) </string>
     <string name="theme_title">Theme</string>
     <string name="theme_summary">App will be restart when you return to the previous screen.</string>
-    <string name="controls_info">        Controls:\n
-        \t  Move Left/Right: Drag Left/Right \n
-        \t	Hard Drop: Swipe Down \n
-        \t	Soft Drop: Drag Down \n
-        \t	Hold Block: Swipe Up \n </string>
-    <string name="scoring_info"> Scoring:\n
-    	\t	Base Points: \n
-    	\t\t	Single: 100 \n
-    	\t\t	Double: 300 \n
-    	\t\t	Triple: 500 \n
-    	\t\t	Tetris: 800 \n
-    	\t Base T-Spin Points: \n
-    	\t\t	No Clear, Kicked: 100 \n
-    	\t\t	No Clear, Not Kicked: 400 \n
-    	\t\t	Single, Kicked: 200 \n
-    	\t\t	Single, Not Kicked: 800 \n
-    	\t\t	Double: 1200 \n
-    	\t\t	Triple: 1600 \n
-    	\t Back to Back Tetris/T-spin: Base Points * 1.5 \n
-    	\t Chaining: 50 * Chain # \n</string>
-    <string name="about_info">        Version: 1.0.0
+    <string name="controls_info">Controls:
+        \n\t  Move Left/Right: Drag Left/Right
+        \n\t	Hard Drop: Swipe Down
+        \n\t	Soft Drop: Drag Down
+        \n\t	Hold Block: Swipe Up</string>
+    <string name="scoring_info"> Scoring:
+    	\n\t	Base Points:
+    	\n\t\t	Single: 100
+    	\n\t\t	Double: 300
+    	\n\t\t	Triple: 500
+    	\n\t\t	Tetris: 800
+    	\n\t Base T-Spin Points:
+    	\n\t\t	No Clear, Kicked: 100
+    	\n\t\t	No Clear, Not Kicked: 400
+    	\n\t\t	Single, Kicked: 200
+    	\n\t\t	Single, Not Kicked: 800
+    	\n\t\t	Double: 1200
+    	\n\t\t	Triple: 1600
+    	\n\t Back to Back Tetris/T-spin: Base Points * 1.5
+    	\n\t Chaining: 50 * Chain #</string>
+    <string name="about_info">\nVersion: 1.0.0
         \nProduced by Jerry Jiang (tpcstld)
         \nLogo by Margaret Lu </string>
     <string name="action_settings">Settings</string>

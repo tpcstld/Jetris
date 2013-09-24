@@ -30,7 +30,9 @@ public class MainGame extends View {
 	static int dragSensitivity = StartGameActivity.dragSensitivity;
 	static int slackLength = StartGameActivity.slackLength;
 	static double softDropSpeed = StartGameActivity.softDropSpeed;
-	static long countDownTime = 120;
+	static int linesPerLevel = StartGameActivity.linesPerLevel;
+	static double gravityAddPerLevel = StartGameActivity.gravityAddPerLevel;
+	static long countDownTime = StartGameActivity.countDownTime;
 	static int textColor = Color.BLACK; // Text Color
 
 	// Game Mode
@@ -47,7 +49,7 @@ public class MainGame extends View {
 		@Override
 		public void onFinish() {
 			win = true;
-			countDownText = "Time Left: " + 0 + ":" + String.format("%02d", 0);
+			auxText = "Time Left: " + 0 + ":" + String.format("%02d", 0);
 		}
 
 		@Override
@@ -55,12 +57,12 @@ public class MainGame extends View {
 			currentCountDownTime = timeLeft;
 			int minutes = (int) timeLeft / 60000;
 			int seconds = (int) timeLeft % 60000 / 1000;
-			countDownText = "Time Left: " + minutes + ":"
+			auxText = "Time Left: " + minutes + ":"
 					+ String.format("%02d", seconds);
 		}
 	}; // Countdown timer for time attack mode;
 
-	static String countDownText = ""; // Text for displaying the time left
+	static String auxText = ""; // Text for displaying the time left
 	static boolean slack = false; // Whether or not slack is currently active
 	public static boolean pause = false; // Whether or not the pause is
 											// currently paused
@@ -80,6 +82,9 @@ public class MainGame extends View {
 	static boolean lastDifficult = false; // Whether or not the last clear was
 											// considered to be "hard"
 	static int score = 0; // The current score
+	static int level = 0;
+	static int linesCleared = 0;
+	static int linesClearedFloor = 0;
 	static int mainFieldShiftX; // How much the screen is shifted to the right
 	static int mainFieldShiftY; // How much the screen is shifted downwards
 	static int squareSide; // The size of one square
@@ -120,6 +125,7 @@ public class MainGame extends View {
 	static int[] playLocationX = new int[4]; // X-coords of the blocks in play
 	static int[] playLocationY = new int[4]; // Y-coords of the blocks in play
 	static double gravity = defaultGravity; // The current gravity of the game
+	static double gravityAdd = 0;
 	static double totalGrav = 0; // The current gravity ticker
 	static long clock = System.currentTimeMillis(); // Tracks the real time for
 													// fps
@@ -166,7 +172,7 @@ public class MainGame extends View {
 		canvas.drawText("Score: " + score, holdShapeXStarting + mainFieldShiftX
 				- squareSide / 2, scoreInfoYStarting + mainFieldShiftY, paint);
 
-		canvas.drawText(countDownText, holdShapeXStarting + mainFieldShiftX
+		canvas.drawText(auxText, holdShapeXStarting + mainFieldShiftX
 				- squareSide / 2, scoreInfoYStarting + mainFieldShiftY
 				+ squareSide, paint);
 
@@ -352,6 +358,8 @@ public class MainGame extends View {
 	// nextShape == The NEXT2 shape on the playing field.
 	// nextShape1 == The NEXT3 shape on the playing field.
 	public static void pickShape() {
+		time.cancel();
+		time = new Timer();
 		if (thisShape == -1) {
 			thisShape = shapeList.remove(r.nextInt(shapeList.size()));
 			nextShape = shapeList.remove(r.nextInt(shapeList.size()));
@@ -475,172 +483,37 @@ public class MainGame extends View {
 
 	public static void shapeDown() {
 		if (!lose & !pause & !win) {
-			boolean move = true;
 			detectShape();
 			coloring();
-			// Detection of whether the block can still fall down.
-			if (true) {
-				for (int xx = 0; xx < playLocationY.length; xx++)
-					if (playLocationY[xx] + 1 >= numberOfBlocksLength)
-						move = false;
-				if (move == true)
-					for (int xx = 0; xx < playLocationY.length; xx++)
-						if (blocks[playLocationX[xx]][playLocationY[xx] + 1] == 2)
-							move = false;
-			}
-			// Detection Ends
 
-			// Slack Procedure
+			boolean move = canFallDown();
+
 			if (!move && !hardDrop && !slackOnce) {
-				slackOnce = true;
-				slack = true;
-				time.schedule(new Slack(), slackLength);
+				activateSlack();
 			}
-			// Slack Procedure Ends.
+
+			// Detect
 			if (!move && !slack) {
-				int currentDrop = 0; // The number of lines cleared
-				// T-spin Recognition
-				boolean moveUp = true;
-				boolean moveLeft = true;
-				boolean moveRight = true;
-				boolean tSpin = false;
+				int currentDrop; // The number of lines cleared
+				boolean tSpin = checkTSpin();
 
+				// Set current squares to inactive
 				for (int xx = 0; xx < playLocationY.length; xx++) {
-					try {
-						if (blocks[playLocationX[xx] - 1][playLocationY[xx]] == 2) {
-							moveLeft = false;
-						}
-					} catch (Exception e) {
-						moveLeft = false;
-					}
-					try {
-						if (blocks[playLocationX[xx] + 1][playLocationY[xx]] == 2) {
-							moveRight = false;
-						}
-					} catch (Exception e) {
-						moveRight = false;
-					}
-					try {
-						if (blocks[playLocationX[xx]][playLocationY[xx] - 1] == 2) {
-							moveUp = false;
-						}
-					} catch (Exception e) {
-						moveUp = false;
-					}
-				}
-
-				if (!moveLeft & !moveRight & !moveUp) {
-					tSpin = true;
-				}
-
-				// T-spin recognition end.
-				for (int xx = 0; xx < playLocationY.length; xx++)
 					blocks[playLocationX[xx]][playLocationY[xx]] = 2;
-
-				for (int yy = numberOfBlocksLength - 1; yy > 0; yy--) {
-					boolean line = true;
-					do {
-						for (int xx = 0; xx < numberOfBlocksWidth; xx++) {
-							if (blocks[xx][yy] == 0) {
-								line = false;
-								break;
-							}
-						}
-						if (line) {
-							for (int xx = 0; xx < numberOfBlocksWidth; xx++) {
-								blocks[xx][yy] = 0;
-							}
-							for (int xy = yy; xy > 0; xy--) {
-								for (int xx = 0; xx < numberOfBlocksWidth; xx++) {
-									blocks[xx][xy] = blocks[xx][xy - 1];
-									colors[xx][xy] = colors[xx][xy - 1];
-								}
-							}
-							for (int xx = 0; xx < numberOfBlocksWidth; xx++) {
-								blocks[xx][0] = 0;
-							}
-							currentDrop++;
-						}
-					} while (line);
 				}
+
+				currentDrop = clearLines();
 				hardDrop = false;
 				totalGrav = 0.0;
 				gravity = defaultGravity;
 
-				// Scoring Information System Startup
-				if (currentDrop > 0 || tSpin) {
-					clearInfo.clear();
-					if (currentDrop == 1) {
-						clearInfo.add("Single");
-					} else if (currentDrop == 2) {
-						clearInfo.add("Double");
-					} else if (currentDrop == 3) {
-						clearInfo.add("Triple");
-					} else if (currentDrop == 4) {
-						clearInfo.add("Tetris");
-					}
-					if (tSpin) {
-						clearInfo.add("T-spin");
-						if (kick) {
-							clearInfo.add("Kicked");
-						}
-					}
-				}
+				int addScore = scoring(currentDrop, tSpin);
 
-				// Scoring System
-				int addScore = 0;
-
-				if (currentDrop > 0) {
-					lastDifficult = difficult;
-					difficult = false;
-				}
-
-				if (currentDrop == 1 & tSpin & !kick) {
-					addScore = 800;
-					difficult = true;
-				} else if (currentDrop == 1 & tSpin & kick) {
-					addScore = 200;
-					difficult = true;
-				} else if (currentDrop == 2 & tSpin) {
-					addScore = 1200;
-					difficult = true;
-				} else if (currentDrop == 3 & tSpin) {
-					addScore = 1600;
-					difficult = true;
-				} else if (currentDrop == 0 & tSpin & kick) {
-					addScore = 100;
-				} else if (currentDrop == 0 & tSpin) {
-					addScore = 400;
-				} else if (currentDrop == 1) {
-					addScore = 100;
-				} else if (currentDrop == 2) {
-					addScore = 300;
-				} else if (currentDrop == 3) {
-					addScore = 500;
-				} else if (currentDrop == 4) {
-					addScore = 800;
-					difficult = true;
-				}
-
-				if (lastDifficult & difficult & currentDrop > 0) {
-					addScore = (int) (addScore * 1.5);
-					clearInfo.add("Back to Back");
-				}
-
-				if (currentDrop > 0) {
-					if (combo > 0) {
-						clearInfo.add(combo + " Chain");
-						addScore = addScore + 50 * combo;
-					}
-					combo = combo + 1;
-				} else {
-					combo = 0;
-				}
-
-				if (addScore > 0) {
-					clearInfo.add("+" + addScore);
-				}
 				score = score + addScore;
+				linesCleared = linesCleared + currentDrop;
+				if (gameMode.equals(Constants.MARATHON_MODE)) {
+					changeGravity();
+				}
 				// Scoring System end.
 
 				pickShape();
@@ -663,13 +536,192 @@ public class MainGame extends View {
 					score = score + 1;
 				}
 			}
-			lose = false;
-			for (int xx = 0; xx < numberOfBlocksWidth; xx++) {
-				if (blocks[xx][1] == 2) {
-					lose = true;
-					countDown.cancel();
-					break;
+			detectLose();
+		}
+	}
+
+	public static void activateSlack() {
+		slackOnce = true;
+		slack = true;
+		time.schedule(new Slack(), slackLength);
+	}
+
+	public static boolean canFallDown() {
+		for (int xx = 0; xx < playLocationY.length; xx++) {
+			if (playLocationY[xx] + 1 >= numberOfBlocksLength) {
+				return false;
+			}
+		}
+		for (int xx = 0; xx < playLocationY.length; xx++) {
+			if (blocks[playLocationX[xx]][playLocationY[xx] + 1] == 2) {
+				return false;
+			}
+		}
+		return true;
+	}
+
+	public static boolean checkTSpin() {
+		boolean moveUp = true;
+		boolean moveLeft = true;
+		boolean moveRight = true;
+
+		for (int xx = 0; xx < playLocationY.length; xx++) {
+			try {
+				if (blocks[playLocationX[xx] - 1][playLocationY[xx]] == 2) {
+					moveLeft = false;
 				}
+			} catch (Exception e) {
+				moveLeft = false;
+			}
+			try {
+				if (blocks[playLocationX[xx] + 1][playLocationY[xx]] == 2) {
+					moveRight = false;
+				}
+			} catch (Exception e) {
+				moveRight = false;
+			}
+			try {
+				if (blocks[playLocationX[xx]][playLocationY[xx] - 1] == 2) {
+					moveUp = false;
+				}
+			} catch (Exception e) {
+				moveUp = false;
+			}
+		}
+
+		if (!moveLeft & !moveRight & !moveUp) {
+			return true;
+		}
+		return false;
+	}
+
+	public static int clearLines() {
+		int counter = 0;
+		for (int yy = numberOfBlocksLength - 1; yy > 0; yy--) {
+			boolean line = true;
+			do {
+				for (int xx = 0; xx < numberOfBlocksWidth; xx++) {
+					if (blocks[xx][yy] == 0) {
+						line = false;
+						break;
+					}
+				}
+				if (line) {
+					for (int xx = 0; xx < numberOfBlocksWidth; xx++) {
+						blocks[xx][yy] = 0;
+					}
+					for (int xy = yy; xy > 0; xy--) {
+						for (int xx = 0; xx < numberOfBlocksWidth; xx++) {
+							blocks[xx][xy] = blocks[xx][xy - 1];
+							colors[xx][xy] = colors[xx][xy - 1];
+						}
+					}
+					for (int xx = 0; xx < numberOfBlocksWidth; xx++) {
+						blocks[xx][0] = 0;
+					}
+					counter++;
+				}
+			} while (line);
+		}
+		return counter;
+	}
+
+	public static int scoring(int currentDrop, boolean tSpin) {
+		// Scoring Information System Startup
+		if (currentDrop > 0 || tSpin) {
+			clearInfo.clear();
+			if (currentDrop == 1) {
+				clearInfo.add("Single");
+			} else if (currentDrop == 2) {
+				clearInfo.add("Double");
+			} else if (currentDrop == 3) {
+				clearInfo.add("Triple");
+			} else if (currentDrop == 4) {
+				clearInfo.add("Tetris");
+			}
+			if (tSpin) {
+				clearInfo.add("T-spin");
+				if (kick) {
+					clearInfo.add("Kicked");
+				}
+			}
+		}
+
+		// Scoring System
+		int addScore = 0;
+
+		if (currentDrop > 0) {
+			lastDifficult = difficult;
+			difficult = false;
+		}
+
+		if (currentDrop == 1 & tSpin & !kick) {
+			addScore = 800;
+			difficult = true;
+		} else if (currentDrop == 1 & tSpin & kick) {
+			addScore = 200;
+			difficult = true;
+		} else if (currentDrop == 2 & tSpin) {
+			addScore = 1200;
+			difficult = true;
+		} else if (currentDrop == 3 & tSpin) {
+			addScore = 1600;
+			difficult = true;
+		} else if (currentDrop == 0 & tSpin & kick) {
+			addScore = 100;
+		} else if (currentDrop == 0 & tSpin) {
+			addScore = 400;
+		} else if (currentDrop == 1) {
+			addScore = 100;
+		} else if (currentDrop == 2) {
+			addScore = 300;
+		} else if (currentDrop == 3) {
+			addScore = 500;
+		} else if (currentDrop == 4) {
+			addScore = 800;
+			difficult = true;
+		}
+
+		if (lastDifficult & difficult & currentDrop > 0) {
+			addScore = (int) (addScore * 1.5);
+			clearInfo.add("Back to Back");
+		}
+
+		if (currentDrop > 0) {
+			if (combo > 0) {
+				clearInfo.add(combo + " Chain");
+				addScore = addScore + 50 * combo;
+			}
+			combo = combo + 1;
+		} else {
+			combo = 0;
+		}
+
+		if (addScore > 0) {
+			clearInfo.add("+" + addScore);
+		}
+
+		return addScore;
+	}
+
+	public static void changeGravity() {
+		while (linesCleared >= linesClearedFloor + linesPerLevel) {
+			level = level + 1;
+			linesClearedFloor = linesClearedFloor + linesPerLevel;
+		}
+		if (gravityAdd < 10) {
+			gravityAdd = gravityAdd + level * gravityAddPerLevel;
+		}
+		auxText = "Level: " + (level + 1);
+	}
+
+	public static void detectLose() {
+		lose = false;
+		for (int xx = 0; xx < numberOfBlocksWidth; xx++) {
+			if (blocks[xx][1] == 2) {
+				lose = true;
+				countDown.cancel();
+				break;
 			}
 		}
 	}
@@ -1042,15 +1094,15 @@ public class MainGame extends View {
 
 	public static void pauseGame(boolean changeTo) {
 		pause = changeTo;
-		if (pause && gameMode.equals("Time Attack")) {
+		if (pause && gameMode.equals(Constants.TIME_ATTACK_MODE)) {
 			countDown.cancel();
-		} else if (!pause && gameMode.equals("Time Attack")) {
+		} else if (!pause && gameMode.equals(Constants.TIME_ATTACK_MODE)) {
 			countDown = new CountDownTimer(currentCountDownTime, 500) {
 
 				@Override
 				public void onFinish() {
 					win = true;
-					countDownText = "Time Left: " + 0 + ":"
+					auxText = "Time Left: " + 0 + ":"
 							+ String.format("%02d", 0);
 				}
 
@@ -1059,7 +1111,7 @@ public class MainGame extends View {
 					currentCountDownTime = timeLeft;
 					int minutes = (int) timeLeft / 60000;
 					int seconds = (int) timeLeft % 60000 / 1000;
-					countDownText = "Time Left: " + minutes + ":"
+					auxText = "Time Left: " + minutes + ":"
 							+ String.format("%02d", seconds);
 				}
 			}; // Countdown timer for time attack mode
@@ -1079,6 +1131,8 @@ public class MainGame extends View {
 		dragSensitivity = StartGameActivity.dragSensitivity;
 		countDownTime = StartGameActivity.countDownTime;
 		textColor = StartGameActivity.textColor;
+		linesPerLevel = StartGameActivity.linesPerLevel;
+		gravityAddPerLevel = StartGameActivity.gravityAddPerLevel;
 	}
 
 	public static OnTouchListener getOnTouchListener() {
@@ -1109,30 +1163,32 @@ public class MainGame extends View {
 						x = arg1.getX();
 						y = arg1.getY();
 						float dy = y - prevY;
-						if (dy > flickSensitivity & !hardDropped) {
-							hardDrop = true;
-							slack = false;
-							gravity = 20.0;
-							turn = false;
-							hardDropped = true;
-						} else if (dy < -flickSensitivity) {
-							if (!holdOnce) {
-								holdShape();
+						if (!hardDropped) {
+							if (dy > flickSensitivity) {
+								hardDrop = true;
+								slack = false;
+								gravity = 20.0;
+								turn = false;
+								hardDropped = true;
+							} else if (dy < -flickSensitivity) {
+								if (!holdOnce) {
+									holdShape();
+								}
+								turn = false;
+							} else if (x - startingX > squareSide) {
+								startingX = x;
+								moveRight();
+								turn = false;
+							} else if (x - startingX < -squareSide) {
+								startingX = x;
+								moveLeft();
+								turn = false;
+							} else if (y - startingY > dragSensitivity
+									& !hardDropped) {
+								gravity = softDropSpeed;
+								softDrop = true;
+								turn = false;
 							}
-							turn = false;
-						} else if (x - startingX > squareSide) {
-							startingX = x;
-							moveRight();
-							turn = false;
-						} else if (x - startingX < -squareSide) {
-							startingX = x;
-							moveLeft();
-							turn = false;
-						} else if (y - startingY > dragSensitivity
-								& !hardDropped) {
-							gravity = softDropSpeed;
-							softDrop = true;
-							turn = false;
 						}
 						prevY = y;
 						coloring();
@@ -1184,7 +1240,7 @@ public class MainGame extends View {
 				long temp = System.currentTimeMillis();
 				long dtime = temp - clock;
 				if (dtime > FPS) {
-					totalGrav = totalGrav + gravity;
+					totalGrav = totalGrav + gravity + gravityAdd;
 					clock = clock + FPS;
 				}
 				while (totalGrav >= 1) {
@@ -1253,6 +1309,10 @@ public class MainGame extends View {
 			shapeList.add(xx);
 		}
 		score = 0;
+		gravityAdd = 0;
+		linesCleared = 0;
+		linesClearedFloor = 0;
+		level = 0;
 		clearInfo.clear();
 		difficult = false;
 		lastDifficult = false;
@@ -1261,16 +1321,16 @@ public class MainGame extends View {
 		lose = false;
 		time.cancel();
 		time = new Timer();
-		countDownText = "";
+		auxText = "";
 		currentCountDownTime = countDownTime * 1000;
 		countDown.cancel();
-		if (gameMode.equals("Time Attack")) {
+		if (gameMode.equals(Constants.TIME_ATTACK_MODE)) {
 			countDown = new CountDownTimer(currentCountDownTime, 500) {
 
 				@Override
 				public void onFinish() {
 					win = true;
-					countDownText = "Time Left: " + 0 + ":"
+					auxText = "Time Left: " + 0 + ":"
 							+ String.format("%02d", 0);
 				}
 
@@ -1279,11 +1339,13 @@ public class MainGame extends View {
 					currentCountDownTime = timeLeft;
 					int minutes = (int) timeLeft / 60000;
 					int seconds = (int) timeLeft % 60000 / 1000;
-					countDownText = "Time Left: " + minutes + ":"
+					auxText = "Time Left: " + minutes + ":"
 							+ String.format("%02d", seconds);
 				}
 			};
 			countDown.start();
+		} else if (gameMode.equals(Constants.MARATHON_MODE)) {
+			auxText = "Level: " + (level + 1);
 		}
 		// Pick the new shape
 		pickShape();

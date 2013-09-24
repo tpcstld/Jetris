@@ -6,11 +6,5 @@
         android:key="slackLength"
         android:summary="@string/slack_length_message"
         android:title="@string/slack_length_title" />
-    <com.tpcstld.jetris.TextPreference
-        android:defaultValue="120"
-        android:inputType="number"
-        android:key="countDownTime"
-        android:summary="@string/count_down_time_message"
-        android:title="@string/count_down_time_title" />
 
 </PreferenceScreen>

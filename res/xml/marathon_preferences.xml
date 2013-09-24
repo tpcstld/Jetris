@@ -1,0 +1,16 @@
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android" >
+
+    <com.tpcstld.jetris.TextPreference
+        android:defaultValue="10"
+        android:inputType="number"
+        android:key="linesPerLevel"
+        android:summary="@string/lines_per_level_message"
+        android:title="@string/lines_per_level_title" />
+    <com.tpcstld.jetris.TextPreference
+        android:defaultValue="0.1"
+        android:inputType="numberDecimal"
+        android:key="gravityAddPerLevel"
+        android:summary="@string/gravity_add_per_level_message"
+        android:title="@string/gravity_add_per_level_title" />
+
+</PreferenceScreen>

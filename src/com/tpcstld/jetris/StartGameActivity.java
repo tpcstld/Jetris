@@ -28,6 +28,8 @@ public class StartGameActivity extends Activity {
 	public static int dragSensitivity = 60;
 	public static long countDownTime = 120;
 	public static int textColor = Color.BLACK;
+	public static int linesPerLevel = 10;
+	public static double gravityAddPerLevel = 0.1;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -68,6 +70,8 @@ public class StartGameActivity extends Activity {
 				"dragSensitivity", settings);
 		countDownTime = getIntFromSettings((int) countDownTime,
 				"countDownTime", settings);
+		linesPerLevel = getIntFromSettings(linesPerLevel, "linesPerLevel", settings);
+		gravityAddPerLevel = getDoubleFromSettings(gravityAddPerLevel, "gravityAddPerLevel", settings);
 
 		// Get the theme to set the textcolor
 		int theme = Constants.getTheme(settings);
