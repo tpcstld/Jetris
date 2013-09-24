@@ -99,6 +99,15 @@ public class StartGameActivity extends Activity {
 		//mainView.setBackgroundColor(Color.WHITE);
 		setContentView(mainView);
 	}
+	
+	public int getInt(int variable, String text, SharedPreferences settings) {
+		try {
+			dragSensitivity = Integer.parseInt(settings.getString("dragSensitivity", String.valueOf(dragSensitivity)));
+		} catch (Exception e) {
+			System.err.println("Error getting dragSensitivity. Reverting to default value.");
+		}
+		return 0;
+	}
 
 	/**
 	 * Set up the {@link android.app.ActionBar}, if the API is available.
