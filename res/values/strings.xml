@@ -71,8 +71,8 @@
     	\t Back to Back Tetris/T-spin: Base Points * 1.5 \n
     	\t Chaining: 50 * Chain # \n</string>
     <string name="about_info">        Version: 1.0.0
-        \nProduced By Jerry Jiang (aka tpcstld)
-        \nLogo By Margaret Lu </string>
+        \nProduced by Jerry Jiang (tpcstld)
+        \nLogo by Margaret Lu </string>
     <string name="action_settings">Settings</string>
     <string name="title_activity_settings">Settings</string>
 
