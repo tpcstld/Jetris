@@ -19,8 +19,6 @@ public class StartGameActivity extends Activity {
 	MainGame mainView;
 	public static double defaultGravity = 0.05; // The default gravity of the
 												// game
-	public static int FPS = 1000 / 30; // Frames per second of the game
-										// (1000/given
 	// value)
 	public static int flickSensitivity = 30; // How sensitive is the flick
 												// gesture
