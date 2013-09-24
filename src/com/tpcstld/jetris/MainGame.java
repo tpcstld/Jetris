@@ -22,10 +22,10 @@ public class MainGame extends View {
 	static final int numSquaresX = 16; // Total number of columns
 	static final int numSquaresY = 22; // total number of rows
 	static final double textScaleSize = 0.8; // Text scaling
+	static final int FPS = 1000 / 30;
 
 	// External Options
 	static double defaultGravity = StartGameActivity.defaultGravity;
-	static int FPS = StartGameActivity.FPS;
 	static int flickSensitivity = StartGameActivity.flickSensitivity;
 	static int dragSensitivity = StartGameActivity.dragSensitivity;
 	static int slackLength = StartGameActivity.slackLength;
@@ -79,7 +79,7 @@ public class MainGame extends View {
 										// to be "hard"
 	static boolean lastDifficult = false; // Whether or not the last clear was
 											// considered to be "hard"
-	static int score = 0;
+	static int score = 0;	// The current score
 	static int mainFieldShiftX; // How much the screen is shifted to the right
 	static int mainFieldShiftY; // How much the screen is shifted downwards
 	static int squareSide; // The size of one square
@@ -137,18 +137,8 @@ public class MainGame extends View {
 
 	public MainGame(Context context) {
 		super(context);
-		gameMode = StartGameActivity.gameMode;
-		// Get the screensize and get the external variables.
-		getScreenSize = true;
-		defaultGravity = StartGameActivity.defaultGravity;
-		gravity = defaultGravity;
-		FPS = StartGameActivity.FPS;
-		flickSensitivity = StartGameActivity.flickSensitivity;
-		slackLength = StartGameActivity.slackLength;
-		softDropSpeed = StartGameActivity.softDropSpeed;
-		dragSensitivity = StartGameActivity.dragSensitivity;
-		countDownTime = StartGameActivity.countDownTime;
-		textColor = StartGameActivity.textColor;
+
+		getSettings();
 
 		// Create the object to receive touch input
 		setOnTouchListener(new OnTouchListener() {
@@ -1181,6 +1171,19 @@ public class MainGame extends View {
 		}
 	}
 
+	public static void getSettings() {
+		// Get the screensize and get the external variables.
+		getScreenSize = true;
+		gameMode = StartGameActivity.gameMode;
+		defaultGravity = StartGameActivity.defaultGravity;
+		gravity = defaultGravity;
+		flickSensitivity = StartGameActivity.flickSensitivity;
+		slackLength = StartGameActivity.slackLength;
+		softDropSpeed = StartGameActivity.softDropSpeed;
+		dragSensitivity = StartGameActivity.dragSensitivity;
+		countDownTime = StartGameActivity.countDownTime;
+		textColor = StartGameActivity.textColor;
+	}
 	public static void newGame() {
 		// Reset Variables
 		for (int xx = 0; xx < numberOfBlocksWidth; xx++) {

@@ -49,7 +49,7 @@
        	Units: Seconds \n
        	From 0 to Infinity (Default: 120) </string>
     <string name="theme_title">Theme</string>
-    <string name="theme_summary">App will be restart when you return to the previous screen.</string>	
+    <string name="theme_summary">App will be restart when you return to the previous screen.</string>
     <string name="controls_info">        Controls:\n
         \t  Move Left/Right: Drag Left/Right \n
         \t	Hard Drop: Swipe Down \n
@@ -70,8 +70,9 @@
     	\t\t	Triple: 1600 \n
     	\t Back to Back Tetris/T-spin: Base Points * 1.5 \n
     	\t Chaining: 50 * Chain # \n</string>
-    <string name="about_info">
-        Version: 1.0.0\nBy Jerry Jiang (aka tpcstld)</string>
+    <string name="about_info">        Version: 1.0.0
+        \nProduced By Jerry Jiang (aka tpcstld)
+        \nLogo By Margaret Lu </string>
     <string name="action_settings">Settings</string>
     <string name="title_activity_settings">Settings</string>
 
