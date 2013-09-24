@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.Random;
 import java.util.Timer;
 
-
 import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Color;
@@ -23,6 +22,7 @@ public class MainGame extends View {
 	static final int numSquaresY = 22; // total number of rows
 	static final double textScaleSize = 0.8; // Text scaling
 	static final int FPS = 1000 / 30;
+	static int ORANGE;
 
 	// External Options
 	static double defaultGravity = StartGameActivity.defaultGravity;
@@ -62,8 +62,8 @@ public class MainGame extends View {
 
 	static String countDownText = ""; // Text for displaying the time left
 	static boolean slack = false; // Whether or not slack is currently active
-	public static boolean pause = false; // Whether or not the pause is currently
-									// paused
+	public static boolean pause = false; // Whether or not the pause is
+											// currently paused
 	static boolean lose = false; // Whether or not the game is still in progress
 	static boolean win = false; // Whether or not the game is finished
 	static boolean holdOnce = false; // Whether or not the block has already
@@ -79,7 +79,7 @@ public class MainGame extends View {
 										// to be "hard"
 	static boolean lastDifficult = false; // Whether or not the last clear was
 											// considered to be "hard"
-	static int score = 0;	// The current score
+	static int score = 0; // The current score
 	static int mainFieldShiftX; // How much the screen is shifted to the right
 	static int mainFieldShiftY; // How much the screen is shifted downwards
 	static int squareSide; // The size of one square
@@ -125,8 +125,8 @@ public class MainGame extends View {
 													// fps
 	static boolean getScreenSize = false; // Initial getting screen size
 											// variable
-	public static boolean startNewGame = true; // Whether it should be a new game or
-										// not
+	public static boolean startNewGame = true; // Whether it should be a new
+												// game or not
 	static ArrayList<String> clearInfo = new ArrayList<String>();
 
 	// Blocks Data:
@@ -140,88 +140,14 @@ public class MainGame extends View {
 
 		getSettings();
 
+		// Setting the orange color since there is no default
+		ORANGE = getResources().getColor(R.color.orange);
+
 		// Create the object to receive touch input
-		setOnTouchListener(new OnTouchListener() {
-			float x;
-			float y;
-			float prevY;
-			boolean turn;
-			boolean hardDropped;
-			float startingX;
-			float startingY;
-
-			@Override
-			public boolean onTouch(View arg0, MotionEvent arg1) {
-				if (!pause & !lose) {
-					switch (arg1.getAction()) {
-
-					case MotionEvent.ACTION_DOWN:
-						x = arg1.getX();
-						y = arg1.getY();
-						startingX = x;
-						startingY = y;
-						prevY = y;
-						turn = true;
-						hardDropped = false;
-						return true;
-					case MotionEvent.ACTION_MOVE:
-						x = arg1.getX();
-						y = arg1.getY();
-						float dy = y - prevY;
-						if (dy > flickSensitivity & !hardDropped) {
-							hardDrop = true;
-							slack = false;
-							gravity = 20.0;
-							turn = false;
-							hardDropped = true;
-						} else if (dy < -flickSensitivity) {
-							if (!holdOnce) {
-								holdShape();
-							}
-							turn = false;
-						} else if (x - startingX > squareSide) {
-							startingX = x;
-							moveRight();
-							turn = false;
-						} else if (x - startingX < -squareSide) {
-							startingX = x;
-							moveLeft();
-							turn = false;
-						} else if (y - startingY > dragSensitivity
-								& !hardDropped) {
-							gravity = softDropSpeed;
-							softDrop = true;
-							turn = false;
-						}
-						prevY = y;
-						coloring();
-						return true;
-					case MotionEvent.ACTION_UP:
-						x = arg1.getX();
-						y = arg1.getY();
-
-						if (turn) {
-							if (x < squareSide * numberOfBlocksWidth * 0.5) {
-								shapeTurnCC();
-							} else {
-								shapeTurn();
-							}
-						}
-						if (softDrop) {
-							gravity = defaultGravity;
-							softDrop = false;
-						}
-						coloring();
-						return true;
-					}
-				}
-				return false;
-			}
-
-		});
+		setOnTouchListener(getOnTouchListener());
 		if (startNewGame) {
 			newGame();
-		} 
+		}
 	}
 
 	@Override
@@ -232,51 +158,25 @@ public class MainGame extends View {
 		if (getScreenSize) {
 			int width = this.getMeasuredWidth();
 			int height = this.getMeasuredHeight();
-			squareSide = (int) Math.min(width / numSquaresX, height
-					/ numSquaresY);
-			holdShapeXStarting = squareSide * (numberOfBlocksWidth + 1);
-			nextShapeYStarting = squareSide * 5;
-			nextShapeY2Starting = squareSide * 8;
-			nextShapeY3Starting = squareSide * 11;
-			clearInfoYStarting = squareSide * 15;
-			scoreInfoYStarting = squareSide * 3;
-			mainFieldShiftX = squareSide / 2;
-			mainFieldShiftY = squareSide;
-			getScreenSize = false;
+			getLayout(width, height);
 			paint.setTextSize((float) (squareSide * textScaleSize));
 		}
-		
+
 		paint.setColor(textColor);
 		canvas.drawText("Score: " + score, holdShapeXStarting + mainFieldShiftX
 				- squareSide / 2, scoreInfoYStarting + mainFieldShiftY, paint);
 
 		canvas.drawText(countDownText, holdShapeXStarting + mainFieldShiftX
-				- squareSide / 2,
-				scoreInfoYStarting + mainFieldShiftY + squareSide, paint);
+				- squareSide / 2, scoreInfoYStarting + mainFieldShiftY
+				+ squareSide, paint);
 
 		for (int xx = 0; xx < clearInfo.size(); xx++) {
 			canvas.drawText(clearInfo.get(xx), holdShapeXStarting
-					+ mainFieldShiftX - squareSide / 2, clearInfoYStarting + mainFieldShiftY
-					+ squareSide * xx, paint);
+					+ mainFieldShiftX - squareSide / 2, clearInfoYStarting
+					+ mainFieldShiftY + squareSide * xx, paint);
 		}
 
-		// Gravity falling mechanic.
-		// totalGrav is incremented by gravity every tick.
-		// when totalGrav is higher than 1, the shape moves down 1 block.
-		if (!lose & !pause & !win) {
-			if (thisShape >= 0) {
-				long temp = System.currentTimeMillis();
-				long dtime = temp - clock;
-				if (dtime > FPS) {
-					totalGrav = totalGrav + gravity;
-					clock = clock + FPS;
-				}
-				while (totalGrav >= 1) {
-					shapeDown();
-					totalGrav = totalGrav - 1;
-				}
-			}
-		}
+		gravity();
 		coloring();
 		ghostShape();
 
@@ -292,30 +192,10 @@ public class MainGame extends View {
 
 		for (int x = 0; x < 8; x++) {
 			// Setting the color of the blocks
-			if (x == 0)
-				paint.setColor(Color.CYAN);
-				// @@@@
-			else if (x == 1)
-				paint.setColor(Color.BLUE);
-			else if (x == 2)
-				//@@@
-				//@
-				paint.setColor(getResources().getColor(R.color.orange));
-			else if (x == 3)
-				paint.setColor(Color.MAGENTA);
-			else if (x == 4)
-				// @@
-				//@@
-				paint.setColor(Color.GREEN);
-			else if (x == 5)
-				paint.setColor(Color.RED);
-			else if (x == 6)
-				//@@
-				//@@
-				paint.setColor(Color.YELLOW);
+			paint.setColor(chooseColor(x));
 
-			for (int xx = 0; xx < numberOfBlocksWidth; xx++)
-				for (int yy = 2; yy < numberOfBlocksLength; yy++)
+			for (int xx = 0; xx < numberOfBlocksWidth; xx++) {
+				for (int yy = 2; yy < numberOfBlocksLength; yy++) {
 					if (blocks[xx][yy] != 0 & blocks[xx][yy] != 3
 							& colors[xx][yy] == x) {
 						canvas.drawRect(xx * squareSide + mainFieldShiftX,
@@ -325,29 +205,37 @@ public class MainGame extends View {
 										* squareSide + squareSide
 										+ mainFieldShiftY, paint);
 					}
+				}
+			}
 
-			for (int xx = 0; xx < numberOfBlocksWidth; xx++)
-				for (int yy = 0; yy < numberOfBlocksLength; yy++)
-					if (blocks[xx][yy] == 3 & lastShape == x)
+			for (int xx = 0; xx < numberOfBlocksWidth; xx++) {
+				for (int yy = 0; yy < numberOfBlocksLength; yy++) {
+					if (blocks[xx][yy] == 3 & lastShape == x) {
 						canvas.drawCircle((float) (xx * squareSide + squareSide
 								* 0.5 + mainFieldShiftX),
 								(float) ((yy - 2) * squareSide + squareSide
 										* 0.5 + mainFieldShiftY),
 								(float) (squareSide * 0.5), paint);
+					}
+				}
+			}
 
-			for (int xx = 0; xx < numberOfHoldShapeWidth; xx++)
-				for (int yy = 0; yy < numberOfHoldShapeLength; yy++)
-					if (holdBlocks[xx][yy] == 1 & holdShape == x)
+			for (int xx = 0; xx < numberOfHoldShapeWidth; xx++) {
+				for (int yy = 0; yy < numberOfHoldShapeLength; yy++) {
+					if (holdBlocks[xx][yy] == 1 & holdShape == x) {
 						canvas.drawRect(xx * squareSide + holdShapeXStarting
 								+ mainFieldShiftX, yy * squareSide
 								+ mainFieldShiftY, xx * squareSide
 								+ holdShapeXStarting + squareSide
 								+ mainFieldShiftX, yy * squareSide + squareSide
 								+ mainFieldShiftY, paint);
+					}
+				}
+			}
 
-			for (int xx = 0; xx < numberOfHoldShapeWidth; xx++)
-				for (int yy = 0; yy < numberOfHoldShapeLength; yy++)
-					if (nextBlocks[xx][yy] == 1 & thisShape == x)
+			for (int xx = 0; xx < numberOfHoldShapeWidth; xx++) {
+				for (int yy = 0; yy < numberOfHoldShapeLength; yy++) {
+					if (nextBlocks[xx][yy] == 1 & thisShape == x) {
 						canvas.drawRect(xx * squareSide + holdShapeXStarting
 								+ mainFieldShiftX, yy * squareSide
 								+ nextShapeYStarting + mainFieldShiftY, xx
@@ -355,10 +243,13 @@ public class MainGame extends View {
 								+ mainFieldShiftX, yy * squareSide
 								+ nextShapeYStarting + squareSide
 								+ mainFieldShiftY, paint);
+					}
+				}
+			}
 
-			for (int xx = 0; xx < numberOfHoldShapeWidth; xx++)
-				for (int yy = 0; yy < numberOfHoldShapeLength; yy++)
-					if (next2Blocks[xx][yy] == 1 & nextShape == x)
+			for (int xx = 0; xx < numberOfHoldShapeWidth; xx++) {
+				for (int yy = 0; yy < numberOfHoldShapeLength; yy++) {
+					if (next2Blocks[xx][yy] == 1 & nextShape == x) {
 						canvas.drawRect(xx * squareSide + holdShapeXStarting
 								+ mainFieldShiftX, yy * squareSide
 								+ nextShapeY2Starting + mainFieldShiftY, xx
@@ -366,10 +257,13 @@ public class MainGame extends View {
 								+ mainFieldShiftX, yy * squareSide
 								+ nextShapeY2Starting + squareSide
 								+ mainFieldShiftY, paint);
+					}
+				}
+			}
 
-			for (int xx = 0; xx < numberOfHoldShapeWidth; xx++)
-				for (int yy = 0; yy < numberOfHoldShapeLength; yy++)
-					if (next3Blocks[xx][yy] == 1 & nextShape1 == x)
+			for (int xx = 0; xx < numberOfHoldShapeWidth; xx++) {
+				for (int yy = 0; yy < numberOfHoldShapeLength; yy++) {
+					if (next3Blocks[xx][yy] == 1 & nextShape1 == x) {
 						canvas.drawRect(xx * squareSide + holdShapeXStarting
 								+ mainFieldShiftX, yy * squareSide
 								+ nextShapeY3Starting + mainFieldShiftY, xx
@@ -377,6 +271,9 @@ public class MainGame extends View {
 								+ mainFieldShiftX, yy * squareSide
 								+ nextShapeY3Starting + squareSide
 								+ mainFieldShiftY, paint);
+					}
+				}
+			}
 		}
 		// Displaying the big text if needed
 		if (lose) {
@@ -407,8 +304,8 @@ public class MainGame extends View {
 			// Display and align the needed text
 			canvas.drawText("TIME'S", width / 2, mainFieldShiftY + length / 3,
 					paint);
-			canvas.drawText("UP", width / 2,
-					mainFieldShiftY + length * 2 / 3, paint);
+			canvas.drawText("UP", width / 2, mainFieldShiftY + length * 2 / 3,
+					paint);
 			// Revert text settings to normal
 			paint.setShadowLayer((float) 0, 0, 0, Color.BLACK);
 			paint.setTextSize((float) (squareSide * textScaleSize));
@@ -697,7 +594,7 @@ public class MainGame extends View {
 					lastDifficult = difficult;
 					difficult = false;
 				}
-				
+
 				if (currentDrop == 1 & tSpin & !kick) {
 					addScore = 800;
 					difficult = true;
@@ -730,7 +627,6 @@ public class MainGame extends View {
 					clearInfo.add("Back to Back");
 				}
 
-				
 				if (currentDrop > 0) {
 					if (combo > 0) {
 						clearInfo.add(combo + " Chain");
@@ -1184,6 +1080,146 @@ public class MainGame extends View {
 		countDownTime = StartGameActivity.countDownTime;
 		textColor = StartGameActivity.textColor;
 	}
+
+	public static OnTouchListener getOnTouchListener() {
+		return new OnTouchListener() {
+			float x;
+			float y;
+			float prevY;
+			boolean turn;
+			boolean hardDropped;
+			float startingX;
+			float startingY;
+
+			@Override
+			public boolean onTouch(View arg0, MotionEvent arg1) {
+				if (!pause & !lose) {
+					switch (arg1.getAction()) {
+
+					case MotionEvent.ACTION_DOWN:
+						x = arg1.getX();
+						y = arg1.getY();
+						startingX = x;
+						startingY = y;
+						prevY = y;
+						turn = true;
+						hardDropped = false;
+						return true;
+					case MotionEvent.ACTION_MOVE:
+						x = arg1.getX();
+						y = arg1.getY();
+						float dy = y - prevY;
+						if (dy > flickSensitivity & !hardDropped) {
+							hardDrop = true;
+							slack = false;
+							gravity = 20.0;
+							turn = false;
+							hardDropped = true;
+						} else if (dy < -flickSensitivity) {
+							if (!holdOnce) {
+								holdShape();
+							}
+							turn = false;
+						} else if (x - startingX > squareSide) {
+							startingX = x;
+							moveRight();
+							turn = false;
+						} else if (x - startingX < -squareSide) {
+							startingX = x;
+							moveLeft();
+							turn = false;
+						} else if (y - startingY > dragSensitivity
+								& !hardDropped) {
+							gravity = softDropSpeed;
+							softDrop = true;
+							turn = false;
+						}
+						prevY = y;
+						coloring();
+						return true;
+					case MotionEvent.ACTION_UP:
+						x = arg1.getX();
+						y = arg1.getY();
+
+						if (turn) {
+							if (x < squareSide * numberOfBlocksWidth * 0.5) {
+								shapeTurnCC();
+							} else {
+								shapeTurn();
+							}
+						}
+						if (softDrop) {
+							gravity = defaultGravity;
+							softDrop = false;
+						}
+						coloring();
+						return true;
+					}
+				}
+				return false;
+			}
+
+		};
+	}
+
+	public static void getLayout(int width, int height) {
+		squareSide = (int) Math.min(width / numSquaresX, height / numSquaresY);
+		holdShapeXStarting = squareSide * (numberOfBlocksWidth + 1);
+		nextShapeYStarting = squareSide * 5;
+		nextShapeY2Starting = squareSide * 8;
+		nextShapeY3Starting = squareSide * 11;
+		clearInfoYStarting = squareSide * 15;
+		scoreInfoYStarting = squareSide * 3;
+		mainFieldShiftX = squareSide / 2;
+		mainFieldShiftY = squareSide;
+		getScreenSize = false;
+	}
+
+	// Gravity falling mechanic.
+	// totalGrav is incremented by gravity every tick.
+	// when totalGrav is higher than 1, the shape moves down 1 block.
+	public static void gravity() {
+		if (!lose & !pause & !win) {
+			if (thisShape >= 0) {
+				long temp = System.currentTimeMillis();
+				long dtime = temp - clock;
+				if (dtime > FPS) {
+					totalGrav = totalGrav + gravity;
+					clock = clock + FPS;
+				}
+				while (totalGrav >= 1) {
+					shapeDown();
+					totalGrav = totalGrav - 1;
+				}
+			}
+		}
+	}
+
+	public static int chooseColor(int x) {
+		if (x == 0) {
+			// @@@@
+			return Color.CYAN;
+		} else if (x == 1) {
+			return Color.BLUE;
+		} else if (x == 2) {
+			// @@@
+			// @
+			return ORANGE;
+		} else if (x == 3) {
+			return Color.MAGENTA;
+		} else if (x == 4) {
+			// @@
+			// @@
+			return Color.GREEN;
+		} else if (x == 5) {
+			return Color.RED;
+		} else {
+			// @@
+			// @@
+			return Color.YELLOW;
+		}
+	}
+
 	public static void newGame() {
 		// Reset Variables
 		for (int xx = 0; xx < numberOfBlocksWidth; xx++) {
