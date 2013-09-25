@@ -95,10 +95,15 @@ public class MainGame extends View {
 	static int numberOfHoldShapeWidth = 4; // The width of the auxiliary boxes
 	static int numberOfHoldShapeLength = 2; // The length of the auxiliary boxes
 	static int holdShapeXStarting; // Where the hold box starts (x)
+	static int holdShapeYStarting; // Where the hold box starts (y)
 	static int nextShapeYStarting; // Where the first next box starts (y)
 	static int nextShapeY2Starting; // Where the second next box starts (y)
 	static int nextShapeY3Starting; // Where the third next box starts (y)
 	static int clearInfoYStarting; // Where the clear info text starts (y)
+	static int scoreInfoYStarting; // Where the score box starts (y)
+	static int holdTextYStarting; // Where the "Hold: " text starts (y)
+	static int nextTextYStarting; // Where the "Next: " text starts (y)
+	static int auxInfoYStarting; // Where the aux box starts (y)
 	static int thisShape = -1; // The NEXT shape on the playing field.
 	static int nextShape = -1; // The NEXT2 shape on the playing field.
 	static int nextShape1 = -1; // The NEXT3 shaped on the playing field.
@@ -108,7 +113,6 @@ public class MainGame extends View {
 	static ArrayList<Integer> shapeList = new ArrayList<Integer>();
 	static int shape = 0; // The current shape of the block
 	static int combo = 0; // The current combo
-	static int scoreInfoYStarting; // Where the score box starts (y)
 	static Random r = new Random(); // The randomizer
 	// Array detailing the type of block in each square
 	static int[][] blocks = new int[numberOfBlocksWidth][numberOfBlocksLength];
@@ -169,13 +173,26 @@ public class MainGame extends View {
 		}
 
 		paint.setColor(textColor);
+		paint.setTextSize((float) (squareSide * textScaleSize * textScaleSize));
+		// Drawing "Hold: " text box
+		canvas.drawText("Hold: ", holdShapeXStarting + mainFieldShiftX,
+				holdTextYStarting + mainFieldShiftY, paint);
+
+		// Drawing "Next: " text box
+		canvas.drawText("Next: ", holdShapeXStarting + mainFieldShiftX,
+				nextTextYStarting + mainFieldShiftY, paint);
+
+		paint.setTextSize((float) (squareSide * textScaleSize));
+
+		// Drawing Score text box
 		canvas.drawText("Score: " + score, holdShapeXStarting + mainFieldShiftX
 				- squareSide / 2, scoreInfoYStarting + mainFieldShiftY, paint);
 
+		// Drawing aux text box
 		canvas.drawText(auxText, holdShapeXStarting + mainFieldShiftX
-				- squareSide / 2, scoreInfoYStarting + mainFieldShiftY
-				+ squareSide, paint);
+				- squareSide / 2, auxInfoYStarting + mainFieldShiftY, paint);
 
+		// Drawing clearInfo text box
 		for (int xx = 0; xx < clearInfo.size(); xx++) {
 			canvas.drawText(clearInfo.get(xx), holdShapeXStarting
 					+ mainFieldShiftX - squareSide / 2, clearInfoYStarting
@@ -213,7 +230,8 @@ public class MainGame extends View {
 					}
 				}
 			}
-
+			
+			//Ghost shape drawing
 			for (int xx = 0; xx < numberOfBlocksWidth; xx++) {
 				for (int yy = 0; yy < numberOfBlocksLength; yy++) {
 					if (blocks[xx][yy] == 3 & lastShape == x) {
@@ -231,10 +249,10 @@ public class MainGame extends View {
 					if (holdBlocks[xx][yy] == 1 & holdShape == x) {
 						canvas.drawRect(xx * squareSide + holdShapeXStarting
 								+ mainFieldShiftX, yy * squareSide
-								+ mainFieldShiftY, xx * squareSide
+								+ mainFieldShiftY + holdShapeYStarting, xx * squareSide
 								+ holdShapeXStarting + squareSide
 								+ mainFieldShiftX, yy * squareSide + squareSide
-								+ mainFieldShiftY, paint);
+								+ mainFieldShiftY + holdShapeYStarting, paint);
 					}
 				}
 			}
@@ -1221,11 +1239,16 @@ public class MainGame extends View {
 	public static void getLayout(int width, int height) {
 		squareSide = (int) Math.min(width / numSquaresX, height / numSquaresY);
 		holdShapeXStarting = squareSide * (numberOfBlocksWidth + 1);
-		nextShapeYStarting = squareSide * 5;
-		nextShapeY2Starting = squareSide * 8;
-		nextShapeY3Starting = squareSide * 11;
-		clearInfoYStarting = squareSide * 15;
-		scoreInfoYStarting = squareSide * 3;
+		holdShapeYStarting = squareSide * 1;
+		nextShapeYStarting = squareSide * 7;
+		nextShapeY2Starting = squareSide * 10;
+		nextShapeY3Starting = squareSide * 13;
+		clearInfoYStarting = squareSide * 16;
+		scoreInfoYStarting = squareSide * 4;
+		auxInfoYStarting = squareSide * 5;
+		holdTextYStarting = squareSide * 0;
+		nextTextYStarting = squareSide * 6;
+
 		mainFieldShiftX = squareSide / 2;
 		mainFieldShiftY = squareSide;
 		getScreenSize = false;
