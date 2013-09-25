@@ -8,7 +8,7 @@
         android:paddingBottom="@dimen/activity_vertical_margin"
         android:paddingLeft="@dimen/activity_horizontal_margin"
         android:paddingRight="@dimen/activity_horizontal_margin"
-        android:paddingTop="@dimen/activity_vertical_margin">
+        android:paddingTop="@dimen/activity_vertical_margin" >
 
         <TextView
             android:id="@+id/controls_info"
@@ -22,13 +22,6 @@
             android:layout_height="wrap_content"
             android:layout_below="@+id/controls_info"
             android:text="@string/scoring_info" />
-
-        <TextView
-            android:id="@+id/about_info"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/scoring_info"
-            android:text="@string/about_info" />
     </RelativeLayout>
 
 </ScrollView>

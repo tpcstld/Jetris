@@ -12,6 +12,7 @@
     <string name="title_activity_instructions">Instructions</string>
     <string name="settings">Settings</string>
     <string name="new_game">New Game</string>
+    <string name="about">About Jetris</string>
     <string name="action_pause">Pause</string>
     <string name="action_unpause">Unpause</string>
     <string name="game_variables_title">Game Variables (Advanced)</string>
@@ -82,8 +83,13 @@
     	\n\t Chaining: 50 * Chain #</string>
     <string name="about_info">\nVersion: 1.0.0
         \nProduced by Jerry Jiang (tpcstld)
-        \nLogo by Margaret Lu </string>
+        \nLogo by Margaret Lu 
+        \n
+        \nJetris is an open source project. If you wish to contribute to Jetris, please go to
+        \nwww.github.com/tpcstld/Jetris</string>
     <string name="action_settings">Settings</string>
     <string name="title_activity_settings">Settings</string>
+    <string name="title_activity_about">AboutActivity</string>
+    <string name="hello_world">Hello world!</string>
 
 </resources>

@@ -9,7 +9,7 @@
     tools:context=".MainActivity" >
 
     <Button
-        android:id="@+id/button1"
+        android:id="@+id/settings"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:layout_alignLeft="@+id/FPS_preference_button"
@@ -52,5 +52,13 @@
         android:layout_alignParentTop="true"
         android:onClick="newMarathonGame"
         android:text="@string/new_marathon_game" />
+
+    <Button
+        android:id="@+id/about"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/settings"
+        android:onClick="openAbout"
+        android:text="@string/about" />
 
 </RelativeLayout>
