@@ -189,8 +189,15 @@ public class MainGame extends View {
 				- squareSide / 2, scoreInfoYStarting + mainFieldShiftY, paint);
 
 		// Drawing aux text box
-		canvas.drawText(auxText, holdShapeXStarting + mainFieldShiftX
-				- squareSide / 2, auxInfoYStarting + mainFieldShiftY, paint);
+		if (gameMode.equals(Constants.MARATHON_MODE)) {
+			String tempText = auxText + " (" + (10 - linesCleared + linesClearedFloor)
+					+ ")";
+			canvas.drawText(tempText, holdShapeXStarting + mainFieldShiftX
+					- squareSide / 2, auxInfoYStarting + mainFieldShiftY, paint);
+		} else if (gameMode.equals(Constants.TIME_ATTACK_MODE)){
+			canvas.drawText(auxText, holdShapeXStarting + mainFieldShiftX
+					- squareSide / 2, auxInfoYStarting + mainFieldShiftY, paint);
+		}
 
 		// Drawing clearInfo text box
 		for (int xx = 0; xx < clearInfo.size(); xx++) {
@@ -230,8 +237,8 @@ public class MainGame extends View {
 					}
 				}
 			}
-			
-			//Ghost shape drawing
+
+			// Ghost shape drawing
 			for (int xx = 0; xx < numberOfBlocksWidth; xx++) {
 				for (int yy = 0; yy < numberOfBlocksLength; yy++) {
 					if (blocks[xx][yy] == 3 & lastShape == x) {
@@ -249,8 +256,8 @@ public class MainGame extends View {
 					if (holdBlocks[xx][yy] == 1 & holdShape == x) {
 						canvas.drawRect(xx * squareSide + holdShapeXStarting
 								+ mainFieldShiftX, yy * squareSide
-								+ mainFieldShiftY + holdShapeYStarting, xx * squareSide
-								+ holdShapeXStarting + squareSide
+								+ mainFieldShiftY + holdShapeYStarting, xx
+								* squareSide + holdShapeXStarting + squareSide
 								+ mainFieldShiftX, yy * squareSide + squareSide
 								+ mainFieldShiftY + holdShapeYStarting, paint);
 					}
@@ -726,9 +733,9 @@ public class MainGame extends View {
 		while (linesCleared >= linesClearedFloor + linesPerLevel) {
 			level = level + 1;
 			linesClearedFloor = linesClearedFloor + linesPerLevel;
-		}
-		if (gravityAdd < 10) {
-			gravityAdd = gravityAdd + level * gravityAddPerLevel;
+			if (gravityAdd < 20) {
+				gravityAdd = level * gravityAddPerLevel;
+			}
 		}
 		auxText = "Level: " + (level + 1);
 	}
