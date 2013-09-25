@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.res.TypedArray;
 import android.preference.DialogPreference;
+import android.preference.PreferenceManager;
 import android.text.InputType;
 import android.util.AttributeSet;
 import android.view.View;
@@ -65,9 +66,8 @@ public class TextPreference extends DialogPreference /*implements OnSharedPrefer
 	public void onDialogClosed(boolean positiveResult) {
 		if (positiveResult) {
 			mNewValue = input.getText().toString();
-			System.out.println(mNewValue);
 			persistString(mNewValue);
-			this.setSummary(mNewValue);
+			setSummary(mNewValue);
 		}
 	}
 	
@@ -84,11 +84,6 @@ public class TextPreference extends DialogPreference /*implements OnSharedPrefer
 	
 	protected Object onGetDefaultValue(TypedArray a, int index) {
 	    return a.getString(index);
-	}
-
-	public void onSharedPreferenceChanged(SharedPreferences sharedPreferences,
-	        String key) {
-		this.setSummary(mCurrentValue);
 	}
 
 }
