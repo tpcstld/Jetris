@@ -49,7 +49,7 @@ public class SettingsFragment extends PreferenceFragment {
 			addPreferencesFromResource(R.xml.marathon_preferences);
 			
 			String[] key = {"linesPerLevel", "gravityAddPerLevel"};
-			String[] def = {"10", "0.1"};
+			String[] def = {"10", "0.025"};
 			
 			setSummaries(key, def, sharedprefs);
 		}

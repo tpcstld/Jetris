@@ -33,7 +33,7 @@
     <string name="gravity_add_per_level_title">Drop Speed per Level</string>
     <string name="gravity_add_per_level_message">The speed added to the base drop speed per level.
         \nUnits: Lines/33 Milliseconds
-        \nFrom 0.0 to 20.0 (Default: 0.1)</string>
+        \nFrom 0.0 to 20.0 (Default: 0.025)</string>
     <string name="FPS_title">Frame Rate</string>
     <string name="FPS_message">The frame rate of the game.
         \nNote: A faster frame rate increases the base drop speed of the blocks.
