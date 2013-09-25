@@ -24,7 +24,7 @@ public class StartGameActivity extends Activity {
 												// gesture
 	public static int slackLength = 1000; // How long the stack goes on for in
 	public static String gameMode = "";
-	public static double softDropSpeed = 9; // How fast soft dropping is
+	public static double softDropSpeed = 0.45; // How fast soft dropping is
 	public static int dragSensitivity = 60;
 	public static long countDownTime = 120;
 	public static int textColor = Color.BLACK;
