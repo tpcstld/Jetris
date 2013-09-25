@@ -5,10 +5,12 @@ import java.util.Random;
 import java.util.Timer;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.os.CountDownTimer;
+import android.preference.PreferenceManager;
 import android.view.MotionEvent;
 import android.view.View;
 
@@ -23,17 +25,20 @@ public class MainGame extends View {
 	static final double textScaleSize = 0.8; // Text scaling
 	static final int FPS = 1000 / 30;
 	static int ORANGE;
+	static Context mContext;
 
 	// External Options
-	static double defaultGravity = StartGameActivity.defaultGravity;
-	static int flickSensitivity = StartGameActivity.flickSensitivity;
-	static int dragSensitivity = StartGameActivity.dragSensitivity;
-	static int slackLength = StartGameActivity.slackLength;
-	static double softDropSpeed = StartGameActivity.softDropSpeed;
-	static int linesPerLevel = StartGameActivity.linesPerLevel;
-	static double gravityAddPerLevel = StartGameActivity.gravityAddPerLevel;
-	static long countDownTime = StartGameActivity.countDownTime;
-	static int textColor = Color.BLACK; // Text Color
+	public static double defaultGravity = 0.05; // The default gravity of the
+												// game value
+	public static int flickSensitivity = 30; // How sensitive is the flick
+												// gesture
+	public static int slackLength = 1000; // How long the stack goes on for in
+	public static double softDropSpeed = 0.45; // How fast soft dropping is
+	public static int dragSensitivity = 60;
+	public static long countDownTime = 120;
+	public static int textColor = Color.BLACK;
+	public static int linesPerLevel = 10;
+	public static double gravityAddPerLevel = 0.025;
 
 	// Game Mode
 	public static String gameMode = "";
@@ -147,9 +152,12 @@ public class MainGame extends View {
 
 	public MainGame(Context context) {
 		super(context);
+		SharedPreferences settings = PreferenceManager
+				.getDefaultSharedPreferences(context);
+		
+		getSettings(settings);
 
-		getSettings();
-
+		mContext = context;
 		// Setting the orange color since there is no default
 		ORANGE = getResources().getColor(R.color.orange);
 
@@ -190,11 +198,11 @@ public class MainGame extends View {
 
 		// Drawing aux text box
 		if (gameMode.equals(Constants.MARATHON_MODE)) {
-			String tempText = auxText + " (" + (10 - linesCleared + linesClearedFloor)
-					+ ")";
+			String tempText = auxText + " ("
+					+ (10 - linesCleared + linesClearedFloor) + ")";
 			canvas.drawText(tempText, holdShapeXStarting + mainFieldShiftX
 					- squareSide / 2, auxInfoYStarting + mainFieldShiftY, paint);
-		} else if (gameMode.equals(Constants.TIME_ATTACK_MODE)){
+		} else if (gameMode.equals(Constants.TIME_ATTACK_MODE)) {
 			canvas.drawText(auxText, holdShapeXStarting + mainFieldShiftX
 					- squareSide / 2, auxInfoYStarting + mainFieldShiftY, paint);
 		}
@@ -360,6 +368,56 @@ public class MainGame extends View {
 		invalidate();
 	}
 
+	public void getSettings(SharedPreferences settings) {
+		defaultGravity = getDoubleFromSettings(defaultGravity,
+				"defaultGravity", settings);
+		flickSensitivity = getIntFromSettings(flickSensitivity,
+				"flickSensitivity", settings);
+		slackLength = getIntFromSettings(slackLength, "slackLength", settings);
+		softDropSpeed = getDoubleFromSettings(softDropSpeed, "softDropSpeed",
+				settings);
+		dragSensitivity = getIntFromSettings(dragSensitivity,
+				"dragSensitivity", settings);
+		countDownTime = getIntFromSettings((int) countDownTime,
+				"countDownTime", settings);
+		linesPerLevel = getIntFromSettings(linesPerLevel, "linesPerLevel",
+				settings);
+		gravityAddPerLevel = getDoubleFromSettings(gravityAddPerLevel,
+				"gravityAddPerLevel", settings);
+
+		// Get the theme to set the textcolor
+		int theme = Constants.getTheme(settings);
+		if (theme == R.style.LightTheme) {
+			textColor = Color.BLACK;
+		} else if (theme == R.style.DarkTheme) {
+			textColor = Color.WHITE;
+		}
+	}
+
+	public int getIntFromSettings(int variable, String text,
+			SharedPreferences settings) {
+		try {
+			return Integer.parseInt(settings.getString(text,
+					String.valueOf(variable)));
+		} catch (Exception e) {
+			System.err.println("Error getting " + text
+					+ ". Reverting to default value.");
+		}
+		return variable;
+	}
+
+	public double getDoubleFromSettings(double variable, String text,
+			SharedPreferences settings) {
+		try {
+			return Double.parseDouble(settings.getString(text,
+					String.valueOf(variable)));
+		} catch (Exception e) {
+			System.err.println("Error getting " + text
+					+ ". Reverting to default value.");
+		}
+		return variable;
+	}
+
 	public static void detectShape() {
 		int counter = 0;
 		for (int yy = numberOfBlocksLength - 1; yy >= 0; yy--) {
@@ -390,6 +448,44 @@ public class MainGame extends View {
 			nextShape = shapeList.remove(r.nextInt(shapeList.size()));
 			nextShape1 = shapeList.remove(r.nextInt(shapeList.size()));
 		}
+		displayShape(thisShape);
+		lastShape = thisShape;
+		thisShape = nextShape;
+		nextShape = nextShape1;
+		nextShape1 = shapeList.remove(r.nextInt(shapeList.size()));
+
+		if (shapeList.size() <= 0) {
+			for (int xx = 0; xx < 7; xx++) {
+				shapeList.add(xx);
+			}
+		}
+
+		displayBoxShape(nextBlocks, thisShape);
+		displayBoxShape(next2Blocks, nextShape);
+		displayBoxShape(next3Blocks, nextShape1);
+		detectShape();
+		holdOnce = false;
+	}
+
+	public static void holdShape() {
+		if (holdShape == -1) {
+			holdShape = lastShape;
+			pickShape();
+		} else {
+			int lastShape1 = holdShape;
+			holdShape = lastShape;
+			lastShape = lastShape1;
+			displayShape(lastShape);
+		}
+		holdOnce = true;
+		displayBoxShape(holdBlocks, holdShape);
+	}
+
+	public static void displayShape(int thisShape) {
+		for (int xx = 0; xx < numberOfBlocksWidth; xx++)
+			for (int yy = 0; yy < numberOfBlocksLength; yy++)
+				if (blocks[xx][yy] == 1)
+					blocks[xx][yy] = 0;
 		if (thisShape == 0) {
 			for (int xx = 3; xx <= 6; xx++)
 				blocks[xx][0] = 1;
@@ -428,90 +524,14 @@ public class MainGame extends View {
 			blocks[5][1] = 1;
 			shape = 19;
 		}
-		lastShape = thisShape;
-		thisShape = nextShape;
-		nextShape = nextShape1;
-		nextShape1 = shapeList.remove(r.nextInt(shapeList.size()));
-
-		if (shapeList.size() <= 0) {
-			for (int xx = 0; xx < 7; xx++) {
-				shapeList.add(xx);
-			}
-		}
-
-		displayBoxShape(nextBlocks, thisShape);
-		displayBoxShape(next2Blocks, nextShape);
-		displayBoxShape(next3Blocks, nextShape1);
-		detectShape();
-		holdOnce = false;
 	}
-
-	public static void holdShape() {
-		if (holdShape == -1) {
-			holdShape = lastShape;
-			for (int xx = 0; xx < numberOfBlocksWidth; xx++)
-				for (int yy = 0; yy < numberOfBlocksLength; yy++)
-					if (blocks[xx][yy] == 1)
-						blocks[xx][yy] = 0;
-			pickShape();
-		} else {
-			int lastShape1 = holdShape;
-			holdShape = lastShape;
-			lastShape = lastShape1;
-			for (int xx = 0; xx < numberOfBlocksWidth; xx++)
-				for (int yy = 0; yy < numberOfBlocksLength; yy++)
-					if (blocks[xx][yy] == 1)
-						blocks[xx][yy] = 0;
-			if (lastShape == 0) {
-				for (int xx = 3; xx <= 6; xx++)
-					blocks[xx][0] = 1;
-				shape = 1;
-
-			} else if (lastShape == 1) {
-				for (int xx = 3; xx <= 5; xx++)
-					blocks[xx][1] = 1;
-				blocks[3][0] = 1;
-				shape = 5;
-			} else if (lastShape == 2) {
-				for (int xx = 3; xx <= 5; xx++)
-					blocks[xx][1] = 1;
-				blocks[5][0] = 1;
-				shape = 9;
-			} else if (lastShape == 3) {
-				for (int xx = 3; xx <= 5; xx++)
-					blocks[xx][1] = 1;
-				blocks[4][0] = 1;
-				shape = 13;
-			} else if (lastShape == 4) {
-				blocks[4][0] = 1;
-				blocks[5][0] = 1;
-				blocks[3][1] = 1;
-				blocks[4][1] = 1;
-				shape = 15;
-			} else if (lastShape == 5) {
-				blocks[3][0] = 1;
-				blocks[4][0] = 1;
-				blocks[4][1] = 1;
-				blocks[5][1] = 1;
-				shape = 17;
-			} else if (lastShape == 6) {
-				blocks[4][0] = 1;
-				blocks[5][0] = 1;
-				blocks[4][1] = 1;
-				blocks[5][1] = 1;
-				shape = 19;
-			}
-		}
-		holdOnce = true;
-		displayBoxShape(holdBlocks, holdShape);
-	}
-
+	
 	public static void shapeDown() {
 		if (!lose & !pause & !win) {
 			detectShape();
 			coloring();
 
-			boolean move = canFallDown();
+			boolean move = canFallDown(playLocationX, playLocationY);
 
 			if (!move && !hardDrop && !slackOnce) {
 				activateSlack();
@@ -571,14 +591,14 @@ public class MainGame extends View {
 		time.schedule(new Slack(), slackLength);
 	}
 
-	public static boolean canFallDown() {
-		for (int xx = 0; xx < playLocationY.length; xx++) {
-			if (playLocationY[xx] + 1 >= numberOfBlocksLength) {
+	public static boolean canFallDown(int[] locationX, int[] locationY) {
+		for (int xx = 0; xx < locationY.length; xx++) {
+			if (locationY[xx] + 1 >= numberOfBlocksLength) {
 				return false;
 			}
 		}
-		for (int xx = 0; xx < playLocationY.length; xx++) {
-			if (blocks[playLocationX[xx]][playLocationY[xx] + 1] == 2) {
+		for (int xx = 0; xx < locationY.length; xx++) {
+			if (blocks[locationX[xx]][locationY[xx] + 1] == 2) {
 				return false;
 			}
 		}
@@ -749,6 +769,28 @@ public class MainGame extends View {
 				break;
 			}
 		}
+		updateHighScore();
+	}
+
+	public static void updateHighScore() {
+		if (lose) {
+			SharedPreferences settings = PreferenceManager
+					.getDefaultSharedPreferences(mContext);
+			if (gameMode.equals(Constants.MARATHON_MODE)) {
+				editHighScore(settings, "Marathon Score");
+			} else if (gameMode.equals(Constants.TIME_ATTACK_MODE)) {
+				editHighScore(settings, "Time Attack Score");
+			}
+		}
+	}
+
+	public static void editHighScore(SharedPreferences settings,
+			String scoreType) {
+		int highScore = settings.getInt(scoreType, 0);
+		if (score > highScore) {
+			SharedPreferences.Editor editor = settings.edit();
+			editor.putInt(scoreType, score);
+		}
 	}
 
 	public static void ghostShape() {
@@ -765,21 +807,19 @@ public class MainGame extends View {
 			tempPlayLocationY[xx] = playLocationY[xx];
 		}
 		do {
-			for (int xx = 0; xx < playLocationY.length; xx++)
-				if (tempPlayLocationY[xx] + 1 >= numberOfBlocksLength)
-					move = false;
-			if (move)
-				for (int xx = 0; xx < playLocationY.length; xx++)
-					if (blocks[tempPlayLocationX[xx]][tempPlayLocationY[xx] + 1] == 2)
-						move = false;
+			move = canFallDown(tempPlayLocationX, tempPlayLocationY);
 			if (!move) {
-				for (int xx = 0; xx < playLocationY.length; xx++)
+				for (int xx = 0; xx < playLocationY.length; xx++) {
 					if (blocks[tempPlayLocationX[xx]][tempPlayLocationY[xx]] != 1
-							& blocks[tempPlayLocationX[xx]][tempPlayLocationY[xx]] != 2)
+							& blocks[tempPlayLocationX[xx]][tempPlayLocationY[xx]] != 2) {
 						blocks[tempPlayLocationX[xx]][tempPlayLocationY[xx]] = 3;
-			} else
-				for (int xx = 0; xx < playLocationY.length; xx++)
+					}
+				}
+			} else {
+				for (int xx = 0; xx < playLocationY.length; xx++) {
 					tempPlayLocationY[xx] = tempPlayLocationY[xx] + 1;
+				}
+			}
 		} while (move);
 	}
 
@@ -1142,22 +1182,6 @@ public class MainGame extends View {
 			}; // Countdown timer for time attack mode
 			countDown.start();
 		}
-	}
-
-	public static void getSettings() {
-		// Get the screensize and get the external variables.
-		getScreenSize = true;
-		gameMode = StartGameActivity.gameMode;
-		defaultGravity = StartGameActivity.defaultGravity;
-		gravity = defaultGravity;
-		flickSensitivity = StartGameActivity.flickSensitivity;
-		slackLength = StartGameActivity.slackLength;
-		softDropSpeed = StartGameActivity.softDropSpeed;
-		dragSensitivity = StartGameActivity.dragSensitivity;
-		countDownTime = StartGameActivity.countDownTime;
-		textColor = StartGameActivity.textColor;
-		linesPerLevel = StartGameActivity.linesPerLevel;
-		gravityAddPerLevel = StartGameActivity.gravityAddPerLevel;
 	}
 
 	public static OnTouchListener getOnTouchListener() {

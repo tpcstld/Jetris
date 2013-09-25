@@ -29,7 +29,7 @@ public class StartGameActivity extends Activity {
 	public static long countDownTime = 120;
 	public static int textColor = Color.BLACK;
 	public static int linesPerLevel = 10;
-	public static double gravityAddPerLevel = 0.1;
+	public static double gravityAddPerLevel = 0.025;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -40,9 +40,6 @@ public class StartGameActivity extends Activity {
 		setContentView(R.layout.activity_jetris_main);
 		// Show the Up button in the action bar.
 		setupActionBar();
-
-		// Get the settings
-		getSettings(settings);
 
 		// Start a new game if the appropriate button is pressed.
 		Intent intent = getIntent();
@@ -56,54 +53,6 @@ public class StartGameActivity extends Activity {
 		// Change the pause/unpause text
 		mainView = new MainGame(this);
 		setContentView(mainView);
-	}
-
-	public void getSettings(SharedPreferences settings) {
-		defaultGravity = getDoubleFromSettings(defaultGravity,
-				"defaultGravity", settings);
-		flickSensitivity = getIntFromSettings(flickSensitivity,
-				"flickSensitivity", settings);
-		slackLength = getIntFromSettings(slackLength, "slackLength", settings);
-		softDropSpeed = getDoubleFromSettings(softDropSpeed, "softDropSpeed",
-				settings);
-		dragSensitivity = getIntFromSettings(dragSensitivity,
-				"dragSensitivity", settings);
-		countDownTime = getIntFromSettings((int) countDownTime,
-				"countDownTime", settings);
-		linesPerLevel = getIntFromSettings(linesPerLevel, "linesPerLevel", settings);
-		gravityAddPerLevel = getDoubleFromSettings(gravityAddPerLevel, "gravityAddPerLevel", settings);
-
-		// Get the theme to set the textcolor
-		int theme = Constants.getTheme(settings);
-		if (theme == R.style.LightTheme) {
-			textColor = Color.BLACK;
-		} else if (theme == R.style.DarkTheme) {
-			textColor = Color.WHITE;
-		}
-	}
-
-	public int getIntFromSettings(int variable, String text,
-			SharedPreferences settings) {
-		try {
-			return Integer.parseInt(settings.getString(text,
-					String.valueOf(variable)));
-		} catch (Exception e) {
-			System.err.println("Error getting " + text
-					+ ". Reverting to default value.");
-		}
-		return variable;
-	}
-
-	public double getDoubleFromSettings(double variable, String text,
-			SharedPreferences settings) {
-		try {
-			return Double.parseDouble(settings.getString(text,
-					String.valueOf(variable)));
-		} catch (Exception e) {
-			System.err.println("Error getting " + text
-					+ ". Reverting to default value.");
-		}
-		return variable;
 	}
 
 	/**
