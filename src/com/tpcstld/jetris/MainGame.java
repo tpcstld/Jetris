@@ -154,7 +154,7 @@ public class MainGame extends View {
 		super(context);
 		SharedPreferences settings = PreferenceManager
 				.getDefaultSharedPreferences(context);
-		
+
 		getSettings(settings);
 
 		mContext = context;
@@ -217,11 +217,11 @@ public class MainGame extends View {
 		gravity();
 		coloring();
 		ghostShape();
-
 		for (int xx = mainFieldShiftX; xx <= squareSide * numberOfBlocksWidth
-				+ mainFieldShiftX; xx += squareSide)
+				+ mainFieldShiftX; xx += squareSide) {
 			canvas.drawLine(xx, mainFieldShiftY, xx, squareSide
 					* (numberOfBlocksLength - 2) + mainFieldShiftY, paint);
+		}
 
 		for (int xx = mainFieldShiftY; xx <= squareSide
 				* (numberOfBlocksLength - 2) + mainFieldShiftY; xx += squareSide)
@@ -385,6 +385,10 @@ public class MainGame extends View {
 		gravityAddPerLevel = getDoubleFromSettings(gravityAddPerLevel,
 				"gravityAddPerLevel", settings);
 
+		if (startNewGame) {
+			getScreenSize = true;
+		}
+		
 		// Get the theme to set the textcolor
 		int theme = Constants.getTheme(settings);
 		if (theme == R.style.LightTheme) {
@@ -525,7 +529,7 @@ public class MainGame extends View {
 			shape = 19;
 		}
 	}
-	
+
 	public static void shapeDown() {
 		if (!lose & !pause & !win) {
 			detectShape();
