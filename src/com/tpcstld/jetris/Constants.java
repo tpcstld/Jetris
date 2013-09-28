@@ -8,6 +8,8 @@ public class Constants {
 	public final static String DARK_THEME = "Dark";
 	public final static String MARATHON_MODE = "Marathon";
 	public final static String TIME_ATTACK_MODE = "Time Attack";
+	public final static String MARATHON_SCORE = "Marathon Score";
+	public final static String TIME_ATTACK_SCORE = "Time Attack Score";
 	
 	public static int getTheme(SharedPreferences settings) {
 		String theme = settings.getString("theme", Constants.LIGHT_THEME);

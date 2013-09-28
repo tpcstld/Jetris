@@ -87,6 +87,7 @@ public class MainGame extends View {
 	static boolean lastDifficult = false; // Whether or not the last clear was
 											// considered to be "hard"
 	static int score = 0; // The current score
+	static int highScore = 0;
 	static int level = 0;
 	static int linesCleared = 0;
 	static int linesClearedFloor = 0;
@@ -109,6 +110,7 @@ public class MainGame extends View {
 	static int holdTextYStarting; // Where the "Hold: " text starts (y)
 	static int nextTextYStarting; // Where the "Next: " text starts (y)
 	static int auxInfoYStarting; // Where the aux box starts (y)
+	static int highScoreYStarting;
 	static int thisShape = -1; // The NEXT shape on the playing field.
 	static int nextShape = -1; // The NEXT2 shape on the playing field.
 	static int nextShape1 = -1; // The NEXT3 shaped on the playing field.
@@ -166,6 +168,7 @@ public class MainGame extends View {
 		if (startNewGame) {
 			newGame();
 		}
+
 	}
 
 	@Override
@@ -189,6 +192,9 @@ public class MainGame extends View {
 		// Drawing "Next: " text box
 		canvas.drawText("Next: ", holdShapeXStarting + mainFieldShiftX,
 				nextTextYStarting + mainFieldShiftY, paint);
+		
+		canvas.drawText("High Score: " + highScore, mainFieldShiftX,
+				highScoreYStarting + mainFieldShiftY, paint);
 
 		paint.setTextSize((float) (squareSide * textScaleSize));
 
@@ -207,6 +213,7 @@ public class MainGame extends View {
 					- squareSide / 2, auxInfoYStarting + mainFieldShiftY, paint);
 		}
 
+		
 		// Drawing clearInfo text box
 		for (int xx = 0; xx < clearInfo.size(); xx++) {
 			canvas.drawText(clearInfo.get(xx), holdShapeXStarting
@@ -388,7 +395,13 @@ public class MainGame extends View {
 		if (startNewGame) {
 			getScreenSize = true;
 		}
-		
+
+		if (gameMode.equals(Constants.MARATHON_MODE)) {
+			highScore = settings.getInt(Constants.MARATHON_SCORE, 0);
+		} else if (gameMode.equals(Constants.TIME_ATTACK_MODE)) {
+			highScore = settings.getInt(Constants.TIME_ATTACK_SCORE, 0);
+		}
+
 		// Get the theme to set the textcolor
 		int theme = Constants.getTheme(settings);
 		if (theme == R.style.LightTheme) {
@@ -564,7 +577,7 @@ public class MainGame extends View {
 					changeGravity();
 				}
 				// Scoring System end.
-
+				detectLose();
 				pickShape();
 			} else if (move) {
 				// If slack is still activated
@@ -585,7 +598,6 @@ public class MainGame extends View {
 					score = score + 1;
 				}
 			}
-			detectLose();
 		}
 	}
 
@@ -781,19 +793,20 @@ public class MainGame extends View {
 			SharedPreferences settings = PreferenceManager
 					.getDefaultSharedPreferences(mContext);
 			if (gameMode.equals(Constants.MARATHON_MODE)) {
-				editHighScore(settings, "Marathon Score");
+				editHighScore(settings, Constants.MARATHON_SCORE);
 			} else if (gameMode.equals(Constants.TIME_ATTACK_MODE)) {
-				editHighScore(settings, "Time Attack Score");
+				editHighScore(settings, Constants.TIME_ATTACK_SCORE);
 			}
 		}
 	}
 
 	public static void editHighScore(SharedPreferences settings,
 			String scoreType) {
-		int highScore = settings.getInt(scoreType, 0);
-		if (score > highScore) {
+		if (score > settings.getInt(scoreType, 0)) {
 			SharedPreferences.Editor editor = settings.edit();
 			editor.putInt(scoreType, score);
+			editor.commit();
+			highScore = score;
 		}
 	}
 
@@ -1281,11 +1294,12 @@ public class MainGame extends View {
 		clearInfoYStarting = squareSide * 16;
 		scoreInfoYStarting = squareSide * 4;
 		auxInfoYStarting = squareSide * 5;
-		holdTextYStarting = squareSide * 0;
+		holdTextYStarting = (int) (squareSide * 0.6);
 		nextTextYStarting = squareSide * 6;
+		highScoreYStarting = (int) (squareSide * 21);
 
 		mainFieldShiftX = squareSide / 2;
-		mainFieldShiftY = squareSide;
+		mainFieldShiftY = 0;
 		getScreenSize = false;
 	}
 
