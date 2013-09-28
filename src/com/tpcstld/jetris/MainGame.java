@@ -34,11 +34,11 @@ public class MainGame extends View {
 												// gesture
 	public static int slackLength = 1000; // How long the stack goes on for in
 	public static double softDropSpeed = 0.45; // How fast soft dropping is
-	public static int dragSensitivity = 60;
+	public static int dragSensitivity = 100;
 	public static long countDownTime = 120;
-	public static int textColor = Color.BLACK;
 	public static int linesPerLevel = 10;
 	public static double gravityAddPerLevel = 0.025;
+	public static int textColor = Color.BLACK;
 
 	// Game Mode
 	public static String gameMode = "";
@@ -48,24 +48,8 @@ public class MainGame extends View {
 	static long currentCountDownTime = countDownTime * 1000; // Time remaining
 																// on time
 																// attack mode
-	static CountDownTimer countDown = new CountDownTimer(currentCountDownTime,
-			500) {
-
-		@Override
-		public void onFinish() {
-			win = true;
-			auxText = "Time Left: " + 0 + ":" + String.format("%02d", 0);
-		}
-
-		@Override
-		public void onTick(long timeLeft) {
-			currentCountDownTime = timeLeft;
-			int minutes = (int) timeLeft / 60000;
-			int seconds = (int) timeLeft % 60000 / 1000;
-			auxText = "Time Left: " + minutes + ":"
-					+ String.format("%02d", seconds);
-		}
-	}; // Countdown timer for time attack mode;
+	static CountDownTimer countDown = new CustomCountDownTimer(
+			currentCountDownTime, FPS);
 
 	static String auxText = ""; // Text for displaying the time left
 	static boolean slack = false; // Whether or not slack is currently active
@@ -192,7 +176,7 @@ public class MainGame extends View {
 		// Drawing "Next: " text box
 		canvas.drawText("Next: ", holdShapeXStarting + mainFieldShiftX,
 				nextTextYStarting + mainFieldShiftY, paint);
-		
+
 		canvas.drawText("High Score: " + highScore, mainFieldShiftX,
 				highScoreYStarting + mainFieldShiftY, paint);
 
@@ -205,7 +189,7 @@ public class MainGame extends View {
 		// Drawing aux text box
 		if (gameMode.equals(Constants.MARATHON_MODE)) {
 			String tempText = auxText + " ("
-					+ (10 - linesCleared + linesClearedFloor) + ")";
+					+ (linesPerLevel - linesCleared + linesClearedFloor) + ")";
 			canvas.drawText(tempText, holdShapeXStarting + mainFieldShiftX
 					- squareSide / 2, auxInfoYStarting + mainFieldShiftY, paint);
 		} else if (gameMode.equals(Constants.TIME_ATTACK_MODE)) {
@@ -213,7 +197,6 @@ public class MainGame extends View {
 					- squareSide / 2, auxInfoYStarting + mainFieldShiftY, paint);
 		}
 
-		
 		// Drawing clearInfo text box
 		for (int xx = 0; xx < clearInfo.size(); xx++) {
 			canvas.drawText(clearInfo.get(xx), holdShapeXStarting
@@ -566,6 +549,7 @@ public class MainGame extends View {
 
 				currentDrop = clearLines();
 				hardDrop = false;
+				softDrop = false;
 				totalGrav = 0.0;
 				gravity = defaultGravity;
 
@@ -785,18 +769,18 @@ public class MainGame extends View {
 				break;
 			}
 		}
-		updateHighScore();
+		if (lose) {
+			updateHighScore();
+		}
 	}
 
 	public static void updateHighScore() {
-		if (lose) {
-			SharedPreferences settings = PreferenceManager
-					.getDefaultSharedPreferences(mContext);
-			if (gameMode.equals(Constants.MARATHON_MODE)) {
-				editHighScore(settings, Constants.MARATHON_SCORE);
-			} else if (gameMode.equals(Constants.TIME_ATTACK_MODE)) {
-				editHighScore(settings, Constants.TIME_ATTACK_SCORE);
-			}
+		SharedPreferences settings = PreferenceManager
+				.getDefaultSharedPreferences(mContext);
+		if (gameMode.equals(Constants.MARATHON_MODE)) {
+			editHighScore(settings, Constants.MARATHON_SCORE);
+		} else if (gameMode.equals(Constants.TIME_ATTACK_MODE)) {
+			editHighScore(settings, Constants.TIME_ATTACK_SCORE);
 		}
 	}
 
@@ -880,7 +864,7 @@ public class MainGame extends View {
 		turnSuccess = false;
 		detectShape();
 		if (shape == 1) {
-			turnShape(-2, -1, 0, 1, 2, 1, 0, -1);
+			turnShape(-1, 0, 1, 2, 2, 1, 0, -1);
 			if (turnSuccess)
 				shape = 2;
 		} else if (shape == 2) {
@@ -968,7 +952,7 @@ public class MainGame extends View {
 			if (turnSuccess)
 				shape = 2;
 		} else if (shape == 2) {
-			turnShape(-2, -1, 0, 1, -2, -1, 0, 1);
+			turnShape(-1, 0, 1, 2, -2, -1, 0, 1);
 			if (turnSuccess)
 				shape = 1;
 		} else if (shape == 3) {
@@ -1179,26 +1163,10 @@ public class MainGame extends View {
 		if (pause && gameMode.equals(Constants.TIME_ATTACK_MODE)) {
 			countDown.cancel();
 		} else if (!pause && gameMode.equals(Constants.TIME_ATTACK_MODE)) {
-			countDown = new CountDownTimer(currentCountDownTime, 500) {
-
-				@Override
-				public void onFinish() {
-					win = true;
-					auxText = "Time Left: " + 0 + ":"
-							+ String.format("%02d", 0);
-				}
-
-				@Override
-				public void onTick(long timeLeft) {
-					currentCountDownTime = timeLeft;
-					int minutes = (int) timeLeft / 60000;
-					int seconds = (int) timeLeft % 60000 / 1000;
-					auxText = "Time Left: " + minutes + ":"
-							+ String.format("%02d", seconds);
-				}
-			}; // Countdown timer for time attack mode
+			countDown = new CustomCountDownTimer(currentCountDownTime, FPS);
 			countDown.start();
 		}
+		clock = System.currentTimeMillis();
 	}
 
 	public static OnTouchListener getOnTouchListener() {
@@ -1207,7 +1175,7 @@ public class MainGame extends View {
 			float y;
 			float prevY;
 			boolean turn;
-			boolean hardDropped;
+			boolean ignoreInputs;
 			float startingX;
 			float startingY;
 
@@ -1223,24 +1191,25 @@ public class MainGame extends View {
 						startingY = y;
 						prevY = y;
 						turn = true;
-						hardDropped = false;
+						ignoreInputs = false;
 						return true;
 					case MotionEvent.ACTION_MOVE:
 						x = arg1.getX();
 						y = arg1.getY();
 						float dy = y - prevY;
-						if (!hardDropped) {
+						if (!ignoreInputs) {
 							if (dy > flickSensitivity) {
 								hardDrop = true;
 								slack = false;
 								gravity = 20.0;
 								turn = false;
-								hardDropped = true;
+								ignoreInputs = true;
 							} else if (dy < -flickSensitivity) {
 								if (!holdOnce) {
 									holdShape();
 								}
 								turn = false;
+								ignoreInputs = true;
 							} else if (x - startingX > squareSide) {
 								startingX = x;
 								moveRight();
@@ -1250,10 +1219,11 @@ public class MainGame extends View {
 								moveLeft();
 								turn = false;
 							} else if (y - startingY > dragSensitivity
-									& !hardDropped) {
+									& !ignoreInputs) {
 								gravity = softDropSpeed;
 								softDrop = true;
 								turn = false;
+								//ignoreInputs = true;
 							}
 						}
 						prevY = y;
@@ -1393,28 +1363,12 @@ public class MainGame extends View {
 		lose = false;
 		time.cancel();
 		time = new Timer();
+		clock = System.currentTimeMillis();
 		auxText = "";
 		currentCountDownTime = countDownTime * 1000;
 		countDown.cancel();
 		if (gameMode.equals(Constants.TIME_ATTACK_MODE)) {
-			countDown = new CountDownTimer(currentCountDownTime, 500) {
-
-				@Override
-				public void onFinish() {
-					win = true;
-					auxText = "Time Left: " + 0 + ":"
-							+ String.format("%02d", 0);
-				}
-
-				@Override
-				public void onTick(long timeLeft) {
-					currentCountDownTime = timeLeft;
-					int minutes = (int) timeLeft / 60000;
-					int seconds = (int) timeLeft % 60000 / 1000;
-					auxText = "Time Left: " + minutes + ":"
-							+ String.format("%02d", seconds);
-				}
-			};
+			countDown = new CustomCountDownTimer(currentCountDownTime, FPS);
 			countDown.start();
 		} else if (gameMode.equals(Constants.MARATHON_MODE)) {
 			auxText = "Level: " + (level + 1);

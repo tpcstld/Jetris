@@ -17,6 +17,7 @@ import com.tpcstld.jetris.R;
 public class StartGameActivity extends Activity {
 
 	MainGame mainView;
+	MenuItem mMenuItem;
 	public static double defaultGravity = 0.05; // The default gravity of the
 												// game
 	// value)
@@ -52,6 +53,9 @@ public class StartGameActivity extends Activity {
 
 		// Change the pause/unpause text
 		mainView = new MainGame(this);
+		if (Constants.getTheme(settings) == R.style.DarkTheme && settings.getBoolean("darkBackground", true)) {
+			mainView.setBackgroundColor(Color.BLACK);
+		}
 		setContentView(mainView);
 	}
 
@@ -69,8 +73,8 @@ public class StartGameActivity extends Activity {
 	public boolean onCreateOptionsMenu(Menu menu) {
 		// Inflate the menu; this adds items to the action bar if it is present.
 		getMenuInflater().inflate(R.menu.game_main, menu);
-		MenuItem item = menu.findItem(R.id.pause);
-		item.setTitle(getPauseMenuMessage(MainGame.pause));
+		mMenuItem = menu.findItem(R.id.pause);
+		mMenuItem.setTitle(getPauseMenuMessage(MainGame.pause));
 		return true;
 	}
 
@@ -102,9 +106,14 @@ public class StartGameActivity extends Activity {
 
 	protected void onPause() {
 		MainGame.pauseGame(true);
+		mMenuItem.setTitle(getPauseMenuMessage(MainGame.pause));
 		super.onPause();
 	}
 
+	protected void onResume() {
+		super.onResume();
+	}
+	
 	public int getPauseMenuMessage(boolean pause) {
 		if (pause) {
 			return R.string.action_unpause;

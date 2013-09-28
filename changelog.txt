@@ -1,0 +1,11 @@
+1.0.1a
+	Added Super Dark background option for the dark theme
+	Added reset settings button
+	Fixed bug: Highscore not updating correctly for Time Attack mode
+	Fixed bug: "Lines to clear" text not displaying correctly if setting was changed
+	Fixed bug: Pause/unpause text not displaying correctly
+	Fixed bug: Base drop speed is sometimes inconsistent after unpausing
+1.0.1
+	Added highscores!
+1.0.0
+    Jetris was born C:

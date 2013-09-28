@@ -21,7 +21,7 @@
     <string name="time_attack_title">Time Attack Variables</string>
     <string name="timer_variables_title">Timer Variables</string>
     <string name="sensitivity_title">Sensitivity Variables</string>
-    <string name="misc_title">Miscellaneous Variables</string>
+    <string name="misc_title">Miscellaneous</string>
     <string name="default_grav_title">Base Drop Speed</string>
     <string name="default_grav_message">The base drop speed of the blocks.
         \nUnits: Lines/33 Milliseconds
@@ -61,6 +61,10 @@
        	\nFrom 0 to Infinity (Default: 120) </string>
     <string name="theme_title">Theme</string>
     <string name="theme_summary">App will be restart when you return to the previous screen.</string>
+    <string name="dark_background_title">Black Background for Dark Theme</string>
+    <string name="dark_background_summary">Highly recommended. Works best on AMOLED screens.</string>
+    <string name="reset_title">Reset All Settings</string>
+    <string name="reset_summary">Misc settings will be kept.</string>
     <string name="controls_info">Controls:
         \n\t  Move Left/Right: Drag Left/Right
         \n\t	Hard Drop: Swipe Down
@@ -81,7 +85,7 @@
     	\n\t\t	Triple: 1600
     	\n\t Back to Back Tetris/T-spin: Base Points * 1.5
     	\n\t Chaining: 50 * Chain #</string>
-    <string name="about_info">\nVersion: 1.0.1
+    <string name="about_info">\nVersion: 1.0.1a
         \nProduced by Jerry Jiang (tpcstld)
         \nLogo by Margaret Lu 
         \n

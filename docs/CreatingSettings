@@ -1,0 +1,11 @@
+Steps to create a setting
+
+1. Make appropriate strings NAME_title and NAME_summary
+2. Make the preference in the appropriate xml page
+3. preference key = variableName
+4. defaultValue = default value
+5. put the setting in getSettings() in MainGame.java
+
+IF NEEDED 
+
+6. put the setting in ResetSettingsPreference.java
