@@ -1,19 +1,21 @@
 package com.tpcstld.jetris;
 
-import android.os.Bundle;
-import android.app.Activity;
-import android.view.Menu;
-import android.view.MenuItem;
-import android.support.v4.app.NavUtils;
 import android.annotation.TargetApi;
+import android.app.Activity;
 import android.content.SharedPreferences;
 import android.os.Build;
+import android.os.Bundle;
+import android.preference.PreferenceManager;
+import android.support.v4.app.NavUtils;
+import android.view.Menu;
+import android.view.MenuItem;
 
 public class InstructionsActivity extends Activity {
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
-		SharedPreferences settings = getSharedPreferences("settings", 0);
+		SharedPreferences settings = PreferenceManager
+				.getDefaultSharedPreferences(this);
 		setTheme(Constants.getTheme(settings));
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_instructions);
