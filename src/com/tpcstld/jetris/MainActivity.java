@@ -8,13 +8,9 @@ import android.preference.PreferenceManager;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-
-import com.tpcstld.jetris.R;
+import android.widget.Button;
 
 public class MainActivity extends Activity {
-
-	final String lightTheme = "light";
-	final String darkTheme = "dark";
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -59,9 +55,11 @@ public class MainActivity extends Activity {
 	}
 
 	public void loadGame(View view) {
-		Intent intent = new Intent(this, StartGameActivity.class);
-		intent.putExtra("startNewGame", false);
-		startActivity(intent);
+		if (!MainGame.gameMode.equals("")) {
+			Intent intent = new Intent(this, StartGameActivity.class);
+			intent.putExtra("startNewGame", false);
+			startActivity(intent);
+		}
 	}
 
 	// Opens the Settings activity when the settings button is pressed
@@ -74,9 +72,20 @@ public class MainActivity extends Activity {
 		Intent intent = new Intent(this, InstructionsActivity.class);
 		startActivity(intent);
 	}
-	
+
 	public void openAbout(View view) {
 		Intent intent = new Intent(this, AboutActivity.class);
 		startActivity(intent);
+	}
+	
+	protected void onResume()
+	{
+		super.onResume();
+		Button button = (Button)findViewById(R.id.loadgame);
+		if (MainGame.gameMode.equals("")) {
+			button.setEnabled(false);
+		} else {
+			button.setEnabled(true);
+		}
 	}
 }
