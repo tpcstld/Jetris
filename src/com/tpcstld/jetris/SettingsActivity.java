@@ -1,7 +1,5 @@
 package com.tpcstld.jetris;
 
-import java.util.List;
-
 import android.annotation.TargetApi;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -24,13 +22,14 @@ public class SettingsActivity extends PreferenceActivity {
 		theme = Constants.getTheme(settings);
 		setTheme(Constants.getTheme(settings));
 		super.onCreate(savedInstanceState);
+
+		getFragmentManager().beginTransaction()
+				.replace(android.R.id.content, new SettingsFragment()).commit();
+
 		// Show the Up button in the action bar.
 		setupActionBar();
 	}
 
-	public void onBuildHeaders(List<Header> target) {
-		loadHeadersFromResource(R.xml.preference_headers, target);
-	}
 
 	/**
 	 * Set up the {@link android.app.ActionBar}, if the API is available.
@@ -68,6 +67,20 @@ public class SettingsActivity extends PreferenceActivity {
 
 	protected void onResume() {
 		super.onResume();
+		SharedPreferences settings = PreferenceManager
+				.getDefaultSharedPreferences(this);
+		if (theme != Constants.getTheme(settings)) {
+			setTheme(Constants.getTheme(settings));
+			Intent i = getBaseContext().getPackageManager()
+					.getLaunchIntentForPackage(
+							getBaseContext().getPackageName());
+			i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+			startActivity(i);
+		}
+	}
+	
+	protected void onPause() {
+		super.onPause();
 		SharedPreferences settings = PreferenceManager
 				.getDefaultSharedPreferences(this);
 		if (theme != Constants.getTheme(settings)) {

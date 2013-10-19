@@ -1,0 +1,81 @@
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android" >
+
+    <PreferenceCategory android:title="@string/marathon_title" >
+        <com.tpcstld.jetris.TextPreference
+            android:defaultValue="10"
+            android:inputType="number"
+            android:key="linesPerLevel"
+            android:summary="@string/lines_per_level_message"
+            android:title="@string/lines_per_level_title" />
+        <com.tpcstld.jetris.TextPreference
+            android:defaultValue="0.025"
+            android:inputType="numberDecimal"
+            android:key="gravityAddPerLevel"
+            android:summary="@string/gravity_add_per_level_message"
+            android:title="@string/gravity_add_per_level_title" />
+    </PreferenceCategory>
+    <PreferenceCategory android:title="@string/time_attack_title" >
+        <com.tpcstld.jetris.TextPreference
+            android:defaultValue="120"
+            android:inputType="number"
+            android:key="countDownTime"
+            android:summary="@string/count_down_time_message"
+            android:title="@string/count_down_time_title" />
+    </PreferenceCategory>
+    <PreferenceCategory android:title="@string/speeds_title" >
+        <com.tpcstld.jetris.TextPreference
+            android:defaultValue="0.05"
+            android:inputType="numberDecimal"
+            android:key="defaultGravity"
+            android:summary="@string/default_grav_message"
+            android:title="@string/default_grav_title" />
+        <com.tpcstld.jetris.TextPreference
+            android:defaultValue="0.45"
+            android:inputType="numberDecimal"
+            android:key="softDropSpeed"
+            android:summary="@string/soft_drop_speed_message"
+            android:title="@string/soft_drop_speed_title" />
+    </PreferenceCategory>
+    <PreferenceCategory android:title="@string/timer_variables_title" >
+        <com.tpcstld.jetris.TextPreference
+            android:defaultValue="1000"
+            android:inputType="number"
+            android:key="slackLength"
+            android:summary="@string/slack_length_message"
+            android:title="@string/slack_length_title" />
+    </PreferenceCategory>
+    <PreferenceCategory android:title="@string/sensitivity_title" >
+        <com.tpcstld.jetris.TextPreference
+            android:defaultValue="30"
+            android:inputType="number"
+            android:key="flickSensitivity"
+            android:summary="@string/flick_sensitivity_message"
+            android:title="@string/flick_sensitivity_title" />
+        <com.tpcstld.jetris.TextPreference
+            android:defaultValue="60"
+            android:inputType="number"
+            android:key="dragSensitivity"
+            android:summary="@string/drag_sensitivity_message"
+            android:title="@string/drag_sensitivity_title" />
+    </PreferenceCategory>
+    <PreferenceCategory android:title="@string/misc_title" >
+        <ListPreference
+            android:defaultValue="Light"
+            android:entries="@array/theme_value"
+            android:entryValues="@array/theme_value"
+            android:key="theme"
+            android:summary="@string/theme_summary"
+            android:title="@string/theme_title" />
+
+        <CheckBoxPreference
+            android:defaultValue="true"
+            android:key="darkBackground"
+            android:summary="@string/dark_background_summary"
+            android:title="@string/dark_background_title" />
+
+        <com.tpcstld.jetris.ResetSettingsPreference
+            android:summary="@string/reset_summary"
+            android:title="@string/reset_title" />
+    </PreferenceCategory>
+
+</PreferenceScreen>
