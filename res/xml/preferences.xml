@@ -7,7 +7,6 @@
             android:key="linesPerLevel"
             android:summary="@string/lines_per_level_message"
             android:title="@string/lines_per_level_title" />
-
         <com.tpcstld.jetris.TextPreference
             android:defaultValue="0.025"
             android:inputType="numberDecimal"
@@ -74,12 +73,9 @@
             android:summary="@string/dark_background_summary"
             android:title="@string/dark_background_title" />
 
-        <com.tpcstld.jetris.ResetHighScoresPreference
-            android:title="@string/reset_highscores_title" />
-
         <com.tpcstld.jetris.ResetSettingsPreference
-            android:summary="@string/reset_settings_summary"
-            android:title="@string/reset_settings_title" />
+            android:summary="@string/reset_summary"
+            android:title="@string/reset_title" />
     </PreferenceCategory>
 
 </PreferenceScreen>

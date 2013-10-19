@@ -5,8 +5,6 @@
     <string name="title_activity_jetris_main">Jetris</string>
     <string name="ok">OK</string>
     <string name="cancel">Cancel</string>
-    <string name="marathon_mode">Marathon Mode</string>
-    <string name="time_attack_mode">Time Attack Mode</string>
     <string name="new_marathon_game">New Marathon Game</string>
     <string name="new_time_attack_game">New Time Attack Game</string>
     <string name="load_game">Load Game</string>
@@ -65,9 +63,8 @@
     <string name="theme_summary">App will be restart when you return to the previous screen.</string>
     <string name="dark_background_title">Black Background for Dark Theme</string>
     <string name="dark_background_summary">Highly recommended. Works best on AMOLED screens.</string>
-    <string name="reset_highscores_title">Reset Highscores</string>
-    <string name="reset_settings_title">Reset All Settings</string>
-    <string name="reset_settings_summary">Misc settings will be kept.</string>
+    <string name="reset_title">Reset All Settings</string>
+    <string name="reset_summary">Misc settings will be kept.</string>
     <string name="controls_info">Controls:
         \n\t  Move Left/Right: Drag Left/Right
         \n\t	Hard Drop: Swipe Down

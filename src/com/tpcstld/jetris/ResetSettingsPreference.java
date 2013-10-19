@@ -22,7 +22,7 @@ public class ResetSettingsPreference extends DialogPreference {
 
 		TypedArray ta = context.obtainStyledAttributes(attrs, attrsArray);
 		setTitle(ta.getString(0));
-		setDialogMessage(Constants.CONFIRM_SETTINGS_MESSAGE);
+		setDialogMessage(Constants.CONFIRM_MESSAGE);
 		setPositiveButtonText(android.R.string.ok);
 		setNegativeButtonText(android.R.string.cancel);
 		setDialogIcon(null);
