@@ -9,6 +9,7 @@ import android.content.SharedPreferences;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
+import android.graphics.Typeface;
 import android.os.CountDownTimer;
 import android.preference.PreferenceManager;
 import android.view.MotionEvent;
@@ -22,7 +23,7 @@ public class MainGame extends View {
 	static int test = 0;
 	static final int numSquaresX = 16; // Total number of columns
 	static final int numSquaresY = 22; // total number of rows
-	static final double textScaleSize = 0.8; // Text scaling
+	static final double textScaleSize = 0.85; // Text scaling
 	static final int FPS = 1000 / 30;
 	static int ORANGE;
 	static Context mContext;
@@ -93,8 +94,9 @@ public class MainGame extends View {
 	static int scoreInfoYStarting; // Where the score box starts (y)
 	static int holdTextYStarting; // Where the "Hold: " text starts (y)
 	static int nextTextYStarting; // Where the "Next: " text starts (y)
+	static int auxInfoXStarting; // Where the aux box starts (x)
 	static int auxInfoYStarting; // Where the aux box starts (y)
-	static int highScoreYStarting;
+	static int highScoreYStarting; // Where the highscore text box starts(y)
 	static int thisShape = -1; // The NEXT shape on the playing field.
 	static int nextShape = -1; // The NEXT2 shape on the playing field.
 	static int nextShape1 = -1; // The NEXT3 shaped on the playing field.
@@ -180,21 +182,21 @@ public class MainGame extends View {
 		canvas.drawText("High Score: " + highScore, mainFieldShiftX,
 				highScoreYStarting + mainFieldShiftY, paint);
 
-		paint.setTextSize((float) (squareSide * textScaleSize));
+		// paint.setTextSize((float) (squareSide * textScaleSize));
 
 		// Drawing Score text box
-		canvas.drawText("Score: " + score, holdShapeXStarting + mainFieldShiftX
-				- squareSide / 2, scoreInfoYStarting + mainFieldShiftY, paint);
+		canvas.drawText("Score: " + score, auxInfoXStarting + mainFieldShiftX,
+				scoreInfoYStarting + mainFieldShiftY, paint);
 
 		// Drawing aux text box
 		if (gameMode.equals(Constants.MARATHON_MODE)) {
 			String tempText = auxText + " ("
 					+ (linesPerLevel - linesCleared + linesClearedFloor) + ")";
-			canvas.drawText(tempText, holdShapeXStarting + mainFieldShiftX
-					- squareSide / 2, auxInfoYStarting + mainFieldShiftY, paint);
+			canvas.drawText(tempText, auxInfoXStarting + mainFieldShiftX,
+					auxInfoYStarting + mainFieldShiftY, paint);
 		} else if (gameMode.equals(Constants.TIME_ATTACK_MODE)) {
-			canvas.drawText(auxText, holdShapeXStarting + mainFieldShiftX
-					- squareSide / 2, auxInfoYStarting + mainFieldShiftY, paint);
+			canvas.drawText(auxText, auxInfoXStarting + mainFieldShiftX,
+					auxInfoYStarting + mainFieldShiftY, paint);
 		}
 
 		// Drawing clearInfo text box
@@ -1223,7 +1225,7 @@ public class MainGame extends View {
 								gravity = softDropSpeed;
 								softDrop = true;
 								turn = false;
-								//ignoreInputs = true;
+								// ignoreInputs = true;
 							}
 						}
 						prevY = y;
@@ -1264,6 +1266,7 @@ public class MainGame extends View {
 		clearInfoYStarting = squareSide * 16;
 		scoreInfoYStarting = squareSide * 4;
 		auxInfoYStarting = squareSide * 5;
+		auxInfoXStarting = holdShapeXStarting - squareSide * 2 / 3;
 		holdTextYStarting = (int) (squareSide * 0.6);
 		nextTextYStarting = squareSide * 6;
 		highScoreYStarting = (int) (squareSide * 21);

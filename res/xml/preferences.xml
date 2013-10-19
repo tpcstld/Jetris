@@ -1,7 +1,7 @@
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android" >
 
     <PreferenceCategory android:title="@string/marathon_title" >
-        <com.tpcstld.jetris.TextPreference
+        <com.tpcstld.jetris.NumberPickerPreference
             android:defaultValue="10"
             android:inputType="number"
             android:key="linesPerLevel"
@@ -15,7 +15,7 @@
             android:title="@string/gravity_add_per_level_title" />
     </PreferenceCategory>
     <PreferenceCategory android:title="@string/time_attack_title" >
-        <com.tpcstld.jetris.TextPreference
+        <com.tpcstld.jetris.NumberPickerPreference
             android:defaultValue="120"
             android:inputType="number"
             android:key="countDownTime"
@@ -37,7 +37,7 @@
             android:title="@string/soft_drop_speed_title" />
     </PreferenceCategory>
     <PreferenceCategory android:title="@string/timer_variables_title" >
-        <com.tpcstld.jetris.TextPreference
+        <com.tpcstld.jetris.NumberPickerPreference
             android:defaultValue="1000"
             android:inputType="number"
             android:key="slackLength"
@@ -45,13 +45,13 @@
             android:title="@string/slack_length_title" />
     </PreferenceCategory>
     <PreferenceCategory android:title="@string/sensitivity_title" >
-        <com.tpcstld.jetris.TextPreference
+        <com.tpcstld.jetris.NumberPickerPreference
             android:defaultValue="30"
             android:inputType="number"
             android:key="flickSensitivity"
             android:summary="@string/flick_sensitivity_message"
             android:title="@string/flick_sensitivity_title" />
-        <com.tpcstld.jetris.TextPreference
+        <com.tpcstld.jetris.NumberPickerPreference
             android:defaultValue="60"
             android:inputType="number"
             android:key="dragSensitivity"
