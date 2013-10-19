@@ -23,7 +23,9 @@ public class MainGame extends View {
 	static int test = 0;
 	static final int numSquaresX = 16; // Total number of columns
 	static final int numSquaresY = 22; // total number of rows
-	static final double textScaleSize = 0.85; // Text scaling
+	static final double textScaleSize = 0.8; // Text scaling
+	static final double textScaleSizeAux = 0.7; // Text scaling for auxiliary
+												// text
 	static final int FPS = 1000 / 30;
 	static int ORANGE;
 	static Context mContext;
@@ -170,7 +172,7 @@ public class MainGame extends View {
 		}
 
 		paint.setColor(textColor);
-		paint.setTextSize((float) (squareSide * textScaleSize * textScaleSize));
+		paint.setTextSize((float) (squareSide * textScaleSizeAux));
 		// Drawing "Hold: " text box
 		canvas.drawText("Hold: ", holdShapeXStarting + mainFieldShiftX,
 				holdTextYStarting + mainFieldShiftY, paint);
@@ -182,21 +184,30 @@ public class MainGame extends View {
 		canvas.drawText("High Score: " + highScore, mainFieldShiftX,
 				highScoreYStarting + mainFieldShiftY, paint);
 
-		// paint.setTextSize((float) (squareSide * textScaleSize));
-
 		// Drawing Score text box
-		canvas.drawText("Score: " + score, auxInfoXStarting + mainFieldShiftX,
+		canvas.drawText("Score:", auxInfoXStarting + mainFieldShiftX,
 				scoreInfoYStarting + mainFieldShiftY, paint);
-
+		changePaintSettings("info");
+		canvas.drawText("" + score, numSquaresX * squareSide,
+				scoreInfoYStarting + mainFieldShiftY, paint);
+		changePaintSettings("normal");
 		// Drawing aux text box
 		if (gameMode.equals(Constants.MARATHON_MODE)) {
 			String tempText = auxText + " ("
 					+ (linesPerLevel - linesCleared + linesClearedFloor) + ")";
-			canvas.drawText(tempText, auxInfoXStarting + mainFieldShiftX,
+			canvas.drawText("Level:", auxInfoXStarting + mainFieldShiftX,
 					auxInfoYStarting + mainFieldShiftY, paint);
+			changePaintSettings("info");
+			canvas.drawText(tempText, numSquaresX * squareSide,
+					auxInfoYStarting + mainFieldShiftY, paint);
+			changePaintSettings("normal");
 		} else if (gameMode.equals(Constants.TIME_ATTACK_MODE)) {
-			canvas.drawText(auxText, auxInfoXStarting + mainFieldShiftX,
+			canvas.drawText("Time:", auxInfoXStarting + mainFieldShiftX,
 					auxInfoYStarting + mainFieldShiftY, paint);
+			changePaintSettings("info");
+			canvas.drawText(auxText, numSquaresX * squareSide, auxInfoYStarting
+					+ mainFieldShiftY, paint);
+			changePaintSettings("normal");
 		}
 
 		// Drawing clearInfo text box
@@ -310,9 +321,7 @@ public class MainGame extends View {
 		if (lose) {
 			// Change the font settings
 			paint.setColor(Color.RED);
-			paint.setTextSize((float) (squareSide * 4));
-			paint.setShadowLayer((float) 5, 0, 0, Color.BLACK);
-			paint.setTextAlign(Paint.Align.CENTER);
+			changePaintSettings("big on");
 			int length = this.getMeasuredHeight();
 			int width = this.getMeasuredWidth();
 			// Display and align the needed text
@@ -321,15 +330,11 @@ public class MainGame extends View {
 			canvas.drawText("OVER", width / 2,
 					mainFieldShiftY + length * 2 / 3, paint);
 			// Revert text settings to normal
-			paint.setShadowLayer((float) 0, 0, 0, Color.BLACK);
-			paint.setTextSize((float) (squareSide * textScaleSize));
-			paint.setTextAlign(Paint.Align.LEFT);
+			changePaintSettings("big off");
 		} else if (win) {
 			// Change the font settings
 			paint.setColor(Color.GREEN);
-			paint.setTextSize((float) (squareSide * 4));
-			paint.setShadowLayer((float) 5, 0, 0, Color.BLACK);
-			paint.setTextAlign(Paint.Align.CENTER);
+			changePaintSettings("big on");
 			int length = this.getMeasuredHeight();
 			int width = this.getMeasuredWidth();
 			// Display and align the needed text
@@ -338,26 +343,40 @@ public class MainGame extends View {
 			canvas.drawText("UP", width / 2, mainFieldShiftY + length * 2 / 3,
 					paint);
 			// Revert text settings to normal
-			paint.setShadowLayer((float) 0, 0, 0, Color.BLACK);
-			paint.setTextSize((float) (squareSide * textScaleSize));
-			paint.setTextAlign(Paint.Align.LEFT);
+			changePaintSettings("big off");
 		} else if (pause) {
 			// Change the font settings
 			paint.setColor(textColor);
-			paint.setTextSize((float) (squareSide * 4));
-			paint.setShadowLayer((float) 5, 0, 0, Color.BLACK);
-			paint.setTextAlign(Paint.Align.CENTER);
+			changePaintSettings("big on");
 			int length = this.getMeasuredHeight();
 			int width = this.getMeasuredWidth();
 			// Display and align the needed text
 			canvas.drawText("PAUSED", width / 2, mainFieldShiftY + length / 2,
 					paint);
 			// Revert text settings to normal
+			changePaintSettings("big off");
+		}
+		invalidate();
+	}
+
+	public void changePaintSettings(String setting) {
+		if (setting.equals("info")) {
+			paint.setTextSize((float) (squareSide * textScaleSize));
+			paint.setTextAlign(Paint.Align.RIGHT);
+			paint.setTypeface(Typeface.DEFAULT_BOLD);
+		} else if (setting.equals("normal")) {
+			paint.setTextAlign(Paint.Align.LEFT);
+			paint.setTypeface(Typeface.DEFAULT);
+			paint.setTextSize((float) (squareSide * textScaleSizeAux));
+		} else if (setting.equals("big on")) {
+			paint.setTextSize((float) (squareSide * 4));
+			paint.setShadowLayer((float) 5, 0, 0, Color.BLACK);
+			paint.setTextAlign(Paint.Align.CENTER);
+		} else if (setting.equals("big off")) {
 			paint.setShadowLayer((float) 0, 0, 0, Color.BLACK);
 			paint.setTextSize((float) (squareSide * textScaleSize));
 			paint.setTextAlign(Paint.Align.LEFT);
 		}
-		invalidate();
 	}
 
 	public void getSettings(SharedPreferences settings) {
@@ -759,7 +778,7 @@ public class MainGame extends View {
 				gravityAdd = level * gravityAddPerLevel;
 			}
 		}
-		auxText = "Level: " + (level + 1);
+		auxText = "" + (level + 1);
 	}
 
 	public static void detectLose() {
@@ -1353,7 +1372,7 @@ public class MainGame extends View {
 		for (int xx = 0; xx < 7; xx++) {
 			shapeList.add(xx);
 		}
-		score = 0;
+		score = 100000;
 		gravityAdd = 0;
 		linesCleared = 0;
 		linesClearedFloor = 0;
@@ -1374,7 +1393,7 @@ public class MainGame extends View {
 			countDown = new CustomCountDownTimer(currentCountDownTime, FPS);
 			countDown.start();
 		} else if (gameMode.equals(Constants.MARATHON_MODE)) {
-			auxText = "Level: " + (level + 1);
+			auxText = "" + (level + 1);
 		}
 		// Pick the new shape
 		pickShape();

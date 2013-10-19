@@ -11,7 +11,7 @@ public class CustomCountDownTimer extends CountDownTimer {
 	@Override
 	public void onFinish() {
 		MainGame.win = true;
-		MainGame.auxText = "Time Left: " + 0 + ":"
+		MainGame.auxText = 0 + ":"
 				+ String.format("%02d", 0);
 		MainGame.updateHighScore();
 	}
@@ -21,7 +21,7 @@ public class CustomCountDownTimer extends CountDownTimer {
 		MainGame.currentCountDownTime = timeLeft;
 		int minutes = (int) timeLeft / 60000;
 		int seconds = (int) timeLeft % 60000 / 1000;
-		MainGame.auxText = "Time Left: " + minutes + ":"
+		MainGame.auxText = minutes + ":"
 				+ String.format("%02d", seconds);
 	}
 
