@@ -10,7 +10,8 @@ public class Constants {
 	public final static String TIME_ATTACK_MODE = "Time Attack";
 	public final static String MARATHON_SCORE = "Marathon Score";
 	public final static String TIME_ATTACK_SCORE = "Time Attack Score";
-	public final static String CONFIRM_MESSAGE = "Are you sure you want to reset all non-misc settings?";
+	public final static String CONFIRM_SETTINGS_MESSAGE = "Are you sure you wish to reset all non-misc settings?";
+	public final static String CONFIRM_HIGHSCORE_MESSAGE = "Are you sure you wish to reset your highscores?";
 
 	public final static String[] settingName = { "defaultGravity", "softDropSpeed",
 			"slackLength", "flickSensitivity", "dragSensitivity",
