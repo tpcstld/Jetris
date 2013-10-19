@@ -8,6 +8,8 @@ import android.preference.PreferenceManager;
 
 public class SettingsFragment extends PreferenceFragment {
 
+	public static Preference[] prefList;
+
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -15,14 +17,26 @@ public class SettingsFragment extends PreferenceFragment {
 				.getDefaultSharedPreferences(getActivity());
 		addPreferencesFromResource(R.xml.preferences);
 
+		getPreferences(Constants.settingName);
 		setSummaries(Constants.settingName, Constants.defaultValue, sharedprefs);
 	}
 
-	public void setSummaries(String[] key, String[] def,
-			SharedPreferences sharedprefs) {
+	public void getPreferences(String[] key) {
+		Preference[] temp = new Preference[key.length];
 		for (int xx = 0; xx < key.length; xx++) {
-			Preference pref = findPreference(key[xx]);
+			temp[xx] = findPreference(key[xx]);
+
+		}
+		prefList = temp;
+	}
+
+	public static void setSummaries(String[] key, String[] def,
+			SharedPreferences sharedprefs) {
+		Preference[] temp = prefList;
+		for (int xx = 0; xx < key.length; xx++) {
+			Preference pref = temp[xx];
 			pref.setSummary(sharedprefs.getString(key[xx], def[xx]));
 		}
+
 	}
 }

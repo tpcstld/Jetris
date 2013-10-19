@@ -41,7 +41,7 @@ public class ResetSettingsPreference extends DialogPreference {
 						Constants.defaultValue[xx]);
 			}
 			editor.commit();
+			SettingsFragment.setSummaries(Constants.settingName, Constants.defaultValue, settings);
 		}
 	}
-
 }
