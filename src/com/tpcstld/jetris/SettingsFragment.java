@@ -15,13 +15,7 @@ public class SettingsFragment extends PreferenceFragment {
 				.getDefaultSharedPreferences(getActivity());
 		addPreferencesFromResource(R.xml.preferences);
 
-		String[] key = { "defaultGravity", "softDropSpeed", "slackLength",
-				"flickSensitivity", "dragSensitivity", "countDownTime",
-				"linesPerLevel", "gravityAddPerLevel" };
-		String[] def = { "0.05", "0.45", "1000", "30", "60", "120", "10",
-				"0.025" };
-
-		setSummaries(key, def, sharedprefs);
+		setSummaries(Constants.settingName, Constants.defaultValue, sharedprefs);
 	}
 
 	public void setSummaries(String[] key, String[] def,

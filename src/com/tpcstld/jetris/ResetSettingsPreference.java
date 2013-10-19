@@ -2,9 +2,11 @@ package com.tpcstld.jetris;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.TypedArray;
 import android.preference.DialogPreference;
+import android.preference.Preference;
 import android.preference.PreferenceManager;
 import android.util.AttributeSet;
 
@@ -33,14 +35,11 @@ public class ResetSettingsPreference extends DialogPreference {
 			SharedPreferences settings = PreferenceManager
 					.getDefaultSharedPreferences(mContext);
 			SharedPreferences.Editor editor = settings.edit();
-			editor.putString("defaultGravity", "0.05");
-			editor.putString("flickSensitivity", "30");
-			editor.putString("slackLength", "1000");
-			editor.putString("softDropSpeed", "0.45");
-			editor.putString("dragSensitivity", "100");
-			editor.putString("countDownTime", "120");
-			editor.putString("linesPerLevel", "10");
-			editor.putString("gravityAddPerLevel", "0.025");
+
+			for (int xx = 0; xx < Constants.settingName.length; xx++) {
+				editor.putString(Constants.settingName[xx],
+						Constants.defaultValue[xx]);
+			}
 			editor.commit();
 		}
 	}

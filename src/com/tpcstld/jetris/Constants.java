@@ -11,7 +11,13 @@ public class Constants {
 	public final static String MARATHON_SCORE = "Marathon Score";
 	public final static String TIME_ATTACK_SCORE = "Time Attack Score";
 	public final static String CONFIRM_MESSAGE = "Are you sure you want to reset all non-misc settings?";
-	
+
+	public final static String[] settingName = { "defaultGravity", "softDropSpeed",
+			"slackLength", "flickSensitivity", "dragSensitivity",
+			"countDownTime", "linesPerLevel", "gravityAddPerLevel" };
+	public final static String[] defaultValue = { "0.05", "0.45", "1000", "30", "60",
+			"120", "10", "0.025" };
+
 	public static int getTheme(SharedPreferences settings) {
 		String theme = settings.getString("theme", Constants.LIGHT_THEME);
 		if (theme.equals(LIGHT_THEME)) {
