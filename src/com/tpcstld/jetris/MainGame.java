@@ -1372,7 +1372,7 @@ public class MainGame extends View {
 		for (int xx = 0; xx < 7; xx++) {
 			shapeList.add(xx);
 		}
-		score = 100000;
+		score = 0;
 		gravityAdd = 0;
 		linesCleared = 0;
 		linesClearedFloor = 0;
