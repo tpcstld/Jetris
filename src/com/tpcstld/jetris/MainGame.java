@@ -26,7 +26,9 @@ public class MainGame extends View {
 	static final double textScaleSize = 0.8; // Text scaling
 	static final double textScaleSizeAux = 0.7; // Text scaling for auxiliary
 												// text
-	static final int FPS = 1000 / 30;
+	static final int FPS = 1000 / 30; // The Frames per second at which the game
+										// runs at
+	static final int loseArea = 2; // The side to side area at which the game is lost
 	static int ORANGE;
 	static Context mContext;
 
@@ -80,6 +82,7 @@ public class MainGame extends View {
 	static int linesClearedFloor = 0;
 	static int mainFieldShiftX; // How much the screen is shifted to the right
 	static int mainFieldShiftY; // How much the screen is shifted downwards
+	static int mainFieldStartingY; //At what Y-value do the vertical lines start at
 	static int squareSide; // The size of one square
 	static int numberOfBlocksWidth = 10; // The number of columns of blocks in
 											// the main field
@@ -222,7 +225,7 @@ public class MainGame extends View {
 		ghostShape();
 		for (int xx = mainFieldShiftX; xx <= squareSide * numberOfBlocksWidth
 				+ mainFieldShiftX; xx += squareSide) {
-			canvas.drawLine(xx, mainFieldShiftY, xx, squareSide
+			canvas.drawLine(xx, mainFieldStartingY, xx, squareSide
 					* (numberOfBlocksLength - 2) + mainFieldShiftY, paint);
 		}
 
@@ -236,7 +239,7 @@ public class MainGame extends View {
 			paint.setColor(chooseColor(x));
 
 			for (int xx = 0; xx < numberOfBlocksWidth; xx++) {
-				for (int yy = 2; yy < numberOfBlocksLength; yy++) {
+				for (int yy = 0; yy < numberOfBlocksLength; yy++) {
 					if (blocks[xx][yy] != 0 & blocks[xx][yy] != 3
 							& colors[xx][yy] == x) {
 						canvas.drawRect(xx * squareSide + mainFieldShiftX,
@@ -784,6 +787,13 @@ public class MainGame extends View {
 	public static void detectLose() {
 		lose = false;
 		for (int xx = 0; xx < numberOfBlocksWidth; xx++) {
+			if (blocks[xx][0] == 2) {
+				lose = true;
+				countDown.cancel();
+				break;
+			}
+		}
+		for (int xx = numberOfBlocksWidth / 2 - loseArea; xx < numberOfBlocksWidth / 2 + loseArea; xx++) {
 			if (blocks[xx][1] == 2) {
 				lose = true;
 				countDown.cancel();
@@ -1291,7 +1301,7 @@ public class MainGame extends View {
 		highScoreYStarting = (int) (squareSide * 21);
 
 		mainFieldShiftX = squareSide / 2;
-		mainFieldShiftY = 0;
+		mainFieldShiftY = squareSide / 2;
 		getScreenSize = false;
 	}
 
