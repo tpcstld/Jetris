@@ -53,7 +53,8 @@ public class StartGameActivity extends Activity {
 
 		// Change the pause/unpause text
 		mainView = new MainGame(this);
-		if (Constants.getTheme(settings) == R.style.DarkTheme && settings.getBoolean("darkBackground", true)) {
+		if (Constants.getTheme(settings) == R.style.DarkTheme
+				&& settings.getBoolean("darkBackground", true)) {
 			mainView.setBackgroundColor(Color.BLACK);
 		}
 		setContentView(mainView);
@@ -74,7 +75,7 @@ public class StartGameActivity extends Activity {
 		// Inflate the menu; this adds items to the action bar if it is present.
 		getMenuInflater().inflate(R.menu.game_main, menu);
 		mMenuItem = menu.findItem(R.id.pause);
-		mMenuItem.setTitle(getPauseMenuMessage(MainGame.pause));
+		updatePauseMessage();
 		return true;
 	}
 
@@ -97,23 +98,28 @@ public class StartGameActivity extends Activity {
 
 	public void pauseGame(MenuItem item) {
 		MainGame.pauseGame(!MainGame.pause);
-		item.setTitle(getPauseMenuMessage(MainGame.pause));
+		updatePauseMessage();
 	}
 
 	public void newGame(MenuItem item) {
 		MainGame.newGame();
+		updatePauseMessage();
 	}
 
 	protected void onPause() {
-		MainGame.pauseGame(true);
-		mMenuItem.setTitle(getPauseMenuMessage(MainGame.pause));
 		super.onPause();
+		MainGame.pauseGame(true);
+		updatePauseMessage();
 	}
 
 	protected void onResume() {
 		super.onResume();
 	}
-	
+
+	public void updatePauseMessage() {
+		mMenuItem.setTitle(getPauseMenuMessage(MainGame.pause));
+	}
+
 	public int getPauseMenuMessage(boolean pause) {
 		if (pause) {
 			return R.string.action_unpause;
