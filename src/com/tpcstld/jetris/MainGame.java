@@ -28,7 +28,6 @@ public class MainGame extends View {
 												// text
 	static final int FPS = 1000 / 30; // The Frames per second at which the game
 										// runs at
-	static final int loseArea = 2; // The side to side area at which the game is lost
 	static int ORANGE;
 	static Context mContext;
 
@@ -82,7 +81,8 @@ public class MainGame extends View {
 	static int linesClearedFloor = 0;
 	static int mainFieldShiftX; // How much the screen is shifted to the right
 	static int mainFieldShiftY; // How much the screen is shifted downwards
-	static int mainFieldStartingY; //At what Y-value do the vertical lines start at
+	static int mainFieldStartingY; // At what Y-value do the vertical lines
+									// start at
 	static int squareSide; // The size of one square
 	static int numberOfBlocksWidth = 10; // The number of columns of blocks in
 											// the main field
@@ -472,25 +472,34 @@ public class MainGame extends View {
 			nextShape1 = shapeList.remove(r.nextInt(shapeList.size()));
 		}
 		displayShape(thisShape);
-		lastShape = thisShape;
-		thisShape = nextShape;
-		nextShape = nextShape1;
-		nextShape1 = shapeList.remove(r.nextInt(shapeList.size()));
+		if (!lose) {
+			lastShape = thisShape;
+			thisShape = nextShape;
+			nextShape = nextShape1;
+			nextShape1 = shapeList.remove(r.nextInt(shapeList.size()));
 
-		if (shapeList.size() <= 0) {
-			for (int xx = 0; xx < 7; xx++) {
-				shapeList.add(xx);
+			if (shapeList.size() <= 0) {
+				for (int xx = 0; xx < 7; xx++) {
+					shapeList.add(xx);
+				}
 			}
-		}
 
-		displayBoxShape(nextBlocks, thisShape);
-		displayBoxShape(next2Blocks, nextShape);
-		displayBoxShape(next3Blocks, nextShape1);
-		detectShape();
-		holdOnce = false;
+			displayBoxShape(nextBlocks, thisShape);
+			displayBoxShape(next2Blocks, nextShape);
+			displayBoxShape(next3Blocks, nextShape1);
+			detectShape();
+			shapeDown();
+			holdOnce = false;
+		}
 	}
 
 	public static void holdShape() {
+		// Clear all active shapes
+		for (int xx = 0; xx < numberOfBlocksWidth; xx++)
+			for (int yy = 0; yy < numberOfBlocksLength; yy++)
+				if (blocks[xx][yy] == 1)
+					blocks[xx][yy] = 0;
+
 		if (holdShape == -1) {
 			holdShape = lastShape;
 			pickShape();
@@ -505,63 +514,55 @@ public class MainGame extends View {
 	}
 
 	public static void displayShape(int thisShape) {
-		for (int xx = 0; xx < numberOfBlocksWidth; xx++)
-			for (int yy = 0; yy < numberOfBlocksLength; yy++)
-				if (blocks[xx][yy] == 1)
-					blocks[xx][yy] = 0;
 		if (thisShape == 0) {
-			for (int xx = 3; xx <= 6; xx++)
-				blocks[xx][0] = 1;
+			placeShapeAndDetectLose(new int[] { 3, 4, 5, 6 }, new int[] { 0, 0,
+					0, 0 });
 			shape = 1;
 		} else if (thisShape == 1) {
-			for (int xx = 3; xx <= 5; xx++)
-				blocks[xx][1] = 1;
-			blocks[3][0] = 1;
+			placeShapeAndDetectLose(new int[] { 3, 3, 4, 5 }, new int[] { 0, 1,
+					1, 1 });
 			shape = 5;
 		} else if (thisShape == 2) {
-			for (int xx = 3; xx <= 5; xx++)
-				blocks[xx][1] = 1;
-			blocks[5][0] = 1;
+			placeShapeAndDetectLose(new int[] { 5, 3, 4, 5 }, new int[] { 0, 1,
+					1, 1 });
 			shape = 9;
 		} else if (thisShape == 3) {
-			for (int xx = 3; xx <= 5; xx++)
-				blocks[xx][1] = 1;
-			blocks[4][0] = 1;
+			placeShapeAndDetectLose(new int[] { 4, 3, 4, 5 }, new int[] { 0, 1,
+					1, 1 });
 			shape = 13;
 		} else if (thisShape == 4) {
-			blocks[4][0] = 1;
-			blocks[5][0] = 1;
-			blocks[3][1] = 1;
-			blocks[4][1] = 1;
+			placeShapeAndDetectLose(new int[] { 4, 5, 3, 4 }, new int[] { 0, 0,
+					1, 1 });
 			shape = 15;
 		} else if (thisShape == 5) {
-			blocks[3][0] = 1;
-			blocks[4][0] = 1;
-			blocks[4][1] = 1;
-			blocks[5][1] = 1;
+			placeShapeAndDetectLose(new int[] { 3, 4, 4, 5 }, new int[] { 0, 0,
+					1, 1 });
 			shape = 17;
 		} else if (thisShape == 6) {
-			blocks[4][0] = 1;
-			blocks[5][0] = 1;
-			blocks[4][1] = 1;
-			blocks[5][1] = 1;
+			placeShapeAndDetectLose(new int[] { 4, 5, 4, 5 }, new int[] { 0, 0,
+					1, 1 });
 			shape = 19;
 		}
 	}
 
-	public static void placeShape(int[] x, int [] y) {
+	public static void placeShapeAndDetectLose(int[] x, int[] y) {
 		lose = false;
 		for (int xx = 0; xx < x.length; xx++) {
 			if (blocks[x[xx]][y[xx]] == 2) {
 				lose = true;
 				countDown.cancel();
+				break;
 			}
-			blocks[x[xx]][y[xx]] = 1;
 		}
 		if (lose) {
 			updateHighScore();
+		} else {
+			for (int xx = 0; xx < x.length; xx++) {
+				blocks[x[xx]][y[xx]] = 1;
+			}
 		}
 	}
+
 	// Checks if there is anything below the active shape.
 	// If there is: Freeze the active shape and initiate scoring
 	// If there isn't: Move the shape down.
@@ -589,7 +590,7 @@ public class MainGame extends View {
 				currentDrop = clearLines();
 				hardDrop = false;
 				softDrop = false;
-				totalGrav = totalGrav % 1;
+				totalGrav = 0.0;
 				gravity = defaultGravity;
 
 				int addScore = scoring(currentDrop, tSpin);
@@ -600,7 +601,6 @@ public class MainGame extends View {
 					changeGravity();
 				}
 				// Scoring System end.
-				detectLose();
 				pickShape();
 			} else if (move) {
 				// If slack is still activated, cancel the slack
@@ -797,20 +797,6 @@ public class MainGame extends View {
 			}
 		}
 		auxText = "" + (level + 1);
-	}
-
-	public static void detectLose() {
-		lose = false;
-		for (int xx = numberOfBlocksWidth / 2 - loseArea; xx < numberOfBlocksWidth / 2 + loseArea; xx++) {
-			if (blocks[xx][0] == 2 || blocks[xx][1] == 2) {
-				lose = true;
-				countDown.cancel();
-				break;
-			}
-		}
-		if (lose) {
-			updateHighScore();
-		}
 	}
 
 	public static void updateHighScore() {
@@ -1155,8 +1141,11 @@ public class MainGame extends View {
 
 	public static void coloring() {
 		detectShape();
-		for (int xx = 0; xx < playLocationX.length; xx++)
-			colors[playLocationX[xx]][playLocationY[xx]] = lastShape;
+		if (!lose && !win) {
+			for (int xx = 0; xx < playLocationX.length; xx++)
+				colors[playLocationX[xx]][playLocationY[xx]] = lastShape;
+		}
+
 	}
 
 	public static void displayBoxShape(int[][] x, int y) {
