@@ -149,11 +149,10 @@ public class MainGame extends View {
 				.getDefaultSharedPreferences(context);
 
 		getSettings(settings);
-
+		gravity = defaultGravity;
 		mContext = context;
 		// Setting the orange color since there is no default
 		ORANGE = getResources().getColor(R.color.orange);
-
 		// Create the object to receive touch input
 		setOnTouchListener(getOnTouchListener());
 		if (startNewGame) {
@@ -550,6 +549,22 @@ public class MainGame extends View {
 		}
 	}
 
+	public static void placeShape(int[] x, int [] y) {
+		lose = false;
+		for (int xx = 0; xx < x.length; xx++) {
+			if (blocks[x[xx]][y[xx]] == 2) {
+				lose = true;
+				countDown.cancel();
+			}
+			blocks[x[xx]][y[xx]] = 1;
+		}
+		if (lose) {
+			updateHighScore();
+		}
+	}
+	// Checks if there is anything below the active shape.
+	// If there is: Freeze the active shape and initiate scoring
+	// If there isn't: Move the shape down.
 	public static void shapeDown() {
 		if (!lose & !pause & !win) {
 			detectShape();
@@ -574,7 +589,7 @@ public class MainGame extends View {
 				currentDrop = clearLines();
 				hardDrop = false;
 				softDrop = false;
-				totalGrav = 0.0;
+				totalGrav = totalGrav % 1;
 				gravity = defaultGravity;
 
 				int addScore = scoring(currentDrop, tSpin);
@@ -588,7 +603,7 @@ public class MainGame extends View {
 				detectLose();
 				pickShape();
 			} else if (move) {
-				// If slack is still activated
+				// If slack is still activated, cancel the slack
 				if (slack) {
 					time.cancel();
 					time = new Timer();
@@ -786,15 +801,8 @@ public class MainGame extends View {
 
 	public static void detectLose() {
 		lose = false;
-		for (int xx = 0; xx < numberOfBlocksWidth; xx++) {
-			if (blocks[xx][0] == 2) {
-				lose = true;
-				countDown.cancel();
-				break;
-			}
-		}
 		for (int xx = numberOfBlocksWidth / 2 - loseArea; xx < numberOfBlocksWidth / 2 + loseArea; xx++) {
-			if (blocks[xx][1] == 2) {
+			if (blocks[xx][0] == 2 || blocks[xx][1] == 2) {
 				lose = true;
 				countDown.cancel();
 				break;
@@ -1318,8 +1326,8 @@ public class MainGame extends View {
 					clock = clock + FPS;
 				}
 				while (totalGrav >= 1) {
-					shapeDown();
 					totalGrav = totalGrav - 1;
+					shapeDown();
 				}
 			}
 		}
