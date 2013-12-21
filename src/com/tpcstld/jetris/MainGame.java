@@ -19,8 +19,8 @@ public class MainGame extends View {
 
 	Paint paint = new Paint();
 
-	// Internal Options
-	static int test = 0;
+	// INTERNAL OPTIONS:
+	static int debug = 0;
 	static final int numSquaresX = 16; // Total number of columns
 	static final int numSquaresY = 22; // total number of rows
 	static final double textScaleSize = 0.8; // Text scaling
@@ -31,65 +31,46 @@ public class MainGame extends View {
 	static int ORANGE;
 	static Context mContext;
 
-	// External Options
-	public static double defaultGravity = 0.05; // The default gravity of the
-												// game value
-	public static int flickSensitivity = 30; // How sensitive is the flick
-												// gesture
+	// EXTERNAL OPTIONS:
+	public static double defaultGravity = 0.05; 
+	// The default gravity of the game value
+	public static int flickSensitivity = 30; 
+	// The Sensitivity is the flick gesture
 	public static int slackLength = 1000; // How long the stack goes on for in
 	public static double softDropSpeed = 0.45; // How fast soft dropping is
-	public static int dragSensitivity = 100;
+	public static int dragSensitivity = 100; 
+	// The sensitivity of the drag gesture
 	public static long countDownTime = 120;
 	public static int linesPerLevel = 10;
 	public static double gravityAddPerLevel = 0.025;
 	public static int textColor = Color.BLACK;
 
+	// GAME STATICS
+	static final int numberOfBlocksWidth = 10; // The number of columns of blocks in
+											// the main field
+	static final int numberOfBlocksLength = 22; // The number of rows of blocks in the
+											// main field
+	static final int numberOfHoldShapeWidth = 4; // The width of the auxiliary boxes
+	static final int numberOfHoldShapeLength = 2; // The length of the auxiliary boxes
+
 	// Game Mode
 	public static String gameMode = "";
 
-	// Timers
+	// TIMERS:
 	static Timer time = new Timer(true); // This is the slack timer
-	static long currentCountDownTime = countDownTime * 1000; // Time remaining
-																// on time
-																// attack mode
+	static long currentCountDownTime = countDownTime * 1000;
+	// Time remaining on time attack mode
 	static CountDownTimer countDown = new CustomCountDownTimer(
 			currentCountDownTime, FPS);
+	static long clock = System.currentTimeMillis();
+	// Tracks the real time for fps
 
-	static String auxText = ""; // Text for displaying the time left
-	static boolean slack = false; // Whether or not slack is currently active
-	public static boolean pause = false; // Whether or not the pause is
-											// currently paused
-	static boolean lose = false; // Whether or not the game is still in progress
-	static boolean win = false; // Whether or not the game is finished
-	static boolean holdOnce = false; // Whether or not the block has already
-										// been held once
-	static boolean hardDrop = false; // Whether or not harddropping is active
-	static boolean slackOnce = false; // Whether or not slack as already been
-										// activated
-	static boolean turnSuccess = false; // Whether or not a turn was successful
-	static boolean softDrop = false; // Whether or not softdropping is active
-	static boolean kick = false; // Whether or not the block was kicked to
-									// location
-	static boolean difficult = false; // Whether or not a clear was considered
-										// to be "hard"
-	static boolean lastDifficult = false; // Whether or not the last clear was
-											// considered to be "hard"
-	static int score = 0; // The current score
-	static int highScore = 0;
-	static int level = 0;
-	static int linesCleared = 0;
-	static int linesClearedFloor = 0;
+	// POSITIONING VARIABLES:
 	static int mainFieldShiftX; // How much the screen is shifted to the right
 	static int mainFieldShiftY; // How much the screen is shifted downwards
 	static int mainFieldStartingY; // At what Y-value do the vertical lines
 									// start at
 	static int squareSide; // The size of one square
-	static int numberOfBlocksWidth = 10; // The number of columns of blocks in
-											// the main field
-	static int numberOfBlocksLength = 22; // The number of rows of blocks in the
-											// main field
-	static int numberOfHoldShapeWidth = 4; // The width of the auxiliary boxes
-	static int numberOfHoldShapeLength = 2; // The length of the auxiliary boxes
 	static int holdShapeXStarting; // Where the hold box starts (x)
 	static int holdShapeYStarting; // Where the hold box starts (y)
 	static int nextShapeYStarting; // Where the first next box starts (y)
@@ -102,39 +83,69 @@ public class MainGame extends View {
 	static int auxInfoXStarting; // Where the aux box starts (x)
 	static int auxInfoYStarting; // Where the aux box starts (y)
 	static int highScoreYStarting; // Where the highscore text box starts(y)
-	static int thisShape = -1; // The NEXT shape on the playing field.
-	static int nextShape = -1; // The NEXT2 shape on the playing field.
-	static int nextShape1 = -1; // The NEXT3 shaped on the playing field.
+
+	// SHAPE INFORMATION:
+	static int nextShape = -1; // The NEXT shape on the playing field.
+	static int next2Shape = -1; // The NEXT2 shape on the playing field.
+	static int next3Shape = -1; // The NEXT3 shaped on the playing field.
 	static int holdShape = -1; // The shape currently being held.
-	static int lastShape = -1; // The CURRENT shape on the playing field.
-	// A list containing the shapes left in the current bag
+	static int currentShape = -1; // The CURRENT shape on the playing field.
 	static ArrayList<Integer> shapeList = new ArrayList<Integer>();
-	static int shape = 0; // The current shape of the block
-	static int combo = 0; // The current combo
-	static Random r = new Random(); // The randomizer
-	// Array detailing the type of block in each square
+	// A list containing the shapes left in the current bag
+	static int specificCurrentShape = 0;
+	// The current, specific shape of the block
+
+	// FIELD INFORMATION:
 	static int[][] blocks = new int[numberOfBlocksWidth][numberOfBlocksLength];
-	// Array detailing the colour in each square
+	// Array detailing the type of block in each square
 	static int[][] colors = new int[numberOfBlocksWidth][numberOfBlocksLength];
-	// Array displaying the block in hold
+	// Array detailing the colour in each square
 	static int[][] holdBlocks = new int[numberOfHoldShapeWidth][numberOfHoldShapeLength];
-	// Array displaying the next block
+	// Array displaying the block in hold
 	static int[][] nextBlocks = new int[numberOfHoldShapeWidth][numberOfHoldShapeLength];
-	// Array displaying the next2 block
+	// Array displaying the next block
 	static int[][] next2Blocks = new int[numberOfHoldShapeWidth][numberOfHoldShapeLength];
-	// Array displaying the next3 block
+	// Array displaying the next2 block
 	static int[][] next3Blocks = new int[numberOfHoldShapeWidth][numberOfHoldShapeLength];
+	// Array displaying the next3 block
 	static int[] playLocationX = new int[4]; // X-coords of the blocks in play
 	static int[] playLocationY = new int[4]; // Y-coords of the blocks in play
-	static double gravity = defaultGravity; // The current gravity of the game
-	static double gravityAdd = 0;
-	static double totalGrav = 0; // The current gravity ticker
-	static long clock = System.currentTimeMillis(); // Tracks the real time for
-													// fps
-	static boolean getScreenSize = false; // Initial getting screen size
-											// variable
-	public static boolean startNewGame = true; // Whether it should be a new
-												// game or not
+	
+	// MISC VARIABLES:
+	static String auxText = ""; // Text for displaying the time left
+	static boolean slack = false; // Whether or not slack is currently active
+	public static boolean pause = false;
+	// Whether or not the game is currently paused
+	static boolean lose = false; // Whether or not the game is still in progress
+	static boolean win = false; // Whether or not the game is finished
+	static boolean holdOnce = false;
+	// Whether or not the block has already been held once
+	static boolean hardDrop = false; // Whether or not harddropping is active
+	static boolean slackOnce = false;
+	// Whether or not slack as already been activated
+	static boolean turnSuccess = false; // Whether or not a turn was successful
+	static boolean softDrop = false; // Whether or not softdropping is active
+	static boolean kick = false;
+	// Whether or not the block was kicked to its current location
+	static boolean difficult = false;
+	// Whether or not a clear was considered to be "hard"
+	static boolean lastDifficult = false;
+	// Whether or not the last clear was considered to be "hard"
+	static int score = 0; // The current score
+	static int highScore = 0; // The highscore of the current gamemode
+	static int level = 0; // The current level (marathon mode)
+	static int linesCleared = 0; // The total number of lines cleared
+	static int linesClearedFloor = 0;
+	// The number of lines cleared in at the current speed (Marathon Mode)
+	static int combo = 0; // The current combo
+	static Random r = new Random(); // The randomizer
+	static double gravity = defaultGravity; // The current base gravity
+	static double gravityAdd = 0; // The amount of gravity to add onto the base
+	static double gravityTicker = 0; // The current gravity ticker
+	static boolean getScreenSize = false;
+	// Initial getting screen size variable
+	public static boolean startNewGame = true;
+	// Whether it should be a new game or not
 	static ArrayList<String> clearInfo = new ArrayList<String>();
 
 	// Blocks Data:
@@ -254,7 +265,7 @@ public class MainGame extends View {
 			// Ghost shape drawing
 			for (int xx = 0; xx < numberOfBlocksWidth; xx++) {
 				for (int yy = 0; yy < numberOfBlocksLength; yy++) {
-					if (blocks[xx][yy] == 3 & lastShape == x) {
+					if (blocks[xx][yy] == 3 & currentShape == x) {
 						canvas.drawCircle((float) (xx * squareSide + squareSide
 								* 0.5 + mainFieldShiftX),
 								(float) ((yy - 2) * squareSide + squareSide
@@ -279,7 +290,7 @@ public class MainGame extends View {
 
 			for (int xx = 0; xx < numberOfHoldShapeWidth; xx++) {
 				for (int yy = 0; yy < numberOfHoldShapeLength; yy++) {
-					if (nextBlocks[xx][yy] == 1 & thisShape == x) {
+					if (nextBlocks[xx][yy] == 1 & nextShape == x) {
 						canvas.drawRect(xx * squareSide + holdShapeXStarting
 								+ mainFieldShiftX, yy * squareSide
 								+ nextShapeYStarting + mainFieldShiftY, xx
@@ -293,7 +304,7 @@ public class MainGame extends View {
 
 			for (int xx = 0; xx < numberOfHoldShapeWidth; xx++) {
 				for (int yy = 0; yy < numberOfHoldShapeLength; yy++) {
-					if (next2Blocks[xx][yy] == 1 & nextShape == x) {
+					if (next2Blocks[xx][yy] == 1 & next2Shape == x) {
 						canvas.drawRect(xx * squareSide + holdShapeXStarting
 								+ mainFieldShiftX, yy * squareSide
 								+ nextShapeY2Starting + mainFieldShiftY, xx
@@ -307,7 +318,7 @@ public class MainGame extends View {
 
 			for (int xx = 0; xx < numberOfHoldShapeWidth; xx++) {
 				for (int yy = 0; yy < numberOfHoldShapeLength; yy++) {
-					if (next3Blocks[xx][yy] == 1 & nextShape1 == x) {
+					if (next3Blocks[xx][yy] == 1 & next3Shape == x) {
 						canvas.drawRect(xx * squareSide + holdShapeXStarting
 								+ mainFieldShiftX, yy * squareSide
 								+ nextShapeY3Starting + mainFieldShiftY, xx
@@ -466,17 +477,17 @@ public class MainGame extends View {
 	public static void pickShape() {
 		time.cancel();
 		time = new Timer();
-		if (thisShape == -1) {
-			thisShape = shapeList.remove(r.nextInt(shapeList.size()));
+		if (nextShape == -1) {
 			nextShape = shapeList.remove(r.nextInt(shapeList.size()));
-			nextShape1 = shapeList.remove(r.nextInt(shapeList.size()));
+			next2Shape = shapeList.remove(r.nextInt(shapeList.size()));
+			next3Shape = shapeList.remove(r.nextInt(shapeList.size()));
 		}
-		displayShape(thisShape);
+		displayShape(nextShape);
 		if (!lose) {
-			lastShape = thisShape;
-			thisShape = nextShape;
-			nextShape = nextShape1;
-			nextShape1 = shapeList.remove(r.nextInt(shapeList.size()));
+			currentShape = nextShape;
+			nextShape = next2Shape;
+			next2Shape = next3Shape;
+			next3Shape = shapeList.remove(r.nextInt(shapeList.size()));
 
 			if (shapeList.size() <= 0) {
 				for (int xx = 0; xx < 7; xx++) {
@@ -484,9 +495,9 @@ public class MainGame extends View {
 				}
 			}
 
-			displayBoxShape(nextBlocks, thisShape);
-			displayBoxShape(next2Blocks, nextShape);
-			displayBoxShape(next3Blocks, nextShape1);
+			displayBoxShape(nextBlocks, nextShape);
+			displayBoxShape(next2Blocks, next2Shape);
+			displayBoxShape(next3Blocks, next3Shape);
 			detectShape();
 			shapeDown();
 			holdOnce = false;
@@ -501,13 +512,13 @@ public class MainGame extends View {
 					blocks[xx][yy] = 0;
 
 		if (holdShape == -1) {
-			holdShape = lastShape;
+			holdShape = currentShape;
 			pickShape();
 		} else {
 			int lastShape1 = holdShape;
-			holdShape = lastShape;
-			lastShape = lastShape1;
-			displayShape(lastShape);
+			holdShape = currentShape;
+			currentShape = lastShape1;
+			displayShape(currentShape);
 		}
 		holdOnce = true;
 		displayBoxShape(holdBlocks, holdShape);
@@ -517,31 +528,31 @@ public class MainGame extends View {
 		if (thisShape == 0) {
 			placeShapeAndDetectLose(new int[] { 3, 4, 5, 6 }, new int[] { 0, 0,
 					0, 0 });
-			shape = 1;
+			specificCurrentShape = 1;
 		} else if (thisShape == 1) {
 			placeShapeAndDetectLose(new int[] { 3, 3, 4, 5 }, new int[] { 0, 1,
 					1, 1 });
-			shape = 5;
+			specificCurrentShape = 5;
 		} else if (thisShape == 2) {
 			placeShapeAndDetectLose(new int[] { 5, 3, 4, 5 }, new int[] { 0, 1,
 					1, 1 });
-			shape = 9;
+			specificCurrentShape = 9;
 		} else if (thisShape == 3) {
 			placeShapeAndDetectLose(new int[] { 4, 3, 4, 5 }, new int[] { 0, 1,
 					1, 1 });
-			shape = 13;
+			specificCurrentShape = 13;
 		} else if (thisShape == 4) {
 			placeShapeAndDetectLose(new int[] { 4, 5, 3, 4 }, new int[] { 0, 0,
 					1, 1 });
-			shape = 15;
+			specificCurrentShape = 15;
 		} else if (thisShape == 5) {
 			placeShapeAndDetectLose(new int[] { 3, 4, 4, 5 }, new int[] { 0, 0,
 					1, 1 });
-			shape = 17;
+			specificCurrentShape = 17;
 		} else if (thisShape == 6) {
 			placeShapeAndDetectLose(new int[] { 4, 5, 4, 5 }, new int[] { 0, 0,
 					1, 1 });
-			shape = 19;
+			specificCurrentShape = 19;
 		}
 	}
 
@@ -590,7 +601,7 @@ public class MainGame extends View {
 				currentDrop = clearLines();
 				hardDrop = false;
 				softDrop = false;
-				totalGrav = 0.0;
+				gravityTicker = 0.0;
 				gravity = defaultGravity;
 
 				int addScore = scoring(currentDrop, tSpin);
@@ -888,78 +899,78 @@ public class MainGame extends View {
 	public static void shapeTurn() {
 		turnSuccess = false;
 		detectShape();
-		if (shape == 1) {
+		if (specificCurrentShape == 1) {
 			turnShape(-1, 0, 1, 2, 2, 1, 0, -1);
 			if (turnSuccess)
-				shape = 2;
-		} else if (shape == 2) {
+				specificCurrentShape = 2;
+		} else if (specificCurrentShape == 2) {
 			turnShape(-2, -1, 0, 1, -2, -1, 0, 1);
 			if (turnSuccess)
-				shape = 1;
-		} else if (shape == 3) {
+				specificCurrentShape = 1;
+		} else if (specificCurrentShape == 3) {
 			turnShape(-2, -1, 0, 1, 0, 1, 0, -1);
 			if (turnSuccess)
-				shape = 4;
-		} else if (shape == 4) {
+				specificCurrentShape = 4;
+		} else if (specificCurrentShape == 4) {
 			turnShape(-1, 0, 0, 1, -1, -2, 0, 1);
 			if (turnSuccess)
-				shape = 5;
-		} else if (shape == 5) {
+				specificCurrentShape = 5;
+		} else if (specificCurrentShape == 5) {
 			turnShape(-1, 0, 1, 2, 1, 0, -1, 0);
 			if (turnSuccess)
-				shape = 6;
-		} else if (shape == 6) {
+				specificCurrentShape = 6;
+		} else if (specificCurrentShape == 6) {
 			turnShape(-1, 0, 0, 1, -1, 0, 2, 1);
 			if (turnSuccess)
-				shape = 3;
-		} else if (shape == 7) {
+				specificCurrentShape = 3;
+		} else if (specificCurrentShape == 7) {
 			turnShape(0, -1, 0, 1, -2, 1, 0, -1);
 			if (turnSuccess)
-				shape = 8;
-		} else if (shape == 8) {
+				specificCurrentShape = 8;
+		} else if (specificCurrentShape == 8) {
 			turnShape(-1, 0, 1, 2, -1, 0, 1, 0);
 			if (turnSuccess)
-				shape = 9;
-		} else if (shape == 9) {
+				specificCurrentShape = 9;
+		} else if (specificCurrentShape == 9) {
 			turnShape(-1, 0, 1, 0, 1, 0, -1, 2);
 			if (turnSuccess)
-				shape = 10;
-		} else if (shape == 10) {
+				specificCurrentShape = 10;
+		} else if (specificCurrentShape == 10) {
 			turnShape(-2, -1, 0, 1, 0, -1, 0, 1);
 			if (turnSuccess)
-				shape = 7;
-		} else if (shape == 11) {
+				specificCurrentShape = 7;
+		} else if (specificCurrentShape == 11) {
 			turnShape(0, -1, 0, 0, 0, -1, 0, 0);
 			if (turnSuccess)
-				shape = 12;
-		} else if (shape == 12) {
+				specificCurrentShape = 12;
+		} else if (specificCurrentShape == 12) {
 			turnShape(1, 0, 0, 0, -1, 0, 0, 0);
 			if (turnSuccess)
-				shape = 13;
-		} else if (shape == 13) {
+				specificCurrentShape = 13;
+		} else if (specificCurrentShape == 13) {
 			turnShape(0, 0, 1, 0, 0, 0, 1, 0);
 			if (turnSuccess)
-				shape = 14;
-		} else if (shape == 14) {
+				specificCurrentShape = 14;
+		} else if (specificCurrentShape == 14) {
 			turnShape(0, 0, 0, -1, 0, 0, 0, 1);
 			if (turnSuccess)
-				shape = 11;
-		} else if (shape == 15) {
+				specificCurrentShape = 11;
+		} else if (specificCurrentShape == 15) {
 			turnShape(0, 0, -2, 0, 0, -1, -1, 0);
 			if (turnSuccess)
-				shape = 16;
-		} else if (shape == 16) {
+				specificCurrentShape = 16;
+		} else if (specificCurrentShape == 16) {
 			turnShape(0, 0, 0, 2, 0, 0, 1, 1);
 			if (turnSuccess)
-				shape = 15;
-		} else if (shape == 17) {
+				specificCurrentShape = 15;
+		} else if (specificCurrentShape == 17) {
 			turnShape(-1, -1, 0, 0, -2, 0, 0, 0);
 			if (turnSuccess)
-				shape = 18;
-		} else if (shape == 18) {
+				specificCurrentShape = 18;
+		} else if (specificCurrentShape == 18) {
 			turnShape(1, 0, 0, 1, 0, 0, 0, 2);
 			if (turnSuccess)
-				shape = 17;
+				specificCurrentShape = 17;
 		}
 		// Reset slack if turn is successful
 		if (turnSuccess) {
@@ -972,78 +983,78 @@ public class MainGame extends View {
 	public static void shapeTurnCC() {
 		turnSuccess = false;
 		detectShape();
-		if (shape == 1) {
+		if (specificCurrentShape == 1) {
 			turnShape(-2, -1, 0, 1, 2, 1, 0, -1);
 			if (turnSuccess)
-				shape = 2;
-		} else if (shape == 2) {
+				specificCurrentShape = 2;
+		} else if (specificCurrentShape == 2) {
 			turnShape(-1, 0, 1, 2, -2, -1, 0, 1);
 			if (turnSuccess)
-				shape = 1;
-		} else if (shape == 3) {
+				specificCurrentShape = 1;
+		} else if (specificCurrentShape == 3) {
 			turnShape(0, -1, 0, 1, -2, -1, 0, 1);
 			if (turnSuccess)
-				shape = 6;
-		} else if (shape == 4) {
+				specificCurrentShape = 6;
+		} else if (specificCurrentShape == 4) {
 			turnShape(1, 2, 0, -1, -1, 0, 0, 1);
 			if (turnSuccess)
-				shape = 3;
-		} else if (shape == 5) {
+				specificCurrentShape = 3;
+		} else if (specificCurrentShape == 5) {
 			turnShape(-1, 0, 1, 0, -1, 0, 1, 2);
 			if (turnSuccess)
-				shape = 4;
-		} else if (shape == 6) {
+				specificCurrentShape = 4;
+		} else if (specificCurrentShape == 6) {
 			turnShape(1, 0, -2, -1, -1, 0, 1, 0);
 			if (turnSuccess)
-				shape = 5;
-		} else if (shape == 7) {
+				specificCurrentShape = 5;
+		} else if (specificCurrentShape == 7) {
 			turnShape(2, -1, 0, 1, 0, -1, 0, 1);
 			if (turnSuccess)
-				shape = 10;
-		} else if (shape == 8) {
+				specificCurrentShape = 10;
+		} else if (specificCurrentShape == 8) {
 			turnShape(1, 0, -1, 0, -1, 0, 1, 2);
 			if (turnSuccess)
-				shape = 7;
-		} else if (shape == 9) {
+				specificCurrentShape = 7;
+		} else if (specificCurrentShape == 9) {
 			turnShape(-1, 0, 1, -2, -1, 0, 1, 0);
 			if (turnSuccess)
-				shape = 8;
-		} else if (shape == 10) {
+				specificCurrentShape = 8;
+		} else if (specificCurrentShape == 10) {
 			turnShape(0, 1, 0, -1, -2, -1, 0, 1);
 			if (turnSuccess)
-				shape = 9;
-		} else if (shape == 11) {
+				specificCurrentShape = 9;
+		} else if (specificCurrentShape == 11) {
 			turnShape(0, 0, 0, 1, 0, 0, 0, -1);
 			if (turnSuccess)
-				shape = 14;
-		} else if (shape == 12) {
+				specificCurrentShape = 14;
+		} else if (specificCurrentShape == 12) {
 			turnShape(0, 0, 0, 1, 0, 0, 0, 1);
 			if (turnSuccess)
-				shape = 11;
-		} else if (shape == 13) {
+				specificCurrentShape = 11;
+		} else if (specificCurrentShape == 13) {
 			turnShape(-1, 0, 0, 0, 1, 0, 0, 0);
 			if (turnSuccess)
-				shape = 12;
-		} else if (shape == 14) {
+				specificCurrentShape = 12;
+		} else if (specificCurrentShape == 14) {
 			turnShape(-1, 0, 0, 0, -1, 0, 0, 0);
 			if (turnSuccess)
-				shape = 13;
-		} else if (shape == 15) {
+				specificCurrentShape = 13;
+		} else if (specificCurrentShape == 15) {
 			turnShape(0, 0, -2, 0, 0, -1, -1, 0);
 			if (turnSuccess)
-				shape = 16;
-		} else if (shape == 16) {
+				specificCurrentShape = 16;
+		} else if (specificCurrentShape == 16) {
 			turnShape(0, 0, 0, 2, 0, 0, 1, 1);
 			if (turnSuccess)
-				shape = 15;
-		} else if (shape == 17) {
+				specificCurrentShape = 15;
+		} else if (specificCurrentShape == 17) {
 			turnShape(-1, -1, 0, 0, -2, 0, 0, 0);
 			if (turnSuccess)
-				shape = 18;
-		} else if (shape == 18) {
+				specificCurrentShape = 18;
+		} else if (specificCurrentShape == 18) {
 			turnShape(1, 0, 0, 1, 0, 0, 0, 2);
 			if (turnSuccess)
-				shape = 17;
+				specificCurrentShape = 17;
 		}
 		// Reset slack if turn is successful
 		if (turnSuccess) {
@@ -1143,7 +1154,7 @@ public class MainGame extends View {
 		detectShape();
 		if (!lose && !win) {
 			for (int xx = 0; xx < playLocationX.length; xx++)
-				colors[playLocationX[xx]][playLocationY[xx]] = lastShape;
+				colors[playLocationX[xx]][playLocationY[xx]] = currentShape;
 		}
 
 	}
@@ -1307,15 +1318,15 @@ public class MainGame extends View {
 	// when totalGrav is higher than 1, the shape moves down 1 block.
 	public static void gravity() {
 		if (!lose & !pause & !win) {
-			if (thisShape >= 0) {
+			if (nextShape >= 0) {
 				long temp = System.currentTimeMillis();
 				long dtime = temp - clock;
 				if (dtime > FPS) {
-					totalGrav = totalGrav + gravity + gravityAdd;
+					gravityTicker = gravityTicker + gravity + gravityAdd;
 					clock = clock + FPS;
 				}
-				while (totalGrav >= 1) {
-					totalGrav = totalGrav - 1;
+				while (gravityTicker >= 1) {
+					gravityTicker = gravityTicker - 1;
 					shapeDown();
 				}
 			}
@@ -1369,12 +1380,12 @@ public class MainGame extends View {
 		next3Blocks = new int[numberOfHoldShapeWidth][numberOfHoldShapeLength];
 		playLocationX = new int[4];
 		playLocationY = new int[4];
-		thisShape = -1;
 		nextShape = -1;
-		nextShape1 = -1;
+		next2Shape = -1;
+		next3Shape = -1;
 		holdShape = -1;
-		shape = -1;
-		lastShape = -1;
+		specificCurrentShape = -1;
+		currentShape = -1;
 		shapeList = new ArrayList<Integer>();
 		for (int xx = 0; xx < 7; xx++) {
 			shapeList.add(xx);
