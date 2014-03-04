@@ -18,14 +18,14 @@ public class Constants {
 	public final static String tripleText = "Triple";
 	public final static String tetrisText = "Tetris";
 	public final static String twistText = "Twist";
-	public final static String kickText = "Off the Wall";
+	public final static String kickText = "Kicked";
 	public final static String backToBackText = "Back to Back";
 	
 	
 	public final static String[] settingName = {"defaultGravity", "softDropSpeed",
 			"slackLength", "flickSensitivity", "dragSensitivity",
 			"countDownTime", "linesPerLevel", "gravityAddPerLevel" };
-	public final static String[] defaultValue = { "0.05", "0.45", "1000", "30", "60",
+	public final static String[] defaultValue = { "0.033", "0.45", "1000", "30", "60",
 			"120", "10", "0.025" };
 	public final static String[] booleanSettingName = {"tapToHold"};
 	public final static boolean[] booleanSettingDefault = { true };

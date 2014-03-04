@@ -32,7 +32,7 @@ public class MainGame extends View {
 
 	// EXTERNAL OPTIONS:
 	public static boolean tapToHold = true;
-	public static double defaultGravity = 0.05;
+	public static double defaultGravity = 0.033;
 	// The default gravity of the game value
 	public static int flickSensitivity = 30;
 	// The Sensitivity is the flick gesture

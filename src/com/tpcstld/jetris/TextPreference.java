@@ -63,7 +63,9 @@ public class TextPreference extends DialogPreference {
 	
 	public void onDialogClosed(boolean positiveResult) {
 		if (positiveResult) {
-			mNewValue = input.getText().toString();
+			double temp = Double.parseDouble(input.getText().toString());
+			temp = Math.min(temp, 20.0);
+			mNewValue = String.valueOf(temp);
 			persistString(mNewValue);
 			setSummary(mNewValue);
 		}
