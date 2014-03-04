@@ -1,3 +1,25 @@
+1.0.4
+	Improved performance for displaying the grid
+	Highscores now updates also during the game.
+		While displayed it doesn't fully update until the game is reset or paused.
+	You can now tap the hold box to hold your current piece.
+1.0.3
+	Changed losing condition to better match tetris guidelines
+	Fixed active shape not falling correctly right after picking
+	Changed board layout
+	Fixed yet another pause text bug
+	Fixed AboutActivity Title
+1.0.2
+	Added Reset Highscore Option
+	Changed information Display
+	Redid settings for integers
+	Settings menu now instantly updates once reset
+	Consolidated settings updating
+	Rebuilt settings menu
+1.0.1b
+	Fixed Load Game when there is no game available
+	Fixed about page displaying settings menu
+	Fixed instructions page not displaying correct theme
 1.0.1a
 	Added Super Dark background option for the dark theme
 	Added reset settings button

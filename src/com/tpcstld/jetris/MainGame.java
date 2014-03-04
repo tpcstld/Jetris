@@ -32,13 +32,13 @@ public class MainGame extends View {
 	static Context mContext;
 
 	// EXTERNAL OPTIONS:
-	public static double defaultGravity = 0.05; 
+	public static double defaultGravity = 0.05;
 	// The default gravity of the game value
-	public static int flickSensitivity = 30; 
+	public static int flickSensitivity = 30;
 	// The Sensitivity is the flick gesture
 	public static int slackLength = 1000; // How long the stack goes on for in
 	public static double softDropSpeed = 0.45; // How fast soft dropping is
-	public static int dragSensitivity = 100; 
+	public static int dragSensitivity = 100;
 	// The sensitivity of the drag gesture
 	public static long countDownTime = 120;
 	public static int linesPerLevel = 10;
@@ -46,12 +46,16 @@ public class MainGame extends View {
 	public static int textColor = Color.BLACK;
 
 	// GAME STATICS
-	static final int numberOfBlocksWidth = 10; // The number of columns of blocks in
-											// the main field
-	static final int numberOfBlocksLength = 22; // The number of rows of blocks in the
-											// main field
-	static final int numberOfHoldShapeWidth = 4; // The width of the auxiliary boxes
-	static final int numberOfHoldShapeLength = 2; // The length of the auxiliary boxes
+	static final int numberOfBlocksWidth = 10; // The number of columns of
+												// blocks in
+												// the main field
+	static final int numberOfBlocksLength = 22; // The number of rows of blocks
+												// in the
+	// main field
+	static final int numberOfHoldShapeWidth = 4; // The width of the auxiliary
+													// boxes
+	static final int numberOfHoldShapeLength = 2; // The length of the auxiliary
+													// boxes
 
 	// Game Mode
 	public static String gameMode = "";
@@ -110,7 +114,7 @@ public class MainGame extends View {
 	// Array displaying the next3 block
 	static int[] playLocationX = new int[4]; // X-coords of the blocks in play
 	static int[] playLocationY = new int[4]; // Y-coords of the blocks in play
-	
+
 	// MISC VARIABLES:
 	static String auxText = ""; // Text for displaying the time left
 	static boolean slack = false; // Whether or not slack is currently active
@@ -205,7 +209,7 @@ public class MainGame extends View {
 		canvas.drawText("" + score, numSquaresX * squareSide,
 				scoreInfoYStarting + mainFieldShiftY, paint);
 		changePaintSettings("normal");
-		
+
 		// Drawing aux text box
 		if (gameMode.equals(Constants.MARATHON_MODE)) {
 			String tempText = auxText + " ("
@@ -235,50 +239,47 @@ public class MainGame extends View {
 		gravity();
 		coloring();
 		ghostShape();
-		
-		//Drawing columns for the main field
+
+		// Drawing columns for the main field
 		for (int xx = mainFieldShiftX; xx <= squareSide * numberOfBlocksWidth
 				+ mainFieldShiftX; xx += squareSide) {
 			canvas.drawLine(xx, mainFieldStartingY, xx, squareSide
 					* (numberOfBlocksLength - 2) + mainFieldShiftY, paint);
 		}
-		
-		//Drawing rows for the main field
+
+		// Drawing rows for the main field
 		for (int xx = mainFieldShiftY; xx <= squareSide
 				* (numberOfBlocksLength - 2) + mainFieldShiftY; xx += squareSide) {
 			canvas.drawLine(mainFieldShiftX, xx, squareSide
 					* numberOfBlocksWidth + mainFieldShiftX, xx, paint);
 		}
-		
+
 		// Coloring the main field
 		for (int xx = 0; xx < numberOfBlocksWidth; xx++) {
 			for (int yy = 0; yy < numberOfBlocksLength; yy++) {
 				if (blocks[xx][yy] != 0 & blocks[xx][yy] != 3) {
 					paint.setColor(chooseColor(colors[xx][yy]));
-					canvas.drawRect(xx * squareSide + mainFieldShiftX,
-							(yy - 2) * squareSide + mainFieldShiftY, xx
-									* squareSide + squareSide
-									+ mainFieldShiftX, (yy - 2)
-									* squareSide + squareSide
-									+ mainFieldShiftY, paint);
+					canvas.drawRect(xx * squareSide + mainFieldShiftX, (yy - 2)
+							* squareSide + mainFieldShiftY, xx * squareSide
+							+ squareSide + mainFieldShiftX, (yy - 2)
+							* squareSide + squareSide + mainFieldShiftY, paint);
 				}
 			}
 		}
-		
+
 		// Coloring the ghost shape
 		paint.setColor(chooseColor(currentShape));
 		for (int xx = 0; xx < numberOfBlocksWidth; xx++) {
 			for (int yy = 0; yy < numberOfBlocksLength; yy++) {
 				if (blocks[xx][yy] == 3) {
 					canvas.drawCircle((float) (xx * squareSide + squareSide
-							* 0.5 + mainFieldShiftX),
-							(float) ((yy - 2) * squareSide + squareSide
-									* 0.5 + mainFieldShiftY),
+							* 0.5 + mainFieldShiftX), (float) ((yy - 2)
+							* squareSide + squareSide * 0.5 + mainFieldShiftY),
 							(float) (squareSide * 0.5), paint);
 				}
 			}
 		}
-	
+
 		// Coloring the blocks for the held shape.
 		paint.setColor(chooseColor(holdShape));
 		for (int xx = 0; xx < numberOfHoldShapeWidth; xx++) {
@@ -293,7 +294,7 @@ public class MainGame extends View {
 				}
 			}
 		}
-		
+
 		// Coloring the next shape
 		paint.setColor(chooseColor(nextShape));
 		for (int xx = 0; xx < numberOfHoldShapeWidth; xx++) {
@@ -303,13 +304,13 @@ public class MainGame extends View {
 							+ mainFieldShiftX, yy * squareSide
 							+ nextShapeYStarting + mainFieldShiftY, xx
 							* squareSide + holdShapeXStarting + squareSide
-							+ mainFieldShiftX, yy * squareSide
-							+ nextShapeYStarting + squareSide
-							+ mainFieldShiftY, paint);
+							+ mainFieldShiftX,
+							yy * squareSide + nextShapeYStarting + squareSide
+									+ mainFieldShiftY, paint);
 				}
 			}
 		}
-		
+
 		// Coloring the second next shape
 		paint.setColor(chooseColor(next2Shape));
 		for (int xx = 0; xx < numberOfHoldShapeWidth; xx++) {
@@ -325,7 +326,7 @@ public class MainGame extends View {
 				}
 			}
 		}
-		
+
 		// Coloring the third next shape
 		paint.setColor(chooseColor(next3Shape));
 		for (int xx = 0; xx < numberOfHoldShapeWidth; xx++) {
@@ -341,7 +342,7 @@ public class MainGame extends View {
 				}
 			}
 		}
-		
+
 		// Displaying the big text if needed
 		// When the game is lost
 		// When the game is won
@@ -521,6 +522,9 @@ public class MainGame extends View {
 
 	public static void holdShape() {
 		// Clear all active shapes
+		if (holdOnce) {
+			return;
+		}
 		for (int xx = 0; xx < numberOfBlocksWidth; xx++)
 			for (int yy = 0; yy < numberOfBlocksLength; yy++)
 				if (blocks[xx][yy] == 1)
@@ -647,6 +651,7 @@ public class MainGame extends View {
 					score = score + 1;
 				}
 			}
+			highScore = Math.max(highScore, score);
 		}
 	}
 
@@ -1221,6 +1226,7 @@ public class MainGame extends View {
 			countDown.start();
 		}
 		clock = System.currentTimeMillis();
+		updateHighScore();
 	}
 
 	public static OnTouchListener getOnTouchListener() {
@@ -1259,9 +1265,7 @@ public class MainGame extends View {
 								turn = false;
 								ignoreInputs = true;
 							} else if (dy < -flickSensitivity) {
-								if (!holdOnce) {
-									holdShape();
-								}
+								holdShape();
 								turn = false;
 								ignoreInputs = true;
 							} else if (x - startingX > squareSide) {
@@ -1286,9 +1290,18 @@ public class MainGame extends View {
 					case MotionEvent.ACTION_UP:
 						x = arg1.getX();
 						y = arg1.getY();
-
 						if (turn) {
-							if (x < squareSide * numberOfBlocksWidth * 0.5) {
+							if (mainFieldShiftX + holdShapeXStarting < x
+									&& x < mainFieldShiftX + holdShapeXStarting
+											+ numberOfHoldShapeWidth
+											* squareSide
+									&& mainFieldShiftY < y
+									&& y < mainFieldShiftY + holdShapeYStarting
+											+ numberOfHoldShapeLength
+											* squareSide) {
+								holdShape();
+							} else if (x < squareSide * numberOfBlocksWidth
+									* 0.5) {
 								shapeTurnCC();
 							} else {
 								shapeTurn();
@@ -1374,6 +1387,7 @@ public class MainGame extends View {
 	}
 
 	public static void newGame() {
+		updateHighScore();
 		// Reset Variables
 		for (int xx = 0; xx < numberOfBlocksWidth; xx++) {
 			for (int yy = 0; yy < numberOfBlocksLength; yy++) {
