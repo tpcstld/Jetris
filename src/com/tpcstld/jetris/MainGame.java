@@ -68,6 +68,8 @@ public class MainGame extends View {
 	static CountDownTimer countDown = new CustomCountDownTimer(
 			currentCountDownTime, FPS);
 	static long clock = System.currentTimeMillis();
+	static long lastSlackTime = System.currentTimeMillis();
+
 	// Tracks the real time for fps
 
 	// POSITIONING VARIABLES:
@@ -159,6 +161,7 @@ public class MainGame extends View {
 	// 2 = locked space
 	// 3 = ghost space
 
+	// Loading the game
 	public MainGame(Context context) {
 		super(context);
 		SharedPreferences settings = PreferenceManager
@@ -175,6 +178,14 @@ public class MainGame extends View {
 			newGame();
 		}
 
+	}
+
+	public void tick() {
+		if (!lose && !pause && !win) {
+			gravity();
+			coloring();
+			ghostShape();
+		}
 	}
 
 	@Override
@@ -236,9 +247,7 @@ public class MainGame extends View {
 					+ mainFieldShiftY + squareSide * xx, paint);
 		}
 
-		gravity();
-		coloring();
-		ghostShape();
+		tick();
 
 		// Drawing columns for the main field
 		for (int xx = mainFieldShiftX; xx <= squareSide * numberOfBlocksWidth
@@ -820,6 +829,22 @@ public class MainGame extends View {
 		return addScore;
 	}
 
+	// Gravity falling mechanic.
+	// totalGrav is incremented by gravity every tick.
+	// when totalGrav is higher than 1, the shape moves down 1 block.
+	public static void gravity() {
+		long temp = System.currentTimeMillis();
+		long dtime = temp - clock;
+		if (dtime > FPS) {
+			gravityTicker = gravityTicker + gravity + gravityAdd;
+			clock = clock + FPS;
+		}
+		while (gravityTicker >= 1) {
+			gravityTicker = gravityTicker - 1;
+			shapeDown();
+		}
+	}
+
 	public static void changeGravity() {
 		while (linesCleared >= linesClearedFloor + linesPerLevel) {
 			level = level + 1;
@@ -829,6 +854,9 @@ public class MainGame extends View {
 			}
 		}
 		auxText = "" + (level + 1);
+	}
+
+	public static void slack() {
 	}
 
 	public static void updateHighScore() {
@@ -893,7 +921,7 @@ public class MainGame extends View {
 			for (int xx = 0; xx < playLocationY.length; xx++)
 				if (blocks[playLocationX[xx] - 1][playLocationY[xx]] == 2)
 					move = false;
-		//Move and reset slack
+		// Move and reset slack
 		if (move) {
 			for (int xx = 0; xx < playLocationY.length; xx++)
 				blocks[playLocationX[xx]][playLocationY[xx]] = 0;
@@ -1236,7 +1264,7 @@ public class MainGame extends View {
 		updateHighScore();
 	}
 
-	//Controls
+	// Controls
 	public static OnTouchListener getOnTouchListener() {
 		return new OnTouchListener() {
 			float x;
@@ -1306,8 +1334,7 @@ public class MainGame extends View {
 									&& mainFieldShiftY < y
 									&& y < mainFieldShiftY + holdShapeYStarting
 											+ numberOfHoldShapeLength
-											* squareSide
-									&& tapToHold) {
+											* squareSide && tapToHold) {
 								holdShape();
 							} else if (x < squareSide * numberOfBlocksWidth
 									* 0.5) {
@@ -1348,26 +1375,6 @@ public class MainGame extends View {
 		mainFieldShiftX = squareSide / 2;
 		mainFieldShiftY = squareSide / 2;
 		getScreenSize = false;
-	}
-
-	// Gravity falling mechanic.
-	// totalGrav is incremented by gravity every tick.
-	// when totalGrav is higher than 1, the shape moves down 1 block.
-	public static void gravity() {
-		if (!lose & !pause & !win) {
-			if (nextShape >= 0) {
-				long temp = System.currentTimeMillis();
-				long dtime = temp - clock;
-				if (dtime > FPS) {
-					gravityTicker = gravityTicker + gravity + gravityAdd;
-					clock = clock + FPS;
-				}
-				while (gravityTicker >= 1) {
-					gravityTicker = gravityTicker - 1;
-					shapeDown();
-				}
-			}
-		}
 	}
 
 	public static int chooseColor(int x) {
