@@ -25,8 +25,9 @@ public class MainGame extends View {
 	static final double textScaleSize = 0.8; // Text scaling
 	static final double textScaleSizeAux = 0.7; // Text scaling for auxiliary
 												// text
-	static final int FPS = 1000000000 / 30; // The nanoseconds per frame at which the game
-										// runs at
+	static final int FPS = 1000000000 / 30; // The nanoseconds per frame at
+											// which the game
+	// runs at
 	static int ORANGE;
 	static Context mContext;
 
@@ -36,7 +37,8 @@ public class MainGame extends View {
 	// The default gravity of the game value
 	public static int flickSensitivity = 30;
 	// The Sensitivity is the flick gesture
-	public static long slackLength = 1000000000; // How long the stack goes on for in milliseconds
+	public static long slackLength = 1000000000; // How long the stack goes on
+													// for in milliseconds
 	public static double softDropSpeed = 0.45; // How fast soft dropping is
 	public static int dragSensitivity = 100;
 	// The sensitivity of the drag gesture
@@ -97,8 +99,6 @@ public class MainGame extends View {
 	static int currentShape = -1; // The CURRENT shape on the playing field.
 	static ArrayList<Integer> shapeList = new ArrayList<Integer>();
 	// A list containing the shapes left in the current bag
-	static int specificCurrentShape = 0;
-	// The current, specific shape of the block
 
 	// FIELD INFORMATION:
 	static int[][] blocks = new int[numberOfBlocksWidth][numberOfBlocksLength];
@@ -115,6 +115,8 @@ public class MainGame extends View {
 	// Array displaying the next3 block
 	static int[] playLocationX = new int[4]; // X-coords of the blocks in play
 	static int[] playLocationY = new int[4]; // Y-coords of the blocks in play
+	static double pivotX; // Rotation Pivot: X-coordinate
+	static double pivotY; // Rotation Pivot: Y-coordinate
 
 	// MISC VARIABLES:
 	static String auxText = ""; // Text for displaying the time left
@@ -427,7 +429,8 @@ public class MainGame extends View {
 				"defaultGravity", settings);
 		flickSensitivity = getIntFromSettings(flickSensitivity,
 				"flickSensitivity", settings);
-		slackLength = getIntFromSettings((int) (slackLength / 1000000), "slackLength", settings) * 1000000;
+		slackLength = getIntFromSettings((int) (slackLength / 1000000),
+				"slackLength", settings) * 1000000;
 		softDropSpeed = getDoubleFromSettings(softDropSpeed, "softDropSpeed",
 				settings);
 		dragSensitivity = getIntFromSettings(dragSensitivity,
@@ -509,7 +512,7 @@ public class MainGame extends View {
 		nextShape = next2Shape;
 		next2Shape = next3Shape;
 		next3Shape = shapeList.remove(r.nextInt(shapeList.size()));
-		
+
 		if (!lose) {
 			if (shapeList.size() <= 0) {
 				for (int xx = 0; xx < 7; xx++) {
@@ -550,34 +553,44 @@ public class MainGame extends View {
 	}
 
 	public static void displayShape(int thisShape) {
+		// 0: @@@@ 1: @ 2: @ 3: @
+		// @@@ @@@ @@@
+
 		if (thisShape == 0) {
 			placeShapeAndDetectLose(new int[] { 3, 4, 5, 6 }, new int[] { 1, 1,
 					1, 1 });
-			specificCurrentShape = 1;
+			pivotX = 4.5;
+			pivotY = 1.5;
 		} else if (thisShape == 1) {
 			placeShapeAndDetectLose(new int[] { 3, 3, 4, 5 }, new int[] { 0, 1,
 					1, 1 });
-			specificCurrentShape = 5;
+			pivotX = 4;
+			pivotY = 1;
 		} else if (thisShape == 2) {
 			placeShapeAndDetectLose(new int[] { 5, 3, 4, 5 }, new int[] { 0, 1,
 					1, 1 });
-			specificCurrentShape = 9;
+			pivotX = 4;
+			pivotY = 1;
 		} else if (thisShape == 3) {
 			placeShapeAndDetectLose(new int[] { 4, 3, 4, 5 }, new int[] { 0, 1,
 					1, 1 });
-			specificCurrentShape = 13;
+			pivotX = 4;
+			pivotY = 1;
 		} else if (thisShape == 4) {
 			placeShapeAndDetectLose(new int[] { 4, 5, 3, 4 }, new int[] { 0, 0,
 					1, 1 });
-			specificCurrentShape = 15;
+			pivotX = 4;
+			pivotY = 1;
 		} else if (thisShape == 5) {
 			placeShapeAndDetectLose(new int[] { 3, 4, 4, 5 }, new int[] { 0, 0,
 					1, 1 });
-			specificCurrentShape = 17;
+			pivotX = 4;
+			pivotY = 1;
 		} else if (thisShape == 6) {
 			placeShapeAndDetectLose(new int[] { 4, 5, 4, 5 }, new int[] { 0, 0,
 					1, 1 });
-			specificCurrentShape = 19;
+			pivotX = 4.5;
+			pivotY = 0.5;
 		}
 	}
 
@@ -680,7 +693,11 @@ public class MainGame extends View {
 			for (int xx = 0; xx < playLocationX.length; xx++) {
 				blocks[playLocationX[xx]][playLocationY[xx]] = 0;
 				blocks[playLocationX[xx]][playLocationY[xx] + 1] = 1;
+
+				// Update current Tetrimino location
+				playLocationY[xx] = playLocationY[xx] + 1;
 			}
+			pivotY = pivotY + 1;
 		}
 		if (move && !slack) {
 			if (hardDrop) {
@@ -955,6 +972,7 @@ public class MainGame extends View {
 				blocks[playLocationX[xx]][playLocationY[xx]] = 0;
 			for (int xx = 0; xx < playLocationY.length; xx++)
 				blocks[playLocationX[xx] - 1][playLocationY[xx]] = 1;
+			pivotX = pivotX - 1;
 		}
 	}
 
@@ -976,85 +994,20 @@ public class MainGame extends View {
 				blocks[playLocationX[xx]][playLocationY[xx]] = 0;
 			for (int xx = 0; xx < playLocationY.length; xx++)
 				blocks[playLocationX[xx] + 1][playLocationY[xx]] = 1;
+			pivotX = pivotX + 1;
 		}
 	}
 
 	public static void shapeTurn() {
 		turnSuccess = false;
 		detectShape();
-		if (specificCurrentShape == 1) {
-			turnShape(-1, 0, 1, 2, 2, 1, 0, -1);
-			if (turnSuccess)
-				specificCurrentShape = 2;
-		} else if (specificCurrentShape == 2) {
-			turnShape(-2, -1, 0, 1, -2, -1, 0, 1);
-			if (turnSuccess)
-				specificCurrentShape = 1;
-		} else if (specificCurrentShape == 3) {
-			turnShape(-2, -1, 0, 1, 0, 1, 0, -1);
-			if (turnSuccess)
-				specificCurrentShape = 4;
-		} else if (specificCurrentShape == 4) {
-			turnShape(-1, 0, 0, 1, -1, -2, 0, 1);
-			if (turnSuccess)
-				specificCurrentShape = 5;
-		} else if (specificCurrentShape == 5) {
-			turnShape(-1, 0, 1, 2, 1, 0, -1, 0);
-			if (turnSuccess)
-				specificCurrentShape = 6;
-		} else if (specificCurrentShape == 6) {
-			turnShape(-1, 0, 0, 1, -1, 0, 2, 1);
-			if (turnSuccess)
-				specificCurrentShape = 3;
-		} else if (specificCurrentShape == 7) {
-			turnShape(0, -1, 0, 1, -2, 1, 0, -1);
-			if (turnSuccess)
-				specificCurrentShape = 8;
-		} else if (specificCurrentShape == 8) {
-			turnShape(-1, 0, 1, 2, -1, 0, 1, 0);
-			if (turnSuccess)
-				specificCurrentShape = 9;
-		} else if (specificCurrentShape == 9) {
-			turnShape(-1, 0, 1, 0, 1, 0, -1, 2);
-			if (turnSuccess)
-				specificCurrentShape = 10;
-		} else if (specificCurrentShape == 10) {
-			turnShape(-2, -1, 0, 1, 0, -1, 0, 1);
-			if (turnSuccess)
-				specificCurrentShape = 7;
-		} else if (specificCurrentShape == 11) {
-			turnShape(0, -1, 0, 0, 0, -1, 0, 0);
-			if (turnSuccess)
-				specificCurrentShape = 12;
-		} else if (specificCurrentShape == 12) {
-			turnShape(1, 0, 0, 0, -1, 0, 0, 0);
-			if (turnSuccess)
-				specificCurrentShape = 13;
-		} else if (specificCurrentShape == 13) {
-			turnShape(0, 0, 1, 0, 0, 0, 1, 0);
-			if (turnSuccess)
-				specificCurrentShape = 14;
-		} else if (specificCurrentShape == 14) {
-			turnShape(0, 0, 0, -1, 0, 0, 0, 1);
-			if (turnSuccess)
-				specificCurrentShape = 11;
-		} else if (specificCurrentShape == 15) {
-			turnShape(0, 0, -2, 0, 0, -1, -1, 0);
-			if (turnSuccess)
-				specificCurrentShape = 16;
-		} else if (specificCurrentShape == 16) {
-			turnShape(0, 0, 0, 2, 0, 0, 1, 1);
-			if (turnSuccess)
-				specificCurrentShape = 15;
-		} else if (specificCurrentShape == 17) {
-			turnShape(-1, -1, 0, 0, -2, 0, 0, 0);
-			if (turnSuccess)
-				specificCurrentShape = 18;
-		} else if (specificCurrentShape == 18) {
-			turnShape(1, 0, 0, 1, 0, 0, 0, 2);
-			if (turnSuccess)
-				specificCurrentShape = 17;
+		int[] dLocationX = new int[4];
+		int[] dLocationY = new int[4];
+		for (int xx = 0; xx < dLocationX.length; xx++) {
+			dLocationX[xx] = (int) (-(playLocationY[xx] - pivotY) - (playLocationX[xx] - pivotX));
+			dLocationY[xx] = (int) ((playLocationX[xx] - pivotX) - (playLocationY[xx] - pivotY));
 		}
+		turnShape(dLocationX, dLocationY);
 		// Reset slack if turn is successful
 		if (turnSuccess) {
 			slackOnce = false;
@@ -1064,112 +1017,42 @@ public class MainGame extends View {
 	public static void shapeTurnCC() {
 		turnSuccess = false;
 		detectShape();
-		if (specificCurrentShape == 1) {
-			turnShape(-2, -1, 0, 1, 2, 1, 0, -1);
-			if (turnSuccess)
-				specificCurrentShape = 2;
-		} else if (specificCurrentShape == 2) {
-			turnShape(-1, 0, 1, 2, -2, -1, 0, 1);
-			if (turnSuccess)
-				specificCurrentShape = 1;
-		} else if (specificCurrentShape == 3) {
-			turnShape(0, -1, 0, 1, -2, -1, 0, 1);
-			if (turnSuccess)
-				specificCurrentShape = 6;
-		} else if (specificCurrentShape == 4) {
-			turnShape(1, 2, 0, -1, -1, 0, 0, 1);
-			if (turnSuccess)
-				specificCurrentShape = 3;
-		} else if (specificCurrentShape == 5) {
-			turnShape(-1, 0, 1, 0, -1, 0, 1, 2);
-			if (turnSuccess)
-				specificCurrentShape = 4;
-		} else if (specificCurrentShape == 6) {
-			turnShape(1, 0, -2, -1, -1, 0, 1, 0);
-			if (turnSuccess)
-				specificCurrentShape = 5;
-		} else if (specificCurrentShape == 7) {
-			turnShape(2, -1, 0, 1, 0, -1, 0, 1);
-			if (turnSuccess)
-				specificCurrentShape = 10;
-		} else if (specificCurrentShape == 8) {
-			turnShape(1, 0, -1, 0, -1, 0, 1, 2);
-			if (turnSuccess)
-				specificCurrentShape = 7;
-		} else if (specificCurrentShape == 9) {
-			turnShape(-1, 0, 1, -2, -1, 0, 1, 0);
-			if (turnSuccess)
-				specificCurrentShape = 8;
-		} else if (specificCurrentShape == 10) {
-			turnShape(0, 1, 0, -1, -2, -1, 0, 1);
-			if (turnSuccess)
-				specificCurrentShape = 9;
-		} else if (specificCurrentShape == 11) {
-			turnShape(0, 0, 0, 1, 0, 0, 0, -1);
-			if (turnSuccess)
-				specificCurrentShape = 14;
-		} else if (specificCurrentShape == 12) {
-			turnShape(0, 0, 0, 1, 0, 0, 0, 1);
-			if (turnSuccess)
-				specificCurrentShape = 11;
-		} else if (specificCurrentShape == 13) {
-			turnShape(-1, 0, 0, 0, 1, 0, 0, 0);
-			if (turnSuccess)
-				specificCurrentShape = 12;
-		} else if (specificCurrentShape == 14) {
-			turnShape(-1, 0, 0, 0, -1, 0, 0, 0);
-			if (turnSuccess)
-				specificCurrentShape = 13;
-		} else if (specificCurrentShape == 15) {
-			turnShape(0, 0, -2, 0, 0, -1, -1, 0);
-			if (turnSuccess)
-				specificCurrentShape = 16;
-		} else if (specificCurrentShape == 16) {
-			turnShape(0, 0, 0, 2, 0, 0, 1, 1);
-			if (turnSuccess)
-				specificCurrentShape = 15;
-		} else if (specificCurrentShape == 17) {
-			turnShape(-1, -1, 0, 0, -2, 0, 0, 0);
-			if (turnSuccess)
-				specificCurrentShape = 18;
-		} else if (specificCurrentShape == 18) {
-			turnShape(1, 0, 0, 1, 0, 0, 0, 2);
-			if (turnSuccess)
-				specificCurrentShape = 17;
+		int[] dLocationX = new int[4];
+		int[] dLocationY = new int[4];
+		for (int xx = 0; xx < dLocationX.length; xx++) {
+			dLocationX[xx] = (int) ((playLocationY[xx] - pivotY) - (playLocationX[xx] - pivotX));
+			dLocationY[xx] = (int) (-(playLocationX[xx] - pivotX) - (playLocationY[xx] - pivotY));
 		}
+		turnShape(dLocationX, dLocationY);
 		// Reset slack if turn is successful
 		if (turnSuccess) {
 			slackOnce = false;
 		}
 	}
 
-	public static void turnShape(int x1, int x2, int x3, int x4, int y1,
-			int y2, int y3, int y4) {
+	public static void turnShape(int[] x, int[] y) {
 		kick = false;
-		int[] x = new int[4];
-		int[] y = new int[4];
-		x[0] = x1;
-		x[1] = x2;
-		x[2] = x3;
-		x[3] = x4;
-		y[0] = y1;
-		y[1] = y2;
-		y[2] = y3;
-		y[3] = y4;
 
-		for (int yy = 0; yy <= 2; yy++) {
+		for (int xy = 0; xy <= 4; xy++) {
 
-			if (yy == 1)
-				yy = -1;
-			else if (yy != 0)
-				yy = yy - 1;
-			for (int xy = 0; xy <= 3; xy++) {
+			// Checking 0, -1, 1, -2, 2
+			if (xy == 1) {
+				xy = -1;
+			} else if (xy == 3) {
+				xy = -2;
+			} else if (xy != 0) {
+				xy = xy / 2;
+			}
 
-				if (xy == 1)
-					xy = -1;
-				else if (xy != 0)
-					xy = xy - 1;
-
+			for (int yy = 0; yy <= 4; yy++) {
+				// Checking 0, -1, 1, -2, 2
+				if (yy == 1) {
+					yy = -1;
+				} else if (yy == 3) {
+					yy = -2;
+				} else if (yy != 0) {
+					yy = yy / 2;
+				}
 				boolean ok = true;
 
 				for (int xx = 0; xx < playLocationX.length; xx++) {
@@ -1178,12 +1061,14 @@ public class MainGame extends View {
 						ok = false;
 					}
 				}
+
 				for (int xx = 0; xx < playLocationY.length; xx++) {
 					if (playLocationY[xx] + y[xx] - yy >= 22
 							| playLocationY[xx] + y[xx] - yy < 0) {
 						ok = false;
 					}
 				}
+
 				try {
 					if (ok) {
 						if (blocks[playLocationX[0] + x[0] + xy][playLocationY[0]
@@ -1196,32 +1081,40 @@ public class MainGame extends View {
 										+ y[3] - yy] != 2) {
 							for (int xx = 0; xx < playLocationY.length; xx++)
 								blocks[playLocationX[xx]][playLocationY[xx]] = 0;
-							for (int xx = 0; xx < playLocationY.length; xx++)
+							for (int xx = 0; xx < playLocationY.length; xx++) {
 								blocks[playLocationX[xx] + x[xx] + xy][playLocationY[xx]
 										+ y[xx] - yy] = 1;
+							}
+							pivotX = pivotX + xy;
+							pivotY = pivotY - yy;
 							turnSuccess = true;
 						}
 					}
 				} catch (Exception e) {
-					e.printStackTrace();
 				}
-				if (xy == -1)
-					xy = 1;
-				else if (xy != 0)
-					xy = xy + 1;
+				if (yy == -1) {
+					yy = 1;
+				} else if (yy == -2) {
+					yy = 3;
+				} else if (yy != 0) {
+					yy = yy * 2;
+				}
 				if (turnSuccess) {
-					if (xy != 0) {
+					if (yy != 0) {
 						kick = true;
 					}
 					break;
 				}
 			}
-			if (yy == -1)
-				yy = 1;
-			else if (yy != 0)
-				yy = yy + 1;
+			if (xy == -1) {
+				xy = 1;
+			} else if (xy == -2) {
+				xy = 3;
+			} else if (xy != 0) {
+				xy = xy * 2;
+			}
 			if (turnSuccess) {
-				if (yy != 0) {
+				if (xy != 0) {
 					kick = true;
 				}
 				break;
@@ -1413,7 +1306,6 @@ public class MainGame extends View {
 		next2Shape = -1;
 		next3Shape = -1;
 		holdShape = -1;
-		specificCurrentShape = -1;
 		currentShape = -1;
 		shapeList = new ArrayList<Integer>();
 		for (int xx = 0; xx < 7; xx++) {
