@@ -194,6 +194,7 @@ public class MainGame extends View {
 		canvas.drawText("Next: ", holdShapeXStarting + mainFieldShiftX,
 				nextTextYStarting + mainFieldShiftY, paint);
 
+		// Drawing "High Score: " text box
 		canvas.drawText("High Score: " + highScore, mainFieldShiftX,
 				highScoreYStarting + mainFieldShiftY, paint);
 
@@ -204,6 +205,7 @@ public class MainGame extends View {
 		canvas.drawText("" + score, numSquaresX * squareSide,
 				scoreInfoYStarting + mainFieldShiftY, paint);
 		changePaintSettings("normal");
+		
 		// Drawing aux text box
 		if (gameMode.equals(Constants.MARATHON_MODE)) {
 			String tempText = auxText + " ("
@@ -233,104 +235,117 @@ public class MainGame extends View {
 		gravity();
 		coloring();
 		ghostShape();
+		
+		//Drawing columns for the main field
 		for (int xx = mainFieldShiftX; xx <= squareSide * numberOfBlocksWidth
 				+ mainFieldShiftX; xx += squareSide) {
 			canvas.drawLine(xx, mainFieldStartingY, xx, squareSide
 					* (numberOfBlocksLength - 2) + mainFieldShiftY, paint);
 		}
-
+		
+		//Drawing rows for the main field
 		for (int xx = mainFieldShiftY; xx <= squareSide
-				* (numberOfBlocksLength - 2) + mainFieldShiftY; xx += squareSide)
+				* (numberOfBlocksLength - 2) + mainFieldShiftY; xx += squareSide) {
 			canvas.drawLine(mainFieldShiftX, xx, squareSide
 					* numberOfBlocksWidth + mainFieldShiftX, xx, paint);
-
-		for (int x = 0; x < 8; x++) {
-			// Setting the color of the blocks
-			paint.setColor(chooseColor(x));
-
-			for (int xx = 0; xx < numberOfBlocksWidth; xx++) {
-				for (int yy = 0; yy < numberOfBlocksLength; yy++) {
-					if (blocks[xx][yy] != 0 & blocks[xx][yy] != 3
-							& colors[xx][yy] == x) {
-						canvas.drawRect(xx * squareSide + mainFieldShiftX,
-								(yy - 2) * squareSide + mainFieldShiftY, xx
-										* squareSide + squareSide
-										+ mainFieldShiftX, (yy - 2)
-										* squareSide + squareSide
-										+ mainFieldShiftY, paint);
-					}
-				}
-			}
-
-			// Ghost shape drawing
-			for (int xx = 0; xx < numberOfBlocksWidth; xx++) {
-				for (int yy = 0; yy < numberOfBlocksLength; yy++) {
-					if (blocks[xx][yy] == 3 & currentShape == x) {
-						canvas.drawCircle((float) (xx * squareSide + squareSide
-								* 0.5 + mainFieldShiftX),
-								(float) ((yy - 2) * squareSide + squareSide
-										* 0.5 + mainFieldShiftY),
-								(float) (squareSide * 0.5), paint);
-					}
-				}
-			}
-
-			for (int xx = 0; xx < numberOfHoldShapeWidth; xx++) {
-				for (int yy = 0; yy < numberOfHoldShapeLength; yy++) {
-					if (holdBlocks[xx][yy] == 1 & holdShape == x) {
-						canvas.drawRect(xx * squareSide + holdShapeXStarting
-								+ mainFieldShiftX, yy * squareSide
-								+ mainFieldShiftY + holdShapeYStarting, xx
-								* squareSide + holdShapeXStarting + squareSide
-								+ mainFieldShiftX, yy * squareSide + squareSide
-								+ mainFieldShiftY + holdShapeYStarting, paint);
-					}
-				}
-			}
-
-			for (int xx = 0; xx < numberOfHoldShapeWidth; xx++) {
-				for (int yy = 0; yy < numberOfHoldShapeLength; yy++) {
-					if (nextBlocks[xx][yy] == 1 & nextShape == x) {
-						canvas.drawRect(xx * squareSide + holdShapeXStarting
-								+ mainFieldShiftX, yy * squareSide
-								+ nextShapeYStarting + mainFieldShiftY, xx
-								* squareSide + holdShapeXStarting + squareSide
-								+ mainFieldShiftX, yy * squareSide
-								+ nextShapeYStarting + squareSide
-								+ mainFieldShiftY, paint);
-					}
-				}
-			}
-
-			for (int xx = 0; xx < numberOfHoldShapeWidth; xx++) {
-				for (int yy = 0; yy < numberOfHoldShapeLength; yy++) {
-					if (next2Blocks[xx][yy] == 1 & next2Shape == x) {
-						canvas.drawRect(xx * squareSide + holdShapeXStarting
-								+ mainFieldShiftX, yy * squareSide
-								+ nextShapeY2Starting + mainFieldShiftY, xx
-								* squareSide + holdShapeXStarting + squareSide
-								+ mainFieldShiftX, yy * squareSide
-								+ nextShapeY2Starting + squareSide
-								+ mainFieldShiftY, paint);
-					}
-				}
-			}
-
-			for (int xx = 0; xx < numberOfHoldShapeWidth; xx++) {
-				for (int yy = 0; yy < numberOfHoldShapeLength; yy++) {
-					if (next3Blocks[xx][yy] == 1 & next3Shape == x) {
-						canvas.drawRect(xx * squareSide + holdShapeXStarting
-								+ mainFieldShiftX, yy * squareSide
-								+ nextShapeY3Starting + mainFieldShiftY, xx
-								* squareSide + holdShapeXStarting + squareSide
-								+ mainFieldShiftX, yy * squareSide
-								+ nextShapeY3Starting + squareSide
-								+ mainFieldShiftY, paint);
-					}
+		}
+		
+		// Coloring the main field
+		for (int xx = 0; xx < numberOfBlocksWidth; xx++) {
+			for (int yy = 0; yy < numberOfBlocksLength; yy++) {
+				if (blocks[xx][yy] != 0 & blocks[xx][yy] != 3) {
+					paint.setColor(chooseColor(colors[xx][yy]));
+					canvas.drawRect(xx * squareSide + mainFieldShiftX,
+							(yy - 2) * squareSide + mainFieldShiftY, xx
+									* squareSide + squareSide
+									+ mainFieldShiftX, (yy - 2)
+									* squareSide + squareSide
+									+ mainFieldShiftY, paint);
 				}
 			}
 		}
+		
+		// Coloring the ghost shape
+		paint.setColor(chooseColor(currentShape));
+		for (int xx = 0; xx < numberOfBlocksWidth; xx++) {
+			for (int yy = 0; yy < numberOfBlocksLength; yy++) {
+				if (blocks[xx][yy] == 3) {
+					canvas.drawCircle((float) (xx * squareSide + squareSide
+							* 0.5 + mainFieldShiftX),
+							(float) ((yy - 2) * squareSide + squareSide
+									* 0.5 + mainFieldShiftY),
+							(float) (squareSide * 0.5), paint);
+				}
+			}
+		}
+	
+		// Coloring the blocks for the held shape.
+		paint.setColor(chooseColor(holdShape));
+		for (int xx = 0; xx < numberOfHoldShapeWidth; xx++) {
+			for (int yy = 0; yy < numberOfHoldShapeLength; yy++) {
+				if (holdBlocks[xx][yy] == 1) {
+					canvas.drawRect(xx * squareSide + holdShapeXStarting
+							+ mainFieldShiftX, yy * squareSide
+							+ mainFieldShiftY + holdShapeYStarting, xx
+							* squareSide + holdShapeXStarting + squareSide
+							+ mainFieldShiftX, yy * squareSide + squareSide
+							+ mainFieldShiftY + holdShapeYStarting, paint);
+				}
+			}
+		}
+		
+		// Coloring the next shape
+		paint.setColor(chooseColor(nextShape));
+		for (int xx = 0; xx < numberOfHoldShapeWidth; xx++) {
+			for (int yy = 0; yy < numberOfHoldShapeLength; yy++) {
+				if (nextBlocks[xx][yy] == 1) {
+					canvas.drawRect(xx * squareSide + holdShapeXStarting
+							+ mainFieldShiftX, yy * squareSide
+							+ nextShapeYStarting + mainFieldShiftY, xx
+							* squareSide + holdShapeXStarting + squareSide
+							+ mainFieldShiftX, yy * squareSide
+							+ nextShapeYStarting + squareSide
+							+ mainFieldShiftY, paint);
+				}
+			}
+		}
+		
+		// Coloring the second next shape
+		paint.setColor(chooseColor(next2Shape));
+		for (int xx = 0; xx < numberOfHoldShapeWidth; xx++) {
+			for (int yy = 0; yy < numberOfHoldShapeLength; yy++) {
+				if (next2Blocks[xx][yy] == 1) {
+					canvas.drawRect(xx * squareSide + holdShapeXStarting
+							+ mainFieldShiftX, yy * squareSide
+							+ nextShapeY2Starting + mainFieldShiftY, xx
+							* squareSide + holdShapeXStarting + squareSide
+							+ mainFieldShiftX, yy * squareSide
+							+ nextShapeY2Starting + squareSide
+							+ mainFieldShiftY, paint);
+				}
+			}
+		}
+		
+		// Coloring the third next shape
+		paint.setColor(chooseColor(next3Shape));
+		for (int xx = 0; xx < numberOfHoldShapeWidth; xx++) {
+			for (int yy = 0; yy < numberOfHoldShapeLength; yy++) {
+				if (next3Blocks[xx][yy] == 1) {
+					canvas.drawRect(xx * squareSide + holdShapeXStarting
+							+ mainFieldShiftX, yy * squareSide
+							+ nextShapeY3Starting + mainFieldShiftY, xx
+							* squareSide + holdShapeXStarting + squareSide
+							+ mainFieldShiftX, yy * squareSide
+							+ nextShapeY3Starting + squareSide
+							+ mainFieldShiftY, paint);
+				}
+			}
+		}
+		
 		// Displaying the big text if needed
+		// When the game is lost
+		// When the game is won
+		// When the game is paused
 		if (lose) {
 			// Change the font settings
 			paint.setColor(Color.RED);
