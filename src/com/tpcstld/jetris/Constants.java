@@ -12,13 +12,16 @@ public class Constants {
 	public final static String TIME_ATTACK_SCORE = "Time Attack Score";
 	public final static String CONFIRM_SETTINGS_MESSAGE = "Are you sure you wish to reset all non-misc settings?";
 	public final static String CONFIRM_HIGHSCORE_MESSAGE = "Are you sure you wish to reset your highscores?";
-
-	public final static String[] settingName = { "defaultGravity", "softDropSpeed",
+	
+	public final static String[] settingName = {"defaultGravity", "softDropSpeed",
 			"slackLength", "flickSensitivity", "dragSensitivity",
 			"countDownTime", "linesPerLevel", "gravityAddPerLevel" };
 	public final static String[] defaultValue = { "0.05", "0.45", "1000", "30", "60",
 			"120", "10", "0.025" };
-
+	public final static String[] booleanSettingName = {"tapToHold"};
+	public final static boolean[] booleanSettingDefault = { true };
+	
+	
 	public static int getTheme(SharedPreferences settings) {
 		String theme = settings.getString("theme", Constants.LIGHT_THEME);
 		if (theme.equals(LIGHT_THEME)) {

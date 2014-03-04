@@ -32,6 +32,7 @@ public class MainGame extends View {
 	static Context mContext;
 
 	// EXTERNAL OPTIONS:
+	public static boolean tapToHold = true;
 	public static double defaultGravity = 0.05;
 	// The default gravity of the game value
 	public static int flickSensitivity = 30;
@@ -408,6 +409,7 @@ public class MainGame extends View {
 	}
 
 	public void getSettings(SharedPreferences settings) {
+		tapToHold = settings.getBoolean("tapToHold", tapToHold);
 		defaultGravity = getDoubleFromSettings(defaultGravity,
 				"defaultGravity", settings);
 		flickSensitivity = getIntFromSettings(flickSensitivity,
@@ -882,13 +884,16 @@ public class MainGame extends View {
 	public static void moveLeft() {
 		boolean move = true;
 		detectShape();
+		// Shape cannot go out of bounds
 		for (int xx = 0; xx < playLocationY.length; xx++)
 			if (playLocationX[xx] - 1 < 0)
 				move = false;
+		// Shape cannot overlap another shape
 		if (move)
 			for (int xx = 0; xx < playLocationY.length; xx++)
 				if (blocks[playLocationX[xx] - 1][playLocationY[xx]] == 2)
 					move = false;
+		//Move and reset slack
 		if (move) {
 			for (int xx = 0; xx < playLocationY.length; xx++)
 				blocks[playLocationX[xx]][playLocationY[xx]] = 0;
@@ -900,13 +905,16 @@ public class MainGame extends View {
 	public static void moveRight() {
 		boolean move = true;
 		detectShape();
+		// Shape cannot go out of bounds
 		for (int xx = 0; xx < playLocationY.length; xx++)
 			if (playLocationX[xx] + 1 >= numberOfBlocksWidth)
 				move = false;
+		// Shape cannot overlap another shape
 		if (move)
 			for (int xx = 0; xx < playLocationY.length; xx++)
 				if (blocks[playLocationX[xx] + 1][playLocationY[xx]] == 2)
 					move = false;
+		// Move and reset slack
 		if (move) {
 			for (int xx = 0; xx < playLocationY.length; xx++)
 				blocks[playLocationX[xx]][playLocationY[xx]] = 0;
@@ -1228,6 +1236,7 @@ public class MainGame extends View {
 		updateHighScore();
 	}
 
+	//Controls
 	public static OnTouchListener getOnTouchListener() {
 		return new OnTouchListener() {
 			float x;
@@ -1297,7 +1306,8 @@ public class MainGame extends View {
 									&& mainFieldShiftY < y
 									&& y < mainFieldShiftY + holdShapeYStarting
 											+ numberOfHoldShapeLength
-											* squareSide) {
+											* squareSide
+									&& tapToHold) {
 								holdShape();
 							} else if (x < squareSide * numberOfBlocksWidth
 									* 0.5) {
