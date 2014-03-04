@@ -1,8 +1,10 @@
 1.0.4
-	Improved performance for displaying the grid
+	Improved performance for displaying the grid.
 	Highscores now updates also during the game.
 		While displayed it doesn't fully update until the game is reset or paused.
 	You can now tap the hold box to hold your current piece.
+	Restructured the game sequence to better display a loss.
+	Improved performance when a block is on delay.
 1.0.3
 	Changed losing condition to better match tetris guidelines
 	Fixed active shape not falling correctly right after picking

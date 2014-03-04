@@ -2,7 +2,6 @@ package com.tpcstld.jetris;
 
 import java.util.ArrayList;
 import java.util.Random;
-import java.util.Timer;
 
 import android.content.Context;
 import android.content.SharedPreferences;
@@ -26,7 +25,7 @@ public class MainGame extends View {
 	static final double textScaleSize = 0.8; // Text scaling
 	static final double textScaleSizeAux = 0.7; // Text scaling for auxiliary
 												// text
-	static final int FPS = 1000 / 30; // The Frames per second at which the game
+	static final int FPS = 1000000000 / 30; // The nanoseconds per frame at which the game
 										// runs at
 	static int ORANGE;
 	static Context mContext;
@@ -37,7 +36,7 @@ public class MainGame extends View {
 	// The default gravity of the game value
 	public static int flickSensitivity = 30;
 	// The Sensitivity is the flick gesture
-	public static int slackLength = 1000; // How long the stack goes on for in
+	public static long slackLength = 1000000000; // How long the stack goes on for in milliseconds
 	public static double softDropSpeed = 0.45; // How fast soft dropping is
 	public static int dragSensitivity = 100;
 	// The sensitivity of the drag gesture
@@ -62,13 +61,12 @@ public class MainGame extends View {
 	public static String gameMode = "";
 
 	// TIMERS:
-	static Timer time = new Timer(true); // This is the slack timer
 	static long currentCountDownTime = countDownTime * 1000;
 	// Time remaining on time attack mode
 	static CountDownTimer countDown = new CustomCountDownTimer(
 			currentCountDownTime, FPS);
-	static long clock = System.currentTimeMillis();
-	static long lastSlackTime = System.currentTimeMillis();
+	static long clock = System.nanoTime();
+	static long slackTime = slackLength;
 
 	// Tracks the real time for fps
 
@@ -182,9 +180,14 @@ public class MainGame extends View {
 
 	public void tick() {
 		if (!lose && !pause && !win) {
-			gravity();
+			long temp = System.nanoTime();
+			long dtime = temp - clock;
+			if (dtime > FPS) {
+				clock = clock + FPS;
+				slack();
+				gravity();
+			}
 			coloring();
-			
 			ghostShape();
 		}
 	}
@@ -424,7 +427,7 @@ public class MainGame extends View {
 				"defaultGravity", settings);
 		flickSensitivity = getIntFromSettings(flickSensitivity,
 				"flickSensitivity", settings);
-		slackLength = getIntFromSettings(slackLength, "slackLength", settings);
+		slackLength = getIntFromSettings((int) (slackLength / 1000000), "slackLength", settings) * 1000000;
 		softDropSpeed = getDoubleFromSettings(softDropSpeed, "softDropSpeed",
 				settings);
 		dragSensitivity = getIntFromSettings(dragSensitivity,
@@ -496,8 +499,6 @@ public class MainGame extends View {
 	// Follows the 7-bag system, which means that there will be ALL the blocks..
 	// ...found in each "bag" of 7 pieces.
 	public static void pickShape() {
-		time.cancel();
-		time = new Timer();
 		if (nextShape == -1) {
 			nextShape = shapeList.remove(r.nextInt(shapeList.size()));
 			next2Shape = shapeList.remove(r.nextInt(shapeList.size()));
@@ -508,8 +509,8 @@ public class MainGame extends View {
 		nextShape = next2Shape;
 		next2Shape = next3Shape;
 		next3Shape = shapeList.remove(r.nextInt(shapeList.size()));
+		
 		if (!lose) {
-
 			if (shapeList.size() <= 0) {
 				for (int xx = 0; xx < 7; xx++) {
 					shapeList.add(xx);
@@ -675,10 +676,6 @@ public class MainGame extends View {
 			pickShape();
 		} else if (move) {
 			// If slack is still activated, cancel the slack
-			if (slack) {
-				time.cancel();
-				time = new Timer();
-			}
 			slackOnce = false;
 			for (int xx = 0; xx < playLocationX.length; xx++) {
 				blocks[playLocationX[xx]][playLocationY[xx]] = 0;
@@ -698,7 +695,7 @@ public class MainGame extends View {
 	public static void activateSlack() {
 		slackOnce = true;
 		slack = true;
-		time.schedule(new Slack(), slackLength);
+		slackTime = slackLength;
 	}
 
 	public static boolean canFallDown(int[] locationX, int[] locationY) {
@@ -863,12 +860,7 @@ public class MainGame extends View {
 	// totalGrav is incremented by gravity every tick.
 	// when totalGrav is higher than 1, the shape moves down 1 block.
 	public static void gravity() {
-		long temp = System.currentTimeMillis();
-		long dtime = temp - clock;
-		if (dtime > FPS) {
-			gravityTicker = gravityTicker + gravity + gravityAdd;
-			clock = clock + FPS;
-		}
+		gravityTicker = gravityTicker + gravity + gravityAdd;
 		while (gravityTicker >= 1) {
 			gravityTicker = gravityTicker - 1;
 			shapeDown();
@@ -887,6 +879,12 @@ public class MainGame extends View {
 	}
 
 	public static void slack() {
+		if (slack) {
+			slackTime = slackTime - FPS;
+			if (slackTime < 0) {
+				slack = false;
+			}
+		}
 	}
 
 	public static void updateHighScore() {
@@ -1060,8 +1058,6 @@ public class MainGame extends View {
 		// Reset slack if turn is successful
 		if (turnSuccess) {
 			slackOnce = false;
-			time.cancel();
-			time = new Timer();
 		}
 	}
 
@@ -1144,8 +1140,6 @@ public class MainGame extends View {
 		// Reset slack if turn is successful
 		if (turnSuccess) {
 			slackOnce = false;
-			time.cancel();
-			time = new Timer();
 		}
 	}
 
@@ -1250,7 +1244,7 @@ public class MainGame extends View {
 			countDown = new CustomCountDownTimer(currentCountDownTime, FPS);
 			countDown.start();
 		}
-		clock = System.currentTimeMillis();
+		clock = System.nanoTime();
 		updateHighScore();
 	}
 
@@ -1436,9 +1430,7 @@ public class MainGame extends View {
 		pause = false;
 		win = false;
 		lose = false;
-		time.cancel();
-		time = new Timer();
-		clock = System.currentTimeMillis();
+		clock = System.nanoTime();
 		auxText = "";
 		currentCountDownTime = countDownTime * 1000;
 		countDown.cancel();
