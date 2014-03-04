@@ -17,13 +17,18 @@
     <string name="about">About Jetris</string>
     <string name="action_pause">Pause</string>
     <string name="action_unpause">Unpause</string>
-    <string name="game_variables_title">Game Variables (Advanced)</string>
+    <string name="controls_title">Controls</string>
+    <string name="game_variables_title">Game Variables</string>
     <string name="speeds_title">Speed Variables</string>
     <string name="marathon_title">Marathon Variables</string>
     <string name="time_attack_title">Time Attack Variables</string>
     <string name="timer_variables_title">Timer Variables</string>
     <string name="sensitivity_title">Sensitivity Variables</string>
     <string name="misc_title">Miscellaneous</string>
+    
+    <string name="tap_hold_title">Tap to Hold</string>
+    <string name="tap_hold_summary">Current piece is held when the hold box is tapped.</string>
+    
     <string name="default_grav_title">Base Drop Speed</string>
     <string name="default_grav_message">The base drop speed of the blocks.
         \nUnits: Lines/33 Milliseconds

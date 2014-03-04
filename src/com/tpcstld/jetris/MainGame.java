@@ -179,8 +179,7 @@ public class MainGame extends View {
 	@Override
 	public void onDraw(Canvas canvas) {
 
-		// Get the screen size and adjust the game screen proportionally if
-		// needed.
+		// Get the screen size and adjust the game screen proportionally
 		if (getScreenSize) {
 			int width = this.getMeasuredWidth();
 			int height = this.getMeasuredHeight();

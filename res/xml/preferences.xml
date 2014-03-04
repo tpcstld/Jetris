@@ -1,5 +1,12 @@
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android" >
 
+    <PreferenceCategory android:title="@string/controls_title" >
+        <CheckBoxPreference
+            android:defaultValue="true"
+            android:key="tapToHold"
+            android:summary="@string/tap_hold_summary"
+            android:title="@string/tap_hold_title" />
+    </PreferenceCategory>
     <PreferenceCategory android:title="@string/marathon_title" >
         <com.tpcstld.jetris.NumberPickerPreference
             android:defaultValue="10"
@@ -74,8 +81,7 @@
             android:summary="@string/dark_background_summary"
             android:title="@string/dark_background_title" />
 
-        <com.tpcstld.jetris.ResetHighScoresPreference
-            android:title="@string/reset_highscores_title" />
+        <com.tpcstld.jetris.ResetHighScoresPreference android:title="@string/reset_highscores_title" />
 
         <com.tpcstld.jetris.ResetSettingsPreference
             android:summary="@string/reset_settings_summary"
