@@ -13,6 +13,15 @@ public class Constants {
 	public final static String CONFIRM_SETTINGS_MESSAGE = "Are you sure you wish to reset all non-misc settings?";
 	public final static String CONFIRM_HIGHSCORE_MESSAGE = "Are you sure you wish to reset your highscores?";
 	
+	public final static String singleText = "Single";
+	public final static String doubleText = "Double";
+	public final static String tripleText = "Triple";
+	public final static String tetrisText = "Tetris";
+	public final static String twistText = "Twist";
+	public final static String kickText = "Off the Wall";
+	public final static String backToBackText = "Back to Back";
+	
+	
 	public final static String[] settingName = {"defaultGravity", "softDropSpeed",
 			"slackLength", "flickSensitivity", "dragSensitivity",
 			"countDownTime", "linesPerLevel", "gravityAddPerLevel" };

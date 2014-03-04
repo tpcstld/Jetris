@@ -783,18 +783,18 @@ public class MainGame extends View {
 		if (currentDrop > 0 || tSpin) {
 			clearInfo.clear();
 			if (currentDrop == 1) {
-				clearInfo.add("Single");
+				clearInfo.add(Constants.singleText);
 			} else if (currentDrop == 2) {
-				clearInfo.add("Double");
+				clearInfo.add(Constants.doubleText);
 			} else if (currentDrop == 3) {
-				clearInfo.add("Triple");
+				clearInfo.add(Constants.tripleText);
 			} else if (currentDrop == 4) {
-				clearInfo.add("Tetris");
+				clearInfo.add(Constants.tetrisText);
 			}
 			if (tSpin) {
-				clearInfo.add("T-spin");
+				clearInfo.add(Constants.twistText);
 				if (kick) {
-					clearInfo.add("Kicked");
+					clearInfo.add(Constants.kickText);
 				}
 			}
 		}
@@ -836,7 +836,7 @@ public class MainGame extends View {
 
 		if (lastDifficult & difficult & currentDrop > 0) {
 			addScore = (int) (addScore * 1.5);
-			clearInfo.add("Back to Back");
+			clearInfo.add(Constants.backToBackText);
 		}
 
 		if (currentDrop > 0) {
