@@ -184,6 +184,7 @@ public class MainGame extends View {
 		if (!lose && !pause && !win) {
 			gravity();
 			coloring();
+			
 			ghostShape();
 		}
 	}
@@ -494,12 +495,6 @@ public class MainGame extends View {
 	// Generates new minos.
 	// Follows the 7-bag system, which means that there will be ALL the blocks..
 	// ...found in each "bag" of 7 pieces.
-	// thisShape = -1 means that it is a new game
-	// Affects:
-	// lastShape == The CURRENT shape on the playing field.
-	// thisShape == The NEXT shape on the playing field.
-	// nextShape == The NEXT2 shape on the playing field.
-	// nextShape1 == The NEXT3 shape on the playing field.
 	public static void pickShape() {
 		time.cancel();
 		time = new Timer();
@@ -509,11 +504,11 @@ public class MainGame extends View {
 			next3Shape = shapeList.remove(r.nextInt(shapeList.size()));
 		}
 		displayShape(nextShape);
+		currentShape = nextShape;
+		nextShape = next2Shape;
+		next2Shape = next3Shape;
+		next3Shape = shapeList.remove(r.nextInt(shapeList.size()));
 		if (!lose) {
-			currentShape = nextShape;
-			nextShape = next2Shape;
-			next2Shape = next3Shape;
-			next3Shape = shapeList.remove(r.nextInt(shapeList.size()));
 
 			if (shapeList.size() <= 0) {
 				for (int xx = 0; xx < 7; xx++) {
@@ -555,8 +550,8 @@ public class MainGame extends View {
 
 	public static void displayShape(int thisShape) {
 		if (thisShape == 0) {
-			placeShapeAndDetectLose(new int[] { 3, 4, 5, 6 }, new int[] { 0, 0,
-					0, 0 });
+			placeShapeAndDetectLose(new int[] { 3, 4, 5, 6 }, new int[] { 1, 1,
+					1, 1 });
 			specificCurrentShape = 1;
 		} else if (thisShape == 1) {
 			placeShapeAndDetectLose(new int[] { 3, 3, 4, 5 }, new int[] { 0, 1,
@@ -585,6 +580,44 @@ public class MainGame extends View {
 		}
 	}
 
+	public static void displayBoxShape(int[][] x, int y) {
+		for (int xx = 0; xx < numberOfHoldShapeWidth; xx++)
+			for (int yy = 0; yy < numberOfHoldShapeLength; yy++)
+				x[xx][yy] = 0;
+
+		if (y == 0) {
+			for (int xx = 0; xx <= 3; xx++)
+				x[xx][1] = 1;
+		} else if (y == 1) {
+			for (int xx = 0; xx <= 2; xx++)
+				x[xx][1] = 1;
+			x[0][0] = 1;
+		} else if (y == 2) {
+			for (int xx = 0; xx <= 2; xx++)
+				x[xx][1] = 1;
+			x[2][0] = 1;
+		} else if (y == 3) {
+			for (int xx = 0; xx <= 2; xx++)
+				x[xx][1] = 1;
+			x[1][0] = 1;
+		} else if (y == 4) {
+			x[1][0] = 1;
+			x[2][0] = 1;
+			x[0][1] = 1;
+			x[1][1] = 1;
+		} else if (y == 5) {
+			x[0][0] = 1;
+			x[1][0] = 1;
+			x[1][1] = 1;
+			x[2][1] = 1;
+		} else if (y == 6) {
+			x[0][0] = 1;
+			x[1][0] = 1;
+			x[0][1] = 1;
+			x[1][1] = 1;
+		}
+	}
+
 	public static void placeShapeAndDetectLose(int[] x, int[] y) {
 		lose = false;
 		for (int xx = 0; xx < x.length; xx++) {
@@ -596,10 +629,9 @@ public class MainGame extends View {
 		}
 		if (lose) {
 			updateHighScore();
-		} else {
-			for (int xx = 0; xx < x.length; xx++) {
-				blocks[x[xx]][y[xx]] = 1;
-			}
+		}
+		for (int xx = 0; xx < x.length; xx++) {
+			blocks[x[xx]][y[xx]] = 1;
 		}
 	}
 
@@ -607,62 +639,60 @@ public class MainGame extends View {
 	// If there is: Freeze the active shape and initiate scoring
 	// If there isn't: Move the shape down.
 	public static void shapeDown() {
-		if (!lose & !pause & !win) {
-			detectShape();
-			coloring();
+		detectShape();
+		coloring();
 
-			boolean move = canFallDown(playLocationX, playLocationY);
+		boolean move = canFallDown(playLocationX, playLocationY);
 
-			if (!move && !hardDrop && !slackOnce) {
-				activateSlack();
-			}
-
-			// Detect
-			if (!move && !slack) {
-				int currentDrop; // The number of lines cleared
-				boolean tSpin = checkTSpin();
-
-				// Set current squares to inactive
-				for (int xx = 0; xx < playLocationY.length; xx++) {
-					blocks[playLocationX[xx]][playLocationY[xx]] = 2;
-				}
-
-				currentDrop = clearLines();
-				hardDrop = false;
-				softDrop = false;
-				gravityTicker = 0.0;
-				gravity = defaultGravity;
-
-				int addScore = scoring(currentDrop, tSpin);
-
-				score = score + addScore;
-				linesCleared = linesCleared + currentDrop;
-				if (gameMode.equals(Constants.MARATHON_MODE)) {
-					changeGravity();
-				}
-				// Scoring System end.
-				pickShape();
-			} else if (move) {
-				// If slack is still activated, cancel the slack
-				if (slack) {
-					time.cancel();
-					time = new Timer();
-				}
-				slackOnce = false;
-				for (int xx = 0; xx < playLocationX.length; xx++) {
-					blocks[playLocationX[xx]][playLocationY[xx]] = 0;
-					blocks[playLocationX[xx]][playLocationY[xx] + 1] = 1;
-				}
-			}
-			if (move && !slack) {
-				if (hardDrop) {
-					score = score + 2;
-				} else if (softDrop) {
-					score = score + 1;
-				}
-			}
-			highScore = Math.max(highScore, score);
+		if (!move && !hardDrop && !slackOnce) {
+			activateSlack();
 		}
+
+		// Detect
+		if (!move && !slack) {
+			int currentDrop; // The number of lines cleared
+			boolean tSpin = checkTSpin();
+
+			// Set current squares to inactive
+			for (int xx = 0; xx < playLocationY.length; xx++) {
+				blocks[playLocationX[xx]][playLocationY[xx]] = 2;
+			}
+
+			currentDrop = clearLines();
+			hardDrop = false;
+			softDrop = false;
+			gravityTicker = 0.0;
+			gravity = defaultGravity;
+
+			int addScore = scoring(currentDrop, tSpin);
+
+			score = score + addScore;
+			linesCleared = linesCleared + currentDrop;
+			if (gameMode.equals(Constants.MARATHON_MODE)) {
+				changeGravity();
+			}
+			// Scoring System end.
+			pickShape();
+		} else if (move) {
+			// If slack is still activated, cancel the slack
+			if (slack) {
+				time.cancel();
+				time = new Timer();
+			}
+			slackOnce = false;
+			for (int xx = 0; xx < playLocationX.length; xx++) {
+				blocks[playLocationX[xx]][playLocationY[xx]] = 0;
+				blocks[playLocationX[xx]][playLocationY[xx] + 1] = 1;
+			}
+		}
+		if (move && !slack) {
+			if (hardDrop) {
+				score = score + 2;
+			} else if (softDrop) {
+				score = score + 1;
+			}
+		}
+		highScore = Math.max(highScore, score);
 	}
 
 	public static void activateSlack() {
@@ -1207,49 +1237,9 @@ public class MainGame extends View {
 
 	public static void coloring() {
 		detectShape();
-		if (!lose && !win) {
-			for (int xx = 0; xx < playLocationX.length; xx++)
-				colors[playLocationX[xx]][playLocationY[xx]] = currentShape;
-		}
+		for (int xx = 0; xx < playLocationX.length; xx++)
+			colors[playLocationX[xx]][playLocationY[xx]] = currentShape;
 
-	}
-
-	public static void displayBoxShape(int[][] x, int y) {
-		for (int xx = 0; xx < numberOfHoldShapeWidth; xx++)
-			for (int yy = 0; yy < numberOfHoldShapeLength; yy++)
-				x[xx][yy] = 0;
-
-		if (y == 0) {
-			for (int xx = 0; xx <= 3; xx++)
-				x[xx][0] = 1;
-		} else if (y == 1) {
-			for (int xx = 0; xx <= 2; xx++)
-				x[xx][1] = 1;
-			x[0][0] = 1;
-		} else if (y == 2) {
-			for (int xx = 0; xx <= 2; xx++)
-				x[xx][1] = 1;
-			x[2][0] = 1;
-		} else if (y == 3) {
-			for (int xx = 0; xx <= 2; xx++)
-				x[xx][1] = 1;
-			x[1][0] = 1;
-		} else if (y == 4) {
-			x[1][0] = 1;
-			x[2][0] = 1;
-			x[0][1] = 1;
-			x[1][1] = 1;
-		} else if (y == 5) {
-			x[0][0] = 1;
-			x[1][0] = 1;
-			x[1][1] = 1;
-			x[2][1] = 1;
-		} else if (y == 6) {
-			x[0][0] = 1;
-			x[1][0] = 1;
-			x[0][1] = 1;
-			x[1][1] = 1;
-		}
 	}
 
 	public static void pauseGame(boolean changeTo) {
