@@ -64,10 +64,7 @@ public class MainGame extends View {
 	public static String gameMode = "";
 
 	// TIMERS:
-	static long currentCountDownTime = countDownTime * 1000;
-	// Time remaining on time attack mode
-	static CountDownTimer countDown = new CustomCountDownTimer(
-			currentCountDownTime, FPS);
+	static long currentCountDownTime = countDownTime * 1000000000;
 	static long clock = System.nanoTime();
 	static long slackTime = slackLength;
 
@@ -191,6 +188,9 @@ public class MainGame extends View {
 			long dtime = temp - clock;
 			if (dtime > FPS) {
 				clock = clock + FPS;
+				if (gameMode.equals(Constants.TIME_ATTACK_MODE)) {
+					countDown();
+				}
 				slack();
 				gravity();
 			}
@@ -629,7 +629,6 @@ public class MainGame extends View {
 		for (int xx = 0; xx < x.length; xx++) {
 			if (blocks[x[xx]][y[xx]] == 2) {
 				lose = true;
-				countDown.cancel();
 				break;
 			}
 		}
@@ -686,7 +685,7 @@ public class MainGame extends View {
 			for (int xx = 0; xx < playLocationX.length; xx++) {
 				blocks[playLocationX[xx]][playLocationY[xx]] = 0;
 			}
-			for (int xx = 0; xx <playLocationX.length; xx++) {
+			for (int xx = 0; xx < playLocationX.length; xx++) {
 				blocks[playLocationX[xx]][playLocationY[xx] + 1] = 1;
 
 				// Update current Tetrimino location
@@ -808,6 +807,18 @@ public class MainGame extends View {
 			} while (line);
 		}
 		return counter;
+	}
+
+	public static void countDown() {
+		currentCountDownTime = currentCountDownTime - FPS;
+		long minutes = currentCountDownTime / 60000 / 1000000;
+		long seconds = (currentCountDownTime / 1000000) % 60000 / 1000;
+		MainGame.auxText = minutes + ":" + String.format("%02d", seconds);
+		if (currentCountDownTime < 0) {
+			win = true;
+			auxText = 0 + ":" + String.format("%02d", 0);
+			updateHighScore();
+		}
 	}
 
 	public static int scoring(int currentDrop, boolean tSpin) {
@@ -1102,8 +1113,10 @@ public class MainGame extends View {
 						for (int xx = 0; xx < playLocationY.length; xx++) {
 							blocks[playLocationX[xx] + x[xx] + checkX][playLocationY[xx]
 									+ y[xx] - checkY] = 1;
-							playLocationX[xx] = playLocationX[xx] + x[xx] + checkX;
-							playLocationY[xx] = playLocationY[xx] + y[xx] - checkY;
+							playLocationX[xx] = playLocationX[xx] + x[xx]
+									+ checkX;
+							playLocationY[xx] = playLocationY[xx] + y[xx]
+									- checkY;
 						}
 						pivotX = pivotX + checkX;
 						pivotY = pivotY - checkY;
@@ -1129,12 +1142,6 @@ public class MainGame extends View {
 
 	public static void pauseGame(boolean changeTo) {
 		pause = changeTo;
-		if (pause && gameMode.equals(Constants.TIME_ATTACK_MODE)) {
-			countDown.cancel();
-		} else if (!pause && gameMode.equals(Constants.TIME_ATTACK_MODE)) {
-			countDown = new CustomCountDownTimer(currentCountDownTime, FPS);
-			countDown.start();
-		}
 		clock = System.nanoTime();
 		updateHighScore();
 	}
@@ -1324,11 +1331,9 @@ public class MainGame extends View {
 		lose = false;
 		clock = System.nanoTime();
 		auxText = "";
-		currentCountDownTime = countDownTime * 1000;
-		countDown.cancel();
+		currentCountDownTime = countDownTime * 1000000000 + FPS;
 		if (gameMode.equals(Constants.TIME_ATTACK_MODE)) {
-			countDown = new CustomCountDownTimer(currentCountDownTime, FPS);
-			countDown.start();
+			countDown();
 		} else if (gameMode.equals(Constants.MARATHON_MODE)) {
 			auxText = "" + (level + 1);
 		}
