@@ -287,93 +287,42 @@ public abstract class MainGame extends View {
 		}
 
 		drawBoxShape(canvas, holdShape, holdBlocks, holdShapeXStarting + mainFieldShiftX, holdShapeYStarting + mainFieldShiftY);
-
-		// Coloring the next shape
-		paint.setColor(chooseColor(nextShape));
-		for (int xx = 0; xx < numberOfHoldShapeWidth; xx++) {
-			for (int yy = 0; yy < numberOfHoldShapeLength; yy++) {
-				if (nextBlocks[xx][yy] == 1) {
-					canvas.drawRect(xx * squareSide + holdShapeXStarting
-							+ mainFieldShiftX, yy * squareSide
-							+ nextShapeYStarting + mainFieldShiftY, xx
-							* squareSide + holdShapeXStarting + squareSide
-							+ mainFieldShiftX,
-							yy * squareSide + nextShapeYStarting + squareSide
-									+ mainFieldShiftY, paint);
-				}
-			}
-		}
-
-		// Coloring the second next shape
-		paint.setColor(chooseColor(next2Shape));
-		for (int xx = 0; xx < numberOfHoldShapeWidth; xx++) {
-			for (int yy = 0; yy < numberOfHoldShapeLength; yy++) {
-				if (next2Blocks[xx][yy] == 1) {
-					canvas.drawRect(xx * squareSide + holdShapeXStarting
-							+ mainFieldShiftX, yy * squareSide
-							+ nextShapeY2Starting + mainFieldShiftY, xx
-							* squareSide + holdShapeXStarting + squareSide
-							+ mainFieldShiftX, yy * squareSide
-							+ nextShapeY2Starting + squareSide
-							+ mainFieldShiftY, paint);
-				}
-			}
-		}
-
-		// Coloring the third next shape
-		paint.setColor(chooseColor(next3Shape));
-		for (int xx = 0; xx < numberOfHoldShapeWidth; xx++) {
-			for (int yy = 0; yy < numberOfHoldShapeLength; yy++) {
-				if (next3Blocks[xx][yy] == 1) {
-					canvas.drawRect(xx * squareSide + holdShapeXStarting
-							+ mainFieldShiftX, yy * squareSide
-							+ nextShapeY3Starting + mainFieldShiftY, xx
-							* squareSide + holdShapeXStarting + squareSide
-							+ mainFieldShiftX, yy * squareSide
-							+ nextShapeY3Starting + squareSide
-							+ mainFieldShiftY, paint);
-				}
-			}
-		}
+		drawBoxShape(canvas, nextShape, nextBlocks, holdShapeXStarting + mainFieldShiftX, nextShapeYStarting + mainFieldShiftY);
+		drawBoxShape(canvas, next2Shape, next2Blocks, holdShapeXStarting + mainFieldShiftX, nextShapeY2Starting + mainFieldShiftY);
+		drawBoxShape(canvas, next3Shape, next3Blocks, holdShapeXStarting + mainFieldShiftX, nextShapeY3Starting + mainFieldShiftY);
 
 		// Displaying the big text if needed
 		// When the game is lost
 		// When the game is won
 		// When the game is paused
-		if (lose) {
-			// Change the font settings
-			paint.setColor(Color.RED);
+		if (lose || win || pause) {
 			changePaintSettings("big on");
 			int length = this.getMeasuredHeight();
 			int width = this.getMeasuredWidth();
-			// Display and align the needed text
-			canvas.drawText("GAME", width / 2, mainFieldShiftY + length / 3,
-					paint);
-			canvas.drawText("OVER", width / 2,
-					mainFieldShiftY + length * 2 / 3, paint);
-			// Revert text settings to normal
-			changePaintSettings("big off");
-		} else if (win) {
-			// Change the font settings
-			paint.setColor(Color.GREEN);
-			changePaintSettings("big on");
-			int length = this.getMeasuredHeight();
-			int width = this.getMeasuredWidth();
-			// Display and align the needed text
-			canvas.drawText("FINISH", width / 2, mainFieldShiftY + length / 2,
-					paint);
-			// Revert text settings to normal
-			changePaintSettings("big off");
-		} else if (pause) {
-			// Change the font settings
-			paint.setColor(textColor);
-			changePaintSettings("big on");
-			int length = this.getMeasuredHeight();
-			int width = this.getMeasuredWidth();
-			// Display and align the needed text
-			canvas.drawText("PAUSED", width / 2, mainFieldShiftY + length / 2,
-					paint);
-			// Revert text settings to normal
+			if (lose) {
+				// Change the font settings
+				paint.setColor(Color.RED);
+				// Display and align the needed text
+				canvas.drawText("GAME", width / 2, mainFieldShiftY + length / 3,
+						paint);
+				canvas.drawText("OVER", width / 2,
+						mainFieldShiftY + length * 2 / 3, paint);
+				// Revert text settings to normal
+			} else if (win) {
+				// Change the font settings
+				paint.setColor(Color.GREEN);
+				// Display and align the needed text
+				canvas.drawText("FINISH", width / 2, mainFieldShiftY + length / 2,
+						paint);
+				// Revert text settings to normal
+			} else if (pause) {
+				// Change the font settings
+				paint.setColor(textColor);
+				// Display and align the needed text
+				canvas.drawText("PAUSED", width / 2, mainFieldShiftY + length / 2,
+						paint);
+				// Revert text settings to normal
+			}
 			changePaintSettings("big off");
 		}
 		invalidate();
