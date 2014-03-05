@@ -17,7 +17,7 @@
             android:title="@string/tspin_title"/>
     </PreferenceCategory>
     <PreferenceCategory android:title="@string/marathon_title" >
-        <com.tpcstld.jetris.NumberPickerPreference
+        <com.tpcstld.jetris.TextPreference
             android:defaultValue="10"
             android:inputType="number"
             android:key="linesPerLevel"
@@ -32,7 +32,7 @@
             android:title="@string/gravity_add_per_level_title" />
     </PreferenceCategory>
     <PreferenceCategory android:title="@string/time_attack_title" >
-        <com.tpcstld.jetris.NumberPickerPreference
+        <com.tpcstld.jetris.TextPreference
             android:defaultValue="120"
             android:inputType="number"
             android:key="countDownTime"
@@ -54,7 +54,7 @@
             android:title="@string/soft_drop_speed_title" />
     </PreferenceCategory>
     <PreferenceCategory android:title="@string/timer_variables_title" >
-        <com.tpcstld.jetris.NumberPickerPreference
+        <com.tpcstld.jetris.TextPreference
             android:defaultValue="1000"
             android:inputType="number"
             android:key="slackLength"

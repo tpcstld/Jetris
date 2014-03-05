@@ -20,6 +20,8 @@ public class Constants {
 	public final static String twistText = "Twist";
 	public final static String kickText = "Kicked";
 	public final static String backToBackText = "Back to Back";
+	
+	public final static double doubleCap = 20.0;
 
 	public final static int[][] kickX = { { 0, -1, -1, 0, -1 },
 			{ 0, 1, 1, 0, 1 }, { 0, 1, 1, 0, 1 }, { 0, -1, -1, 0, -1 } };

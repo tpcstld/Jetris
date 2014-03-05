@@ -12,7 +12,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 public class TextPreference extends DialogPreference {
-	
+
 	String mNewValue;
 	String mCurrentValue;
 	String mMessage;
@@ -25,14 +25,13 @@ public class TextPreference extends DialogPreference {
 	public TextPreference(Context context, AttributeSet attrs) {
 		super(context, attrs);
 		mContext = context;
-	    int[] attrsArray = new int[] {
-	    		android.R.attr.title, //0
-	    		android.R.attr.summary, //1
-	    		android.R.attr.key, //2
-	    		android.R.attr.inputType //3
-	        };
-	    
-	    TypedArray ta = context.obtainStyledAttributes(attrs, attrsArray);
+		int[] attrsArray = new int[] { android.R.attr.title, // 0
+				android.R.attr.summary, // 1
+				android.R.attr.key, // 2
+				android.R.attr.inputType // 3
+		};
+
+		TypedArray ta = context.obtainStyledAttributes(attrs, attrsArray);
 		setTitle(ta.getString(0));
 		mMessage = ta.getString(1);
 		currentOption = ta.getString(2);
@@ -41,49 +40,78 @@ public class TextPreference extends DialogPreference {
 		setNegativeButtonText(android.R.string.cancel);
 		setDialogIcon(null);
 	}
-	
+
 	protected View onCreateDialogView() {
-	    LinearLayout layout = new LinearLayout(mContext);
-	    layout.setOrientation(LinearLayout.VERTICAL);
-	    layout.setPadding(6,6,6,6);
-	    
-	    TextView message = new TextView(mContext);
-	    message.setText(mMessage);
-	    message.setTextSize(16);
-	    layout.addView(message);
-	    
+		LinearLayout layout = new LinearLayout(mContext);
+		layout.setOrientation(LinearLayout.VERTICAL);
+		layout.setPadding(6, 6, 6, 6);
+
+		TextView message = new TextView(mContext);
+		message.setText(mMessage);
+		message.setTextSize(16);
+		layout.addView(message);
+
 		input = new EditText(mContext);
 		mCurrentValue = getPersistedString(currentOption);
 		input.setText(mCurrentValue);
 		input.setInputType(inputType);
-		
+
 		layout.addView(input);
 		return layout;
 	}
-	
+
 	public void onDialogClosed(boolean positiveResult) {
 		if (positiveResult) {
-			double temp = Double.parseDouble(input.getText().toString());
-			temp = Math.min(temp, 20.0);
-			mNewValue = String.valueOf(temp);
+			System.out.println(inputType);
+			System.out.println(InputType.TYPE_NUMBER_FLAG_DECIMAL);
+			System.out.println(InputType.TYPE_CLASS_NUMBER);
+			if (inputType == (InputType.TYPE_CLASS_NUMBER | InputType.TYPE_NUMBER_FLAG_DECIMAL)) {
+				try {
+					double temp = Double
+							.parseDouble(input.getText().toString());
+					temp = Math.min(temp, Constants.doubleCap);
+					mNewValue = String.valueOf(temp);
+				} catch (NumberFormatException e) {
+					if (input.getText().toString().equals("")) {
+						mNewValue = mCurrentValue;
+					} else {
+						mNewValue = String.valueOf(Constants.doubleCap);
+					}
+				}
+			} else if (inputType == (InputType.TYPE_CLASS_NUMBER | InputType.TYPE_NUMBER_VARIATION_NORMAL)) {
+				System.out.println(input.getText().toString());
+				try {
+					int temp = Integer.parseInt(input.getText().toString());
+					System.out.println(temp);
+					temp = Math.min(temp, Integer.MAX_VALUE);
+					mNewValue = String.valueOf(temp);
+				} catch (NumberFormatException e) {
+					if (input.getText().toString().equals("")) {
+						mNewValue = mCurrentValue;
+					} else {
+						mNewValue = String.valueOf(Integer.MAX_VALUE);
+					}
+				}
+			}
 			persistString(mNewValue);
 			setSummary(mNewValue);
 		}
 	}
-	
-	protected void onSetInitialValue(boolean restorePersistedValue, Object defaultValue) {
-	    if (restorePersistedValue) {
-	        // Restore existing state
-	        mCurrentValue = this.getPersistedString(currentOption);
-	    } else {
-	        // Set default state from the XML attribute
-	        mCurrentValue = (String) defaultValue;
-	        persistString(mCurrentValue);
-	    }
+
+	protected void onSetInitialValue(boolean restorePersistedValue,
+			Object defaultValue) {
+		if (restorePersistedValue) {
+			// Restore existing state
+			mCurrentValue = this.getPersistedString(currentOption);
+		} else {
+			// Set default state from the XML attribute
+			mCurrentValue = (String) defaultValue;
+			persistString(mCurrentValue);
+		}
 	}
-	
+
 	protected Object onGetDefaultValue(TypedArray a, int index) {
-	    return a.getString(index);
+		return a.getString(index);
 	}
 
 }
