@@ -33,6 +33,7 @@ public class MainGame extends View {
 
 	// EXTERNAL OPTIONS:
 	public static boolean tapToHold = true;
+	public static String tSpinMode = "3-corner T";
 	public static double defaultGravity = 0.033;
 	// The default gravity of the game value
 	public static int flickSensitivity = 30;
@@ -99,7 +100,8 @@ public class MainGame extends View {
 	static int currentShape = -1; // The CURRENT shape on the playing field.
 	static ArrayList<Integer> shapeList = new ArrayList<Integer>();
 	// A list containing the shapes left in the current bag
-	static int currentRotation = 0; //The current rotation 0 = spawn, 1 = R, 2 = 2, 3 = L;
+	static int currentRotation = 0; // The current rotation 0 = spawn, 1 = R, 2
+									// = 2, 3 = L;
 
 	// FIELD INFORMATION:
 	static int[][] blocks = new int[numberOfBlocksWidth][numberOfBlocksLength];
@@ -141,9 +143,11 @@ public class MainGame extends View {
 	// Whether or not the last clear was considered to be "hard"
 	static int score = 0; // The current score
 	static int highScore = 0; // The highscore of the current gamemode
-	static int level = 0; // The current level (marathon mode)
+	static int level = 0; // The current level (marathon mode) level 0 = level 1
+							// displayed
 	static int linesCleared = 0; // The total number of lines cleared
 	static int linesClearedFloor = 0;
+	static String lastMove = "Nothing";
 	// The number of lines cleared in at the current speed (Marathon Mode)
 	static int combo = 0; // The current combo
 	static Random r = new Random(); // The randomizer
@@ -520,7 +524,6 @@ public class MainGame extends View {
 					shapeList.add(xx);
 				}
 			}
-
 			displayBoxShape(nextBlocks, nextShape);
 			displayBoxShape(next2Blocks, next2Shape);
 			displayBoxShape(next3Blocks, next3Shape);
@@ -698,6 +701,7 @@ public class MainGame extends View {
 
 				// Update current Tetrimino location
 				playLocationY[xx] = playLocationY[xx] + 1;
+				lastMove = "Drop";
 			}
 			pivotY = pivotY + 1;
 		}
@@ -732,36 +736,55 @@ public class MainGame extends View {
 	}
 
 	public static boolean checkTSpin() {
-		boolean moveUp = true;
-		boolean moveLeft = true;
-		boolean moveRight = true;
+		if (tSpinMode.equals("3-corner T")) {
+			if (currentShape != 3 || !lastMove.equals("Turn")) {
+				return false;
+			}
+			int counter = 0;
+			for (int xx = -1; xx <= 1; xx = xx + 2) {
+				for (int yy = -1; yy <= 1; yy = yy + 2) {
+					try {
+						if (blocks[(int) pivotX + xx][(int) pivotY + yy] == 2) {
+							counter = counter + 1;
+						}
+					} catch (Exception e) {
+						counter = counter + 1;
+					}
+				}
+			}
+			return (counter >= 3);
+		} else if (tSpinMode.equals("Immobile")){
+			boolean moveUp = true;
+			boolean moveLeft = true;
+			boolean moveRight = true;
 
-		for (int xx = 0; xx < playLocationY.length; xx++) {
-			try {
-				if (blocks[playLocationX[xx] - 1][playLocationY[xx]] == 2) {
+			for (int xx = 0; xx < playLocationY.length; xx++) {
+				try {
+					if (blocks[playLocationX[xx] - 1][playLocationY[xx]] == 2) {
+						moveLeft = false;
+					}
+				} catch (Exception e) {
 					moveLeft = false;
 				}
-			} catch (Exception e) {
-				moveLeft = false;
-			}
-			try {
-				if (blocks[playLocationX[xx] + 1][playLocationY[xx]] == 2) {
+				try {
+					if (blocks[playLocationX[xx] + 1][playLocationY[xx]] == 2) {
+						moveRight = false;
+					}
+				} catch (Exception e) {
 					moveRight = false;
 				}
-			} catch (Exception e) {
-				moveRight = false;
-			}
-			try {
-				if (blocks[playLocationX[xx]][playLocationY[xx] - 1] == 2) {
+				try {
+					if (blocks[playLocationX[xx]][playLocationY[xx] - 1] == 2) {
+						moveUp = false;
+					}
+				} catch (Exception e) {
 					moveUp = false;
 				}
-			} catch (Exception e) {
-				moveUp = false;
 			}
-		}
 
-		if (!moveLeft & !moveRight & !moveUp) {
-			return true;
+			if (!moveLeft & !moveRight & !moveUp) {
+				return true;
+			}
 		}
 		return false;
 	}
@@ -852,7 +875,7 @@ public class MainGame extends View {
 			addScore = 800;
 			difficult = true;
 		}
-
+		addScore = addScore * (level + 1);
 		if (lastDifficult & difficult & currentDrop > 0) {
 			addScore = (int) (addScore * 1.5);
 			clearInfo.add(Constants.backToBackText);
@@ -861,7 +884,7 @@ public class MainGame extends View {
 		if (currentDrop > 0) {
 			if (combo > 0) {
 				clearInfo.add(combo + " Chain");
-				addScore = addScore + 50 * combo;
+				addScore = addScore + 50 * combo * (level + 1);
 			}
 			combo = combo + 1;
 		} else {
@@ -1014,7 +1037,7 @@ public class MainGame extends View {
 		if (turnSuccess) {
 			slackOnce = false;
 			currentRotation = (currentRotation + 1) % 4;
-			System.out.println(currentRotation);
+			lastMove = "Turn";
 		}
 	}
 
@@ -1032,12 +1055,13 @@ public class MainGame extends View {
 		if (turnSuccess) {
 			slackOnce = false;
 			currentRotation = (currentRotation + 3) % 4;
-			System.out.println(currentRotation);
+			lastMove = "Turn";
 		}
-		
+
 	}
 
-	public static void turnShape(int[] x, int[] y, int tableIndex, boolean counterclockwise) {
+	public static void turnShape(int[] x, int[] y, int tableIndex,
+			boolean counterclockwise) {
 		kick = false;
 		for (int i = 0; i < 5; i++) {
 			int checkX = 0;
@@ -1049,12 +1073,12 @@ public class MainGame extends View {
 				checkX = Constants.kickX[tableIndex][i];
 				checkY = Constants.kickY[tableIndex][i];
 			}
-			
+
 			if (counterclockwise) {
 				checkX = -checkX;
 				checkY = -checkY;
 			}
-			
+
 			boolean ok = true;
 
 			for (int xx = 0; xx < playLocationX.length; xx++) {

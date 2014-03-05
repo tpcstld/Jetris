@@ -17,7 +17,7 @@ public class Constants {
 	public final static String doubleText = "Double";
 	public final static String tripleText = "Triple";
 	public final static String tetrisText = "Tetris";
-	public final static String twistText = "Twist";
+	public final static String twistText = "T-spin";
 	public final static String kickText = "Kicked";
 	public final static String backToBackText = "Back to Back";
 
