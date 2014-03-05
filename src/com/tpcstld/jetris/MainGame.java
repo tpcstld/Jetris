@@ -1033,25 +1033,30 @@ public class MainGame extends View {
 	public static void turnShape(int[] x, int[] y) {
 		kick = false;
 
-		for (int xy = 0; xy <= 4; xy++) {
-
+		for (int i = 0; i <= 4; i++) {
+			int yy = 0;
 			// Checking 0, -1, 1, -2, 2
-			if (xy == 1) {
-				xy = -1;
-			} else if (xy == 3) {
-				xy = -2;
-			} else if (xy != 0) {
-				xy = xy / 2;
+			if (i == 1 || i == 2) {
+				yy = -i;
+			} else if (i != 0){
+				yy = i - 2;
 			}
+			
+			/*else if (yy == 3) {
+				yy = -2;
+			} else if (yy != 0) {
+				yy = yy / 2;
+			}*/
 
-			for (int yy = 0; yy <= 4; yy++) {
+			for (int j = 0; j <= 4; j++) {
+				int xy = 0;
 				// Checking 0, -1, 1, -2, 2
-				if (yy == 1) {
-					yy = -1;
-				} else if (yy == 3) {
-					yy = -2;
-				} else if (yy != 0) {
-					yy = yy / 2;
+				if (j == 1) {
+					xy = -1;
+				} else if (j == 3) {
+					xy = -2;
+				} else if (j != 0) {
+					xy = j / 2;
 				}
 				boolean ok = true;
 
@@ -1092,29 +1097,15 @@ public class MainGame extends View {
 					}
 				} catch (Exception e) {
 				}
-				if (yy == -1) {
-					yy = 1;
-				} else if (yy == -2) {
-					yy = 3;
-				} else if (yy != 0) {
-					yy = yy * 2;
-				}
 				if (turnSuccess) {
-					if (yy != 0) {
+					if (xy != 0) {
 						kick = true;
 					}
 					break;
 				}
 			}
-			if (xy == -1) {
-				xy = 1;
-			} else if (xy == -2) {
-				xy = 3;
-			} else if (xy != 0) {
-				xy = xy * 2;
-			}
 			if (turnSuccess) {
-				if (xy != 0) {
+				if (yy != 0) {
 					kick = true;
 				}
 				break;
@@ -1312,6 +1303,7 @@ public class MainGame extends View {
 			shapeList.add(xx);
 		}
 		score = 0;
+		gravityTicker = 0;
 		gravityAdd = 0;
 		linesCleared = 0;
 		linesClearedFloor = 0;
