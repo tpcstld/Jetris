@@ -491,19 +491,6 @@ public class MainGame extends View {
 		return variable;
 	}
 
-	public static void detectShape() {
-		int counter = 0;
-		for (int yy = numberOfBlocksLength - 1; yy >= 0; yy--) {
-			for (int xx = numberOfBlocksWidth - 1; xx >= 0; xx--) {
-				if (blocks[xx][yy] == 1) {
-					playLocationX[counter] = xx;
-					playLocationY[counter] = yy;
-					counter++;
-				}
-			}
-		}
-	}
-
 	// Generates new minos.
 	// Follows the 7-bag system, which means that there will be ALL the blocks..
 	// ...found in each "bag" of 7 pieces.
@@ -528,7 +515,6 @@ public class MainGame extends View {
 			displayBoxShape(nextBlocks, nextShape);
 			displayBoxShape(next2Blocks, next2Shape);
 			displayBoxShape(next3Blocks, next3Shape);
-			detectShape();
 			shapeDown();
 			holdOnce = false;
 		}
@@ -652,6 +638,8 @@ public class MainGame extends View {
 		}
 		for (int xx = 0; xx < x.length; xx++) {
 			blocks[x[xx]][y[xx]] = 1;
+			playLocationX[xx] = x[xx];
+			playLocationY[xx] = y[xx];
 		}
 	}
 
@@ -659,7 +647,6 @@ public class MainGame extends View {
 	// If there is: Freeze the active shape and initiate scoring
 	// If there isn't: Move the shape down.
 	public static void shapeDown() {
-		detectShape();
 		coloring();
 
 		boolean move = canFallDown(playLocationX, playLocationY);
@@ -698,6 +685,8 @@ public class MainGame extends View {
 			slackOnce = false;
 			for (int xx = 0; xx < playLocationX.length; xx++) {
 				blocks[playLocationX[xx]][playLocationY[xx]] = 0;
+			}
+			for (int xx = 0; xx <playLocationX.length; xx++) {
 				blocks[playLocationX[xx]][playLocationY[xx] + 1] = 1;
 
 				// Update current Tetrimino location
@@ -754,7 +743,7 @@ public class MainGame extends View {
 				}
 			}
 			return (counter >= 3);
-		} else if (tSpinMode.equals("Immobile")){
+		} else if (tSpinMode.equals("Immobile")) {
 			boolean moveUp = true;
 			boolean moveLeft = true;
 			boolean moveRight = true;
@@ -952,7 +941,6 @@ public class MainGame extends View {
 
 	public static void ghostShape() {
 		boolean move = true;
-		detectShape();
 		int[] tempPlayLocationX = new int[4];
 		int[] tempPlayLocationY = new int[4];
 		for (int xx = 0; xx < numberOfBlocksWidth; xx++)
@@ -982,7 +970,6 @@ public class MainGame extends View {
 
 	public static void moveLeft() {
 		boolean move = true;
-		detectShape();
 		// Shape cannot go out of bounds
 		for (int xx = 0; xx < playLocationY.length; xx++)
 			if (playLocationX[xx] - 1 < 0)
@@ -994,17 +981,19 @@ public class MainGame extends View {
 					move = false;
 		// Move and reset slack
 		if (move) {
-			for (int xx = 0; xx < playLocationY.length; xx++)
+			for (int xx = 0; xx < playLocationY.length; xx++) {
 				blocks[playLocationX[xx]][playLocationY[xx]] = 0;
-			for (int xx = 0; xx < playLocationY.length; xx++)
+			}
+			for (int xx = 0; xx < playLocationY.length; xx++) {
 				blocks[playLocationX[xx] - 1][playLocationY[xx]] = 1;
+				playLocationX[xx] = playLocationX[xx] - 1;
+			}
 			pivotX = pivotX - 1;
 		}
 	}
 
 	public static void moveRight() {
 		boolean move = true;
-		detectShape();
 		// Shape cannot go out of bounds
 		for (int xx = 0; xx < playLocationY.length; xx++)
 			if (playLocationX[xx] + 1 >= numberOfBlocksWidth)
@@ -1016,17 +1005,19 @@ public class MainGame extends View {
 					move = false;
 		// Move and reset slack
 		if (move) {
-			for (int xx = 0; xx < playLocationY.length; xx++)
+			for (int xx = 0; xx < playLocationY.length; xx++) {
 				blocks[playLocationX[xx]][playLocationY[xx]] = 0;
-			for (int xx = 0; xx < playLocationY.length; xx++)
+			}
+			for (int xx = 0; xx < playLocationY.length; xx++) {
 				blocks[playLocationX[xx] + 1][playLocationY[xx]] = 1;
+				playLocationX[xx] = playLocationX[xx] + 1;
+			}
 			pivotX = pivotX + 1;
 		}
 	}
 
 	public static void shapeTurn() {
 		turnSuccess = false;
-		detectShape();
 		int[] dLocationX = new int[4];
 		int[] dLocationY = new int[4];
 		for (int xx = 0; xx < dLocationX.length; xx++) {
@@ -1044,7 +1035,6 @@ public class MainGame extends View {
 
 	public static void shapeTurnCC() {
 		turnSuccess = false;
-		detectShape();
 		int[] dLocationX = new int[4];
 		int[] dLocationY = new int[4];
 		for (int xx = 0; xx < dLocationX.length; xx++) {
@@ -1106,11 +1096,14 @@ public class MainGame extends View {
 									+ y[2] - checkY] != 2
 							& blocks[playLocationX[3] + x[3] + checkX][playLocationY[3]
 									+ y[3] - checkY] != 2) {
-						for (int xx = 0; xx < playLocationY.length; xx++)
+						for (int xx = 0; xx < playLocationY.length; xx++) {
 							blocks[playLocationX[xx]][playLocationY[xx]] = 0;
+						}
 						for (int xx = 0; xx < playLocationY.length; xx++) {
 							blocks[playLocationX[xx] + x[xx] + checkX][playLocationY[xx]
 									+ y[xx] - checkY] = 1;
+							playLocationX[xx] = playLocationX[xx] + x[xx] + checkX;
+							playLocationY[xx] = playLocationY[xx] + y[xx] - checkY;
 						}
 						pivotX = pivotX + checkX;
 						pivotY = pivotY - checkY;
@@ -1129,7 +1122,6 @@ public class MainGame extends View {
 	}
 
 	public static void coloring() {
-		detectShape();
 		for (int xx = 0; xx < playLocationX.length; xx++)
 			colors[playLocationX[xx]][playLocationY[xx]] = currentShape;
 

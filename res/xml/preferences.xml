@@ -41,7 +41,7 @@
     </PreferenceCategory>
     <PreferenceCategory android:title="@string/speeds_title" >
         <com.tpcstld.jetris.TextPreference
-            android:defaultValue="0.05"
+            android:defaultValue="0.033"
             android:inputType="numberDecimal"
             android:key="defaultGravity"
             android:summary="@string/default_grav_message"
