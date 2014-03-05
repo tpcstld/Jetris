@@ -9,6 +9,7 @@
 	Highscores now updates during the game.
 		While displayed it doesn't fully save until the game is reset or paused.
 	Restructured the game sequence to better display a loss.
+	Improved performance for timer in time attack.
 	Improved performance for displaying the grid.
 	Improved performance when a Tetrimino is on delay.
 	Improved performance for updating the locations of the active Tetrimino.

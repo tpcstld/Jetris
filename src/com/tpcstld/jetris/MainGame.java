@@ -9,7 +9,6 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Typeface;
-import android.os.CountDownTimer;
 import android.preference.PreferenceManager;
 import android.view.MotionEvent;
 import android.view.View;
@@ -387,9 +386,7 @@ public class MainGame extends View {
 			int length = this.getMeasuredHeight();
 			int width = this.getMeasuredWidth();
 			// Display and align the needed text
-			canvas.drawText("TIME'S", width / 2, mainFieldShiftY + length / 3,
-					paint);
-			canvas.drawText("UP", width / 2, mainFieldShiftY + length * 2 / 3,
+			canvas.drawText("FINISH", width / 2, mainFieldShiftY + length / 2,
 					paint);
 			// Revert text settings to normal
 			changePaintSettings("big off");
