@@ -1,6 +1,7 @@
 1.0.4
 	You can now tap the hold box to hold your current Tetrimino.
 		You are able to turn this feature off in the settings.
+	Dragging up now cancels soft dropping.
 	Jetris now follows the Super Rotation System exactly!
 	Jetris now implements Infinity exactly!
 	Jetris now has the 3-corner T t-spin system.

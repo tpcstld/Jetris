@@ -1193,10 +1193,15 @@ public class MainGame extends View {
 								turn = false;
 							} else if (y - startingY > dragSensitivity
 									& !ignoreInputs) {
+								startingY = y;
 								gravity = softDropSpeed;
 								softDrop = true;
 								turn = false;
-								// ignoreInputs = true;
+							} else if (startingY - y > dragSensitivity / 2 & !ignoreInputs) {
+								startingY = y;
+								gravity = defaultGravity;
+								softDrop = false;
+								turn = false;
 							}
 						}
 						prevY = y;
