@@ -42,9 +42,6 @@ public abstract class MainGame extends View {
 	public static double softDropSpeed = 0.45; // How fast soft dropping is
 	public static int dragSensitivity = 100;
 	// The sensitivity of the drag gesture
-	public static long countDownTime = 120;
-	public static int linesPerLevel = 10;
-	public static double gravityAddPerLevel = 0.025;
 	public static int textColor = Color.BLACK;
 
 	// GAME STATICS
@@ -63,7 +60,6 @@ public abstract class MainGame extends View {
 	public static String gameMode = "";
 
 	// TIMERS:
-	static long currentCountDownTime = countDownTime * 1000000000;
 	static long clock = System.nanoTime();
 	static long slackTime = slackLength;
 
@@ -185,6 +181,8 @@ public abstract class MainGame extends View {
 	public abstract void onNewGame();
 	
 	public abstract void onScore(int currentDrop);
+	
+	public abstract void onGetSettings(SharedPreferences settings);
 	
 	public void tick() {
 		if (!lose && !pause && !win) {
@@ -383,13 +381,7 @@ public abstract class MainGame extends View {
 				settings);
 		dragSensitivity = getIntFromSettings(dragSensitivity,
 				"dragSensitivity", settings);
-		countDownTime = getIntFromSettings((int) countDownTime,
-				"countDownTime", settings);
-		linesPerLevel = getIntFromSettings(linesPerLevel, "linesPerLevel",
-				settings);
-		gravityAddPerLevel = getDoubleFromSettings(gravityAddPerLevel,
-				"gravityAddPerLevel", settings);
-
+		onGetSettings(settings);
 		if (startNewGame) {
 			getScreenSize = true;
 		}

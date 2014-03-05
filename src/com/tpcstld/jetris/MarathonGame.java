@@ -9,6 +9,8 @@ public class MarathonGame extends MainGame {
 
 	int linesCleared = 0; // The total number of lines cleared
 	int linesClearedFloor = 0;
+	public double gravityAddPerLevel = 0.025;
+	public int linesPerLevel = 10;
 	
 	public MarathonGame(Context context) {
 		super(context);
@@ -69,6 +71,14 @@ public class MarathonGame extends MainGame {
 	@Override
 	public void onScore(int currentDrop) {
 		linesCleared = linesCleared + currentDrop;
+	}
+
+	@Override
+	public void onGetSettings(SharedPreferences settings) {
+		gravityAddPerLevel = getDoubleFromSettings(gravityAddPerLevel,
+				"gravityAddPerLevel", settings);
+		linesPerLevel = getIntFromSettings(linesPerLevel, "linesPerLevel",
+				settings);
 	}
 
 }

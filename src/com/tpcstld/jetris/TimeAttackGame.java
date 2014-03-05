@@ -6,7 +6,9 @@ import android.graphics.Canvas;
 import android.preference.PreferenceManager;
 
 public class TimeAttackGame extends MainGame {
-
+	
+	public static long countDownTime = 120;
+	static long currentCountDownTime = countDownTime * 1000000000;
 	public TimeAttackGame(Context context) {
 		super(context);
 		// TODO Auto-generated constructor stub
@@ -65,6 +67,12 @@ public class TimeAttackGame extends MainGame {
 	@Override
 	public void onScore(int currentDrop) {
 		// TODO Auto-generated method stub
+	}
+
+	@Override
+	public void onGetSettings(SharedPreferences settings) {
+		countDownTime = getIntFromSettings((int) countDownTime,
+				"countDownTime", settings);
 	}
 
 }
