@@ -833,7 +833,7 @@ public abstract class MainGame extends View {
 		}
 	}
 
-	public static void slack() {
+	public void slack() {
 		if (slack) {
 			slackTime = slackTime - FPS;
 			if (slackTime < 0) {
@@ -844,7 +844,7 @@ public abstract class MainGame extends View {
 
 	public abstract void updateHighScore();
 
-	public static void editHighScore(SharedPreferences settings,
+	public void editHighScore(SharedPreferences settings,
 			String scoreType) {
 		if (score > settings.getInt(scoreType, 0)) {
 			SharedPreferences.Editor editor = settings.edit();
@@ -883,7 +883,7 @@ public abstract class MainGame extends View {
 		} while (move);
 	}
 
-	public static void moveLeft() {
+	public void moveLeft() {
 		boolean move = true;
 		// Shape cannot go out of bounds
 		for (int xx = 0; xx < playLocationY.length; xx++)
@@ -907,7 +907,7 @@ public abstract class MainGame extends View {
 		}
 	}
 
-	public static void moveRight() {
+	public void moveRight() {
 		boolean move = true;
 		// Shape cannot go out of bounds
 		for (int xx = 0; xx < playLocationY.length; xx++)
@@ -931,7 +931,7 @@ public abstract class MainGame extends View {
 		}
 	}
 
-	public static void shapeTurn() {
+	public void shapeTurn() {
 		turnSuccess = false;
 		int[] dLocationX = new int[4];
 		int[] dLocationY = new int[4];
@@ -948,7 +948,7 @@ public abstract class MainGame extends View {
 		}
 	}
 
-	public static void shapeTurnCC() {
+	public void shapeTurnCC() {
 		turnSuccess = false;
 		int[] dLocationX = new int[4];
 		int[] dLocationY = new int[4];
@@ -966,7 +966,7 @@ public abstract class MainGame extends View {
 
 	}
 
-	public static void turnShape(int[] x, int[] y, int tableIndex,
+	public void turnShape(int[] x, int[] y, int tableIndex,
 			boolean counterclockwise) {
 		kick = false;
 		for (int i = 0; i < 5; i++) {
@@ -1038,7 +1038,7 @@ public abstract class MainGame extends View {
 		}
 	}
 
-	public static void coloring() {
+	public void coloring() {
 		for (int xx = 0; xx < playLocationX.length; xx++)
 			colors[playLocationX[xx]][playLocationY[xx]] = currentShape;
 
@@ -1148,7 +1148,7 @@ public abstract class MainGame extends View {
 		};
 	}
 
-	public static void getLayout(int width, int height) {
+	public void getLayout(int width, int height) {
 		squareSide = (int) Math.min(width / numSquaresX, height / numSquaresY);
 		holdShapeXStarting = squareSide * (numberOfBlocksWidth + 1);
 		holdShapeYStarting = squareSide * 1;
@@ -1168,7 +1168,7 @@ public abstract class MainGame extends View {
 		getScreenSize = false;
 	}
 
-	public static int chooseColor(int x) {
+	public int chooseColor(int x) {
 		if (x == 0) {
 			// @@@@
 			return Color.CYAN;
