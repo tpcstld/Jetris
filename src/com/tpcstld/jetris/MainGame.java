@@ -141,10 +141,7 @@ public abstract class MainGame extends View {
 	static int highScore = 0; // The highscore of the current gamemode
 	static int level = 0; // The current level (marathon mode) level 0 = level 1
 							// displayed
-	static int linesCleared = 0; // The total number of lines cleared
-	static int linesClearedFloor = 0;
 	static String lastMove = "Nothing";
-	// The number of lines cleared in at the current speed (Marathon Mode)
 	static int combo = 0; // The current combo
 	static Random r = new Random(); // The randomizer
 	static double gravity = defaultGravity; // The current base gravity
@@ -184,6 +181,10 @@ public abstract class MainGame extends View {
 	public abstract void onTick();
 	
 	public abstract void onShapeLocked();
+	
+	public abstract void onNewGame();
+	
+	public abstract void onScore(int currentDrop);
 	
 	public void tick() {
 		if (!lose && !pause && !win) {
@@ -523,7 +524,7 @@ public abstract class MainGame extends View {
 		currentRotation = 0;
 	}
 
-	public static void updateBoxShape(int[][] x, int y) {
+	public void updateBoxShape(int[][] x, int y) {
 		for (int xx = 0; xx < numberOfHoldShapeWidth; xx++)
 			for (int yy = 0; yy < numberOfHoldShapeLength; yy++)
 				x[xx][yy] = 0;
@@ -637,13 +638,13 @@ public abstract class MainGame extends View {
 		highScore = Math.max(highScore, score);
 	}
 
-	public static void activateSlack() {
+	public void activateSlack() {
 		slackOnce = true;
 		slack = true;
 		slackTime = slackLength;
 	}
 
-	public static boolean canFallDown(int[] locationX, int[] locationY) {
+	public boolean canFallDown(int[] locationX, int[] locationY) {
 		for (int xx = 0; xx < locationY.length; xx++) {
 			if (locationY[xx] + 1 >= numberOfBlocksLength) {
 				return false;
@@ -657,7 +658,7 @@ public abstract class MainGame extends View {
 		return true;
 	}
 
-	public static boolean checkTSpin() {
+	public boolean checkTSpin() {
 		if (tSpinMode.equals("3-corner T")) {
 			if (currentShape != 3 || !lastMove.equals("Turn")) {
 				return false;
@@ -711,7 +712,7 @@ public abstract class MainGame extends View {
 		return false;
 	}
 
-	public static int clearLines() {
+	public int clearLines() {
 		int counter = 0;
 		for (int yy = numberOfBlocksLength - 1; yy > 0; yy--) {
 			boolean line = true;
@@ -742,19 +743,7 @@ public abstract class MainGame extends View {
 		return counter;
 	}
 
-	public void countDown() {
-		currentCountDownTime = currentCountDownTime - FPS;
-		long minutes = currentCountDownTime / 60000 / 1000000;
-		long seconds = (currentCountDownTime / 1000000) % 60000 / 1000;
-		MainGame.auxText = minutes + ":" + String.format("%02d", seconds);
-		if (currentCountDownTime < 0) {
-			win = true;
-			auxText = 0 + ":" + String.format("%02d", 0);
-			updateHighScore();
-		}
-	}
-
-	public static void scoring(int currentDrop, boolean tSpin) {
+	public void scoring(int currentDrop, boolean tSpin) {
 		// Scoring Information System Startup
 		if (currentDrop > 0 || tSpin) {
 			clearInfo.clear();
@@ -830,7 +819,7 @@ public abstract class MainGame extends View {
 		}
 		
 		score = score + addScore;
-		linesCleared = linesCleared + currentDrop;
+		onScore(currentDrop);
 	}
 
 	// Gravity falling mechanic.
@@ -853,15 +842,7 @@ public abstract class MainGame extends View {
 		}
 	}
 
-	public abstract void updateHighScore();/* {
-		SharedPreferences settings = PreferenceManager
-				.getDefaultSharedPreferences(mContext);
-		if (gameMode.equals(Constants.MARATHON_MODE)) {
-			editHighScore(settings, Constants.MARATHON_SCORE);
-		} else if (gameMode.equals(Constants.TIME_ATTACK_MODE)) {
-			editHighScore(settings, Constants.TIME_ATTACK_SCORE);
-		}
-	}*/
+	public abstract void updateHighScore();
 
 	public static void editHighScore(SharedPreferences settings,
 			String scoreType) {
@@ -873,7 +854,7 @@ public abstract class MainGame extends View {
 		}
 	}
 
-	public static void ghostShape() {
+	public void ghostShape() {
 		boolean move = true;
 		int[] tempPlayLocationX = new int[4];
 		int[] tempPlayLocationY = new int[4];
@@ -1248,8 +1229,6 @@ public abstract class MainGame extends View {
 		lastMove = "Nothing";
 		gravityTicker = 0;
 		gravityAdd = 0;
-		linesCleared = 0;
-		linesClearedFloor = 0;
 		level = 0;
 		clearInfo.clear();
 		difficult = false;
@@ -1259,12 +1238,7 @@ public abstract class MainGame extends View {
 		lose = false;
 		clock = System.nanoTime();
 		auxText = "";
-		currentCountDownTime = countDownTime * 1000000000 + FPS;
-		if (gameMode.equals(Constants.TIME_ATTACK_MODE)) {
-			countDown();
-		} else if (gameMode.equals(Constants.MARATHON_MODE)) {
-			auxText = "" + (level + 1);
-		}
+		onNewGame();
 		// Pick the new shape
 		pickShape();
 	}

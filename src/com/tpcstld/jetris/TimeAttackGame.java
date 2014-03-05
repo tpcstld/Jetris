@@ -44,4 +44,27 @@ public class TimeAttackGame extends MainGame {
 		editHighScore(settings, Constants.TIME_ATTACK_SCORE);
 	}
 
+	@Override
+	public void onNewGame() {
+		currentCountDownTime = countDownTime * 1000000000 + FPS;
+		countDown();
+	}
+	
+	public void countDown() {
+		currentCountDownTime = currentCountDownTime - FPS;
+		long minutes = currentCountDownTime / 60000 / 1000000;
+		long seconds = (currentCountDownTime / 1000000) % 60000 / 1000;
+		MainGame.auxText = minutes + ":" + String.format("%02d", seconds);
+		if (currentCountDownTime < 0) {
+			win = true;
+			auxText = 0 + ":" + String.format("%02d", 0);
+			updateHighScore();
+		}
+	}
+
+	@Override
+	public void onScore(int currentDrop) {
+		// TODO Auto-generated method stub
+	}
+
 }

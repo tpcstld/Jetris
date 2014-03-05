@@ -7,6 +7,9 @@ import android.preference.PreferenceManager;
 
 public class MarathonGame extends MainGame {
 
+	int linesCleared = 0; // The total number of lines cleared
+	int linesClearedFloor = 0;
+	
 	public MarathonGame(Context context) {
 		super(context);
 		// TODO Auto-generated constructor stub
@@ -38,7 +41,7 @@ public class MarathonGame extends MainGame {
 		changeGravity();
 	}
 
-	public static void changeGravity() {
+	public void changeGravity() {
 		while (linesCleared >= linesClearedFloor + linesPerLevel) {
 			level = level + 1;
 			linesClearedFloor = linesClearedFloor + linesPerLevel;
@@ -54,6 +57,18 @@ public class MarathonGame extends MainGame {
 		SharedPreferences settings = PreferenceManager
 				.getDefaultSharedPreferences(mContext);
 		editHighScore(settings, Constants.MARATHON_SCORE);
+	}
+
+	@Override
+	public void onNewGame() {
+		linesCleared = 0;
+		linesClearedFloor = 0;
+		auxText = "" + (level + 1);
+	}
+
+	@Override
+	public void onScore(int currentDrop) {
+		linesCleared = linesCleared + currentDrop;
 	}
 
 }
