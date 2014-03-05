@@ -17,7 +17,7 @@ public class Constants {
 	public final static String doubleText = "Double";
 	public final static String tripleText = "Triple";
 	public final static String tetrisText = "Tetris";
-	public final static String twistText = "T-spin";
+	public final static String twistText = "Twist";
 	public final static String kickText = "Kicked";
 	public final static String backToBackText = "Back to Back";
 
@@ -30,11 +30,11 @@ public class Constants {
 			{ 0, -1, 2, -1, 2 }, { 0, 2, -1, 2, -1 }, { 0, 1, -2, 1, -2 } };
 	public final static int[][] iBlockkickY = { { 0, 0, 0, -1, 2 },
 			{ 0, 0, 0, 2, -1 }, { 0, 0, 0, 1, -2 }, { 0, 0, 0, -2, 1 } };
-	public final static String[] settingName = { "defaultGravity",
+	public final static String[] settingName = { "tSpinMode", "defaultGravity",
 			"softDropSpeed", "slackLength", "flickSensitivity",
 			"dragSensitivity", "countDownTime", "linesPerLevel",
 			"gravityAddPerLevel" };
-	public final static String[] defaultValue = { "0.033", "0.45", "1000",
+	public final static String[] defaultValue = { "3-corner T", "0.033", "0.45", "1000",
 			"30", "60", "120", "10", "0.025" };
 	public final static String[] booleanSettingName = { "tapToHold" };
 	public final static boolean[] booleanSettingDefault = { true };

@@ -7,6 +7,15 @@
             android:summary="@string/tap_hold_summary"
             android:title="@string/tap_hold_title" />
     </PreferenceCategory>
+    <PreferenceCategory android:title="@string/scoring_title" >
+        <com.tpcstld.jetris.CustomListPreference 
+            android:defaultValue="3-corner T"
+            android:entries="@array/tspin_value"
+            android:entryValues="@array/tspin_value"
+            android:key="tSpinMode"
+            android:summary="@string/tspin_summary"
+            android:title="@string/tspin_title"/>
+    </PreferenceCategory>
     <PreferenceCategory android:title="@string/marathon_title" >
         <com.tpcstld.jetris.NumberPickerPreference
             android:defaultValue="10"

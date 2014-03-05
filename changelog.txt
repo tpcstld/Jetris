@@ -2,8 +2,10 @@
 	You can now tap the hold box to hold your current Tetrimino.
 		You are able to turn this feature off in the settings.
 	Jetris now follows the Super Rotation System exactly!
+	Jetris now implements Infinity exactly!
 	Jetris now has the 3-corner T t-spin system.
-		You can choose between this system and the original (immobile) system in the settings.
+		You can choose between this system and the original (Immobile) system in the settings.
+	"T-spin" have been renamed to "Twist" to account for spins that are not with the T-Tetrimino in Immobile mode.
 	Improved performance for displaying the grid.
 	Highscores now updates during the game.
 		While displayed it doesn't fully save until the game is reset or paused.

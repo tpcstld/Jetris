@@ -430,6 +430,7 @@ public class MainGame extends View {
 
 	public void getSettings(SharedPreferences settings) {
 		tapToHold = settings.getBoolean("tapToHold", tapToHold);
+		tSpinMode = settings.getString("tSpinMode", tSpinMode);
 		defaultGravity = getDoubleFromSettings(defaultGravity,
 				"defaultGravity", settings);
 		flickSensitivity = getIntFromSettings(flickSensitivity,
@@ -1317,6 +1318,7 @@ public class MainGame extends View {
 			shapeList.add(xx);
 		}
 		score = 0;
+		lastMove = "Nothing";
 		gravityTicker = 0;
 		gravityAdd = 0;
 		linesCleared = 0;

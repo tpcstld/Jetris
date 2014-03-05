@@ -18,6 +18,7 @@
     <string name="action_pause">Pause</string>
     <string name="action_unpause">Unpause</string>
     <string name="controls_title">Controls</string>
+    <string name="scoring_title">Scoring</string>
     <string name="game_variables_title">Game Variables</string>
     <string name="speeds_title">Speed Variables</string>
     <string name="marathon_title">Marathon Variables</string>
@@ -29,6 +30,8 @@
     <string name="tap_hold_title">Tap to Hold</string>
     <string name="tap_hold_summary">Current piece is held when the hold box is tapped.</string>
     
+    <string name="tspin_title">T-Spin System</string>
+    <string name="tspin_summary">The t-spin recognition system used for scoring.</string>
     <string name="default_grav_title">Base Drop Speed</string>
     <string name="default_grav_message">The base drop speed of the blocks.
         \nUnits: Lines/33 Milliseconds
