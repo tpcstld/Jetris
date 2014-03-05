@@ -181,7 +181,9 @@ public abstract class MainGame extends View {
 
 	}
 
-	public abstract void extraTick();
+	public abstract void onTick();
+	
+	public abstract void onShapeLocked();
 	
 	public void tick() {
 		if (!lose && !pause && !win) {
@@ -189,7 +191,7 @@ public abstract class MainGame extends View {
 			long dtime = temp - clock;
 			if (dtime > FPS) {
 				clock = clock + FPS;
-				extraTick();
+				onTick();
 				slack();
 				gravity();
 			}
@@ -429,7 +431,7 @@ public abstract class MainGame extends View {
 	// Generates new minos.
 	// Follows the 7-bag system, which means that there will be ALL the blocks..
 	// ...found in each "bag" of 7 pieces.
-	public static void pickShape() {
+	public void pickShape() {
 		if (nextShape == -1) {
 			nextShape = shapeList.remove(r.nextInt(shapeList.size()));
 			next2Shape = shapeList.remove(r.nextInt(shapeList.size()));
@@ -455,7 +457,7 @@ public abstract class MainGame extends View {
 		}
 	}
 
-	public static void holdShape() {
+	public void holdShape() {
 		// Clear all active shapes
 		if (holdOnce) {
 			return;
@@ -478,7 +480,7 @@ public abstract class MainGame extends View {
 		updateBoxShape(holdBlocks, holdShape);
 	}
 
-	public static void updateNewShape(int thisShape) {
+	public void updateNewShape(int thisShape) {
 		// 0: @@@@ 1: @ 2: @ 3: @
 		// @@@ @@@ @@@
 
@@ -559,7 +561,7 @@ public abstract class MainGame extends View {
 		}
 	}
 
-	public static void placeShapeAndDetectLose(int[] x, int[] y) {
+	public void placeShapeAndDetectLose(int[] x, int[] y) {
 		lose = false;
 		for (int xx = 0; xx < x.length; xx++) {
 			if (blocks[x[xx]][y[xx]] == 2) {
@@ -580,7 +582,7 @@ public abstract class MainGame extends View {
 	// Checks if there is anything below the active shape.
 	// If there is: Freeze the active shape and initiate scoring
 	// If there isn't: Move the shape down.
-	public static void shapeDown() {
+	public void shapeDown() {
 		coloring();
 
 		boolean move = canFallDown(playLocationX, playLocationY);
@@ -605,14 +607,10 @@ public abstract class MainGame extends View {
 			gravityTicker = 0.0;
 			gravity = defaultGravity;
 
-			int addScore = scoring(currentDrop, tSpin);
-
-			score = score + addScore;
-			linesCleared = linesCleared + currentDrop;
-			if (gameMode.equals(Constants.MARATHON_MODE)) {
-				changeGravity();
-			}
+			scoring(currentDrop, tSpin);
 			// Scoring System end.
+			
+			onShapeLocked();
 			pickShape();
 		} else if (move) {
 			// If slack is still activated, cancel the slack
@@ -744,7 +742,7 @@ public abstract class MainGame extends View {
 		return counter;
 	}
 
-	public static void countDown() {
+	public void countDown() {
 		currentCountDownTime = currentCountDownTime - FPS;
 		long minutes = currentCountDownTime / 60000 / 1000000;
 		long seconds = (currentCountDownTime / 1000000) % 60000 / 1000;
@@ -756,7 +754,7 @@ public abstract class MainGame extends View {
 		}
 	}
 
-	public static int scoring(int currentDrop, boolean tSpin) {
+	public static void scoring(int currentDrop, boolean tSpin) {
 		// Scoring Information System Startup
 		if (currentDrop > 0 || tSpin) {
 			clearInfo.clear();
@@ -830,30 +828,20 @@ public abstract class MainGame extends View {
 		if (addScore > 0) {
 			clearInfo.add("+" + addScore);
 		}
-
-		return addScore;
+		
+		score = score + addScore;
+		linesCleared = linesCleared + currentDrop;
 	}
 
 	// Gravity falling mechanic.
 	// totalGrav is incremented by gravity every tick.
 	// when totalGrav is higher than 1, the shape moves down 1 block.
-	public static void gravity() {
+	public void gravity() {
 		gravityTicker = gravityTicker + gravity + gravityAdd;
 		while (gravityTicker >= 1) {
 			gravityTicker = gravityTicker - 1;
 			shapeDown();
 		}
-	}
-
-	public static void changeGravity() {
-		while (linesCleared >= linesClearedFloor + linesPerLevel) {
-			level = level + 1;
-			linesClearedFloor = linesClearedFloor + linesPerLevel;
-			if (gravityAdd < 20) {
-				gravityAdd = level * gravityAddPerLevel;
-			}
-		}
-		auxText = "" + (level + 1);
 	}
 
 	public static void slack() {
@@ -865,7 +853,7 @@ public abstract class MainGame extends View {
 		}
 	}
 
-	public static void updateHighScore() {
+	public abstract void updateHighScore();/* {
 		SharedPreferences settings = PreferenceManager
 				.getDefaultSharedPreferences(mContext);
 		if (gameMode.equals(Constants.MARATHON_MODE)) {
@@ -873,7 +861,7 @@ public abstract class MainGame extends View {
 		} else if (gameMode.equals(Constants.TIME_ATTACK_MODE)) {
 			editHighScore(settings, Constants.TIME_ATTACK_SCORE);
 		}
-	}
+	}*/
 
 	public static void editHighScore(SharedPreferences settings,
 			String scoreType) {
@@ -1075,14 +1063,14 @@ public abstract class MainGame extends View {
 
 	}
 
-	public static void pauseGame(boolean changeTo) {
+	public void pauseGame(boolean changeTo) {
 		pause = changeTo;
 		clock = System.nanoTime();
 		updateHighScore();
 	}
 
 	// Controls
-	public static OnTouchListener getOnTouchListener() {
+	public OnTouchListener getOnTouchListener() {
 		return new OnTouchListener() {
 			float x;
 			float y;
@@ -1224,7 +1212,7 @@ public abstract class MainGame extends View {
 		}
 	}
 
-	public static void newGame() {
+	public void newGame() {
 		updateHighScore();
 		// Reset Variables
 		for (int xx = 0; xx < numberOfBlocksWidth; xx++) {

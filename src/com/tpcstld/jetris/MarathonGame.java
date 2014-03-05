@@ -3,6 +3,7 @@ package com.tpcstld.jetris;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.graphics.Canvas;
+import android.preference.PreferenceManager;
 
 public class MarathonGame extends MainGame {
 
@@ -12,7 +13,7 @@ public class MarathonGame extends MainGame {
 	}
 
 	@Override
-	public void extraTick() {
+	public void onTick() {
 	}
 
 	@Override
@@ -30,6 +31,29 @@ public class MarathonGame extends MainGame {
 	@Override
 	public int getHighScore(SharedPreferences settings) {
 		return settings.getInt(Constants.MARATHON_SCORE, 0);
+	}
+
+	@Override
+	public void onShapeLocked() {
+		changeGravity();
+	}
+
+	public static void changeGravity() {
+		while (linesCleared >= linesClearedFloor + linesPerLevel) {
+			level = level + 1;
+			linesClearedFloor = linesClearedFloor + linesPerLevel;
+			if (gravityAdd < 20) {
+				gravityAdd = level * gravityAddPerLevel;
+			}
+		}
+		auxText = "" + (level + 1);
+	}
+
+	@Override
+	public void updateHighScore() {
+		SharedPreferences settings = PreferenceManager
+				.getDefaultSharedPreferences(mContext);
+		editHighScore(settings, Constants.MARATHON_SCORE);
 	}
 
 }

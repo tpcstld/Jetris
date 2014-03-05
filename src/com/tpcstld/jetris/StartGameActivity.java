@@ -102,18 +102,18 @@ public class StartGameActivity extends Activity {
 	}
 
 	public void pauseGame(MenuItem item) {
-		MainGame.pauseGame(!MainGame.pause);
+		mainView.pauseGame(!MainGame.pause);
 		updatePauseMessage();
 	}
 
 	public void newGame(MenuItem item) {
-		MainGame.newGame();
+		mainView.newGame();
 		updatePauseMessage();
 	}
 
 	protected void onPause() {
 		super.onPause();
-		MainGame.pauseGame(true);
+		mainView.pauseGame(true);
 		updatePauseMessage();
 	}
 

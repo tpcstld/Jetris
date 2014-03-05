@@ -3,6 +3,7 @@ package com.tpcstld.jetris;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.graphics.Canvas;
+import android.preference.PreferenceManager;
 
 public class TimeAttackGame extends MainGame {
 
@@ -12,7 +13,7 @@ public class TimeAttackGame extends MainGame {
 	}
 
 	@Override
-	public void extraTick() {
+	public void onTick() {
 		countDown();
 	}
 
@@ -30,6 +31,17 @@ public class TimeAttackGame extends MainGame {
 	@Override
 	public int getHighScore(SharedPreferences settings) {
 		return settings.getInt(Constants.TIME_ATTACK_SCORE, 0);
+	}
+
+	@Override
+	public void onShapeLocked() {
+	}
+
+	@Override
+	public void updateHighScore() {
+		SharedPreferences settings = PreferenceManager
+				.getDefaultSharedPreferences(mContext);
+		editHighScore(settings, Constants.TIME_ATTACK_SCORE);
 	}
 
 }
