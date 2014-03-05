@@ -99,6 +99,7 @@ public class MainGame extends View {
 	static int currentShape = -1; // The CURRENT shape on the playing field.
 	static ArrayList<Integer> shapeList = new ArrayList<Integer>();
 	// A list containing the shapes left in the current bag
+	static int currentRotation = 0; //The current rotation 0 = spawn, 1 = R, 2 = 2, 3 = L;
 
 	// FIELD INFORMATION:
 	static int[][] blocks = new int[numberOfBlocksWidth][numberOfBlocksLength];
@@ -592,6 +593,7 @@ public class MainGame extends View {
 			pivotX = 4.5;
 			pivotY = 0.5;
 		}
+		currentRotation = 0;
 	}
 
 	public static void displayBoxShape(int[][] x, int y) {
@@ -1007,10 +1009,12 @@ public class MainGame extends View {
 			dLocationX[xx] = (int) (-(playLocationY[xx] - pivotY) - (playLocationX[xx] - pivotX));
 			dLocationY[xx] = (int) ((playLocationX[xx] - pivotX) - (playLocationY[xx] - pivotY));
 		}
-		turnShape(dLocationX, dLocationY);
+		turnShape(dLocationX, dLocationY, currentRotation, false);
 		// Reset slack if turn is successful
 		if (turnSuccess) {
 			slackOnce = false;
+			currentRotation = (currentRotation + 1) % 4;
+			System.out.println(currentRotation);
 		}
 	}
 
@@ -1023,89 +1027,75 @@ public class MainGame extends View {
 			dLocationX[xx] = (int) ((playLocationY[xx] - pivotY) - (playLocationX[xx] - pivotX));
 			dLocationY[xx] = (int) (-(playLocationX[xx] - pivotX) - (playLocationY[xx] - pivotY));
 		}
-		turnShape(dLocationX, dLocationY);
+		turnShape(dLocationX, dLocationY, ((currentRotation + 3) % 4), true);
 		// Reset slack if turn is successful
 		if (turnSuccess) {
 			slackOnce = false;
+			currentRotation = (currentRotation + 3) % 4;
+			System.out.println(currentRotation);
 		}
+		
 	}
 
-	public static void turnShape(int[] x, int[] y) {
+	public static void turnShape(int[] x, int[] y, int tableIndex, boolean counterclockwise) {
 		kick = false;
-
-		for (int i = 0; i <= 4; i++) {
-			int yy = 0;
-			// Checking 0, -1, 1, -2, 2
-			if (i == 1 || i == 2) {
-				yy = -i;
-			} else if (i != 0){
-				yy = i - 2;
+		for (int i = 0; i < 5; i++) {
+			int checkX = 0;
+			int checkY = 0;
+			if (currentShape == 0) {
+				checkX = Constants.iBlockkickX[tableIndex][i];
+				checkY = Constants.iBlockkickY[tableIndex][i];
+			} else {
+				checkX = Constants.kickX[tableIndex][i];
+				checkY = Constants.kickY[tableIndex][i];
 			}
 			
-			/*else if (yy == 3) {
-				yy = -2;
-			} else if (yy != 0) {
-				yy = yy / 2;
-			}*/
+			if (counterclockwise) {
+				checkX = -checkX;
+				checkY = -checkY;
+			}
+			
+			boolean ok = true;
 
-			for (int j = 0; j <= 4; j++) {
-				int xy = 0;
-				// Checking 0, -1, 1, -2, 2
-				if (j == 1) {
-					xy = -1;
-				} else if (j == 3) {
-					xy = -2;
-				} else if (j != 0) {
-					xy = j / 2;
-				}
-				boolean ok = true;
-
-				for (int xx = 0; xx < playLocationX.length; xx++) {
-					if (playLocationX[xx] + x[xx] + xy > numberOfBlocksWidth - 1
-							| playLocationX[xx] + x[xx] + xy < 0) {
-						ok = false;
-					}
-				}
-
-				for (int xx = 0; xx < playLocationY.length; xx++) {
-					if (playLocationY[xx] + y[xx] - yy >= 22
-							| playLocationY[xx] + y[xx] - yy < 0) {
-						ok = false;
-					}
-				}
-
-				try {
-					if (ok) {
-						if (blocks[playLocationX[0] + x[0] + xy][playLocationY[0]
-								+ y[0] - yy] != 2
-								& blocks[playLocationX[1] + x[1] + xy][playLocationY[1]
-										+ y[1] - yy] != 2
-								& blocks[playLocationX[2] + x[2] + xy][playLocationY[2]
-										+ y[2] - yy] != 2
-								& blocks[playLocationX[3] + x[3] + xy][playLocationY[3]
-										+ y[3] - yy] != 2) {
-							for (int xx = 0; xx < playLocationY.length; xx++)
-								blocks[playLocationX[xx]][playLocationY[xx]] = 0;
-							for (int xx = 0; xx < playLocationY.length; xx++) {
-								blocks[playLocationX[xx] + x[xx] + xy][playLocationY[xx]
-										+ y[xx] - yy] = 1;
-							}
-							pivotX = pivotX + xy;
-							pivotY = pivotY - yy;
-							turnSuccess = true;
-						}
-					}
-				} catch (Exception e) {
-				}
-				if (turnSuccess) {
-					if (xy != 0) {
-						kick = true;
-					}
-					break;
+			for (int xx = 0; xx < playLocationX.length; xx++) {
+				if (playLocationX[xx] + x[xx] + checkX > numberOfBlocksWidth - 1
+						| playLocationX[xx] + x[xx] + checkX < 0) {
+					ok = false;
 				}
 			}
+
+			for (int xx = 0; xx < playLocationY.length; xx++) {
+				if (playLocationY[xx] + y[xx] - checkY >= 22
+						| playLocationY[xx] + y[xx] - checkY < 0) {
+					ok = false;
+				}
+			}
+
+			try {
+				if (ok) {
+					if (blocks[playLocationX[0] + x[0] + checkX][playLocationY[0]
+							+ y[0] - checkY] != 2
+							& blocks[playLocationX[1] + x[1] + checkX][playLocationY[1]
+									+ y[1] - checkY] != 2
+							& blocks[playLocationX[2] + x[2] + checkX][playLocationY[2]
+									+ y[2] - checkY] != 2
+							& blocks[playLocationX[3] + x[3] + checkX][playLocationY[3]
+									+ y[3] - checkY] != 2) {
+						for (int xx = 0; xx < playLocationY.length; xx++)
+							blocks[playLocationX[xx]][playLocationY[xx]] = 0;
+						for (int xx = 0; xx < playLocationY.length; xx++) {
+							blocks[playLocationX[xx] + x[xx] + checkX][playLocationY[xx]
+									+ y[xx] - checkY] = 1;
+						}
+						pivotX = pivotX + checkX;
+						pivotY = pivotY - checkY;
+						turnSuccess = true;
+					}
+				}
+			} catch (Exception e) {
+			}
 			if (turnSuccess) {
-				if (yy != 0) {
+				if (i != 0) {
 					kick = true;
 				}
 				break;
