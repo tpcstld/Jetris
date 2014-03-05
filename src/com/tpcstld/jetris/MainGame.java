@@ -13,7 +13,7 @@ import android.preference.PreferenceManager;
 import android.view.MotionEvent;
 import android.view.View;
 
-public class MainGame extends View {
+public abstract class MainGame extends View {
 
 	Paint paint = new Paint();
 
@@ -181,15 +181,15 @@ public class MainGame extends View {
 
 	}
 
+	public abstract void extraTick();
+	
 	public void tick() {
 		if (!lose && !pause && !win) {
 			long temp = System.nanoTime();
 			long dtime = temp - clock;
 			if (dtime > FPS) {
 				clock = clock + FPS;
-				if (gameMode.equals(Constants.TIME_ATTACK_MODE)) {
-					countDown();
-				}
+				extraTick();
 				slack();
 				gravity();
 			}
@@ -197,7 +197,11 @@ public class MainGame extends View {
 			ghostShape();
 		}
 	}
-
+	
+	public abstract void printAuxText(Canvas canvas);
+	
+	public abstract int getHighScore(SharedPreferences settings);
+	
 	@Override
 	public void onDraw(Canvas canvas) {
 
@@ -231,24 +235,7 @@ public class MainGame extends View {
 				scoreInfoYStarting + mainFieldShiftY, paint);
 		changePaintSettings("normal");
 
-		// Drawing aux text box
-		if (gameMode.equals(Constants.MARATHON_MODE)) {
-			String tempText = auxText + " ("
-					+ (linesPerLevel - linesCleared + linesClearedFloor) + ")";
-			canvas.drawText("Level:", auxInfoXStarting + mainFieldShiftX,
-					auxInfoYStarting + mainFieldShiftY, paint);
-			changePaintSettings("info");
-			canvas.drawText(tempText, numSquaresX * squareSide,
-					auxInfoYStarting + mainFieldShiftY, paint);
-			changePaintSettings("normal");
-		} else if (gameMode.equals(Constants.TIME_ATTACK_MODE)) {
-			canvas.drawText("Time:", auxInfoXStarting + mainFieldShiftX,
-					auxInfoYStarting + mainFieldShiftY, paint);
-			changePaintSettings("info");
-			canvas.drawText(auxText, numSquaresX * squareSide, auxInfoYStarting
-					+ mainFieldShiftY, paint);
-			changePaintSettings("normal");
-		}
+		printAuxText(canvas);
 
 		// Drawing clearInfo text box
 		for (int xx = 0; xx < clearInfo.size(); xx++) {
@@ -299,20 +286,7 @@ public class MainGame extends View {
 			}
 		}
 
-		// Coloring the blocks for the held shape.
-		paint.setColor(chooseColor(holdShape));
-		for (int xx = 0; xx < numberOfHoldShapeWidth; xx++) {
-			for (int yy = 0; yy < numberOfHoldShapeLength; yy++) {
-				if (holdBlocks[xx][yy] == 1) {
-					canvas.drawRect(xx * squareSide + holdShapeXStarting
-							+ mainFieldShiftX, yy * squareSide
-							+ mainFieldShiftY + holdShapeYStarting, xx
-							* squareSide + holdShapeXStarting + squareSide
-							+ mainFieldShiftX, yy * squareSide + squareSide
-							+ mainFieldShiftY + holdShapeYStarting, paint);
-				}
-			}
-		}
+		drawBoxShape(canvas, holdShape, holdBlocks, holdShapeXStarting + mainFieldShiftX, holdShapeYStarting + mainFieldShiftY);
 
 		// Coloring the next shape
 		paint.setColor(chooseColor(nextShape));
@@ -405,6 +379,25 @@ public class MainGame extends View {
 		invalidate();
 	}
 
+	public void drawBoxShape(Canvas canvas, int targetShape, int[][] targetBlocks, int shiftX, int shiftY) {
+		paint.setColor(chooseColor(targetShape));
+		for (int xx = 0; xx < numberOfHoldShapeWidth; xx++) {
+			for (int yy = 0; yy < numberOfHoldShapeLength; yy++) {
+				if (targetBlocks[xx][yy] == 1) {
+					/*canvas.drawRect(xx * squareSide + holdShapeXStarting
+							+ mainFieldShiftX, yy * squareSide
+							+ nextShapeYStarting + mainFieldShiftY, xx
+							* squareSide + holdShapeXStarting + squareSide
+							+ mainFieldShiftX,
+							yy * squareSide + nextShapeYStarting + squareSide
+									+ mainFieldShiftY, paint);*/
+					canvas.drawRect(xx * squareSide + shiftX, yy * squareSide + shiftY,
+									(xx + 1) * squareSide + shiftX, (yy + 1)* squareSide + shiftY, paint);
+				}
+			}
+		}
+	}
+	
 	public void changePaintSettings(String setting) {
 		if (setting.equals("info")) {
 			paint.setTextSize((float) (squareSide * textScaleSize));
@@ -448,12 +441,8 @@ public class MainGame extends View {
 		if (startNewGame) {
 			getScreenSize = true;
 		}
-
-		if (gameMode.equals(Constants.MARATHON_MODE)) {
-			highScore = settings.getInt(Constants.MARATHON_SCORE, 0);
-		} else if (gameMode.equals(Constants.TIME_ATTACK_MODE)) {
-			highScore = settings.getInt(Constants.TIME_ATTACK_SCORE, 0);
-		}
+		
+		highScore = getHighScore(settings);
 
 		// Get the theme to set the textcolor
 		int theme = Constants.getTheme(settings);
@@ -497,7 +486,7 @@ public class MainGame extends View {
 			next2Shape = shapeList.remove(r.nextInt(shapeList.size()));
 			next3Shape = shapeList.remove(r.nextInt(shapeList.size()));
 		}
-		displayShape(nextShape);
+		updateNewShape(nextShape);
 		currentShape = nextShape;
 		nextShape = next2Shape;
 		next2Shape = next3Shape;
@@ -509,9 +498,9 @@ public class MainGame extends View {
 					shapeList.add(xx);
 				}
 			}
-			displayBoxShape(nextBlocks, nextShape);
-			displayBoxShape(next2Blocks, next2Shape);
-			displayBoxShape(next3Blocks, next3Shape);
+			updateBoxShape(nextBlocks, nextShape);
+			updateBoxShape(next2Blocks, next2Shape);
+			updateBoxShape(next3Blocks, next3Shape);
 			shapeDown();
 			holdOnce = false;
 		}
@@ -534,13 +523,13 @@ public class MainGame extends View {
 			int lastShape1 = holdShape;
 			holdShape = currentShape;
 			currentShape = lastShape1;
-			displayShape(currentShape);
+			updateNewShape(currentShape);
 		}
 		holdOnce = true;
-		displayBoxShape(holdBlocks, holdShape);
+		updateBoxShape(holdBlocks, holdShape);
 	}
 
-	public static void displayShape(int thisShape) {
+	public static void updateNewShape(int thisShape) {
 		// 0: @@@@ 1: @ 2: @ 3: @
 		// @@@ @@@ @@@
 
@@ -583,7 +572,7 @@ public class MainGame extends View {
 		currentRotation = 0;
 	}
 
-	public static void displayBoxShape(int[][] x, int y) {
+	public static void updateBoxShape(int[][] x, int y) {
 		for (int xx = 0; xx < numberOfHoldShapeWidth; xx++)
 			for (int yy = 0; yy < numberOfHoldShapeLength; yy++)
 				x[xx][yy] = 0;

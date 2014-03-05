@@ -52,7 +52,12 @@ public class StartGameActivity extends Activity {
 		}
 
 		// Change the pause/unpause text
-		mainView = new MainGame(this);
+		if (gameMode.equals(Constants.MARATHON_MODE)) {
+			mainView = new MarathonGame(this);
+		} else if (gameMode.equals(Constants.TIME_ATTACK_MODE)) {
+			mainView = new TimeAttackGame(this);
+		}
+		
 		if (Constants.getTheme(settings) == R.style.DarkTheme
 				&& settings.getBoolean("darkBackground", true)) {
 			mainView.setBackgroundColor(Color.BLACK);
