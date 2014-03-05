@@ -14,7 +14,6 @@ import android.view.MenuItem;
 public class SettingsActivity extends PreferenceActivity {
 
 	int theme;
-
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		SharedPreferences settings = PreferenceManager

@@ -20,9 +20,10 @@ public class CustomListPreference extends ListPreference {
 		setSummary(value);
 	}
 	
-	@Override
-	public void setSummary(CharSequence summary) {
-		super.setSummary(getEntry());
+	public void setSummary(String summary) {
+		super.setValue(summary);
+		notifyChanged();
+		super.setSummary(getValue());
 	}
 	
 }

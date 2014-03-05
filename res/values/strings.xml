@@ -87,18 +87,19 @@
     	\n\t\t	Double: 300
     	\n\t\t	Triple: 500
     	\n\t\t	Tetris: 800
-    	\n\t Base T-Spin Points (* Level):
+    	\n\t Base Twist (T-spin) Points (* Level):
     	\n\t\t	No Clear, Kicked: 100
     	\n\t\t	No Clear, Not Kicked: 400
     	\n\t\t	Single, Kicked: 200
     	\n\t\t	Single, Not Kicked: 800
     	\n\t\t	Double: 1200
     	\n\t\t	Triple: 1600
-    	\n\t Back to Back Tetris/T-Spin Clear: Base Points * 1.5
+    	\n\t Back to Back Tetris/Twist Clear: Base Points * 1.5
     	\n\t Chaining: 50 * Chain # * Level
     	\n\t 
     	\n\t Level = 1 For time attack mode.
-    	\n\t No Clear t-spins only give points in 3-corner T mode. </string>
+    	\n\t No Clear Twists only give points in 3-corner T mode.
+    	\n\t Only T-Tetriminos can twist in 3-corner T mode. </string>
     <string name="about_info">\nVersion: 1.0.4
         \nProduced by Jerry Jiang (tpcstld)
         \nLogo by Margaret Lu 

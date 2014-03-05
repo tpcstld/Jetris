@@ -3,6 +3,7 @@ package com.tpcstld.jetris;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.CheckBoxPreference;
+import android.preference.ListPreference;
 import android.preference.Preference;
 import android.preference.PreferenceFragment;
 import android.preference.PreferenceManager;
@@ -13,7 +14,7 @@ public class SettingsFragment extends PreferenceFragment {
 	public static Preference[] booleanPrefList;
 	public static final String prefListName = "prefList";
 	public static final String booleanPrefListName = "booleanPrefList";
-	
+
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -44,7 +45,12 @@ public class SettingsFragment extends PreferenceFragment {
 	public static void setSummariesString(String[] key, String[] def,
 			SharedPreferences sharedprefs) {
 		for (int xx = 0; xx < key.length; xx++) {
-			prefList[xx].setSummary(sharedprefs.getString(key[xx], def[xx]));
+			try {
+				Double.parseDouble(def[xx]);
+				prefList[xx].setSummary(sharedprefs.getString(key[xx], def[xx]));
+			} catch (Exception e) {
+				((ListPreference) prefList[xx]).setValue(sharedprefs.getString(key[xx], def[xx]));
+			}
 		}
 	}
 
