@@ -10,7 +10,8 @@
 	Default "Default Gravity" has been adjusted to 0.033. 
 		You may want to change this setting manually (or press reset all settings).
 	Fixed bug: Some settings are able to be changed such that it exceeds the cap.
-	Fixed bug: Low timing resolution causing Tetriminos to fall erratically. 
+	Fixed bug: Low timing resolution causing Tetriminos to fall erratically.
+	Fixed bug: First block falling faster than normal on new game. 
 1.0.3
 	Changed losing condition to better match Tetris guidelines
 	Fixed active shape not falling correctly right after picking
