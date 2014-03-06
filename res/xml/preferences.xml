@@ -23,6 +23,13 @@
             android:key="linesPerLevel"
             android:summary="@string/lines_per_level_message"
             android:title="@string/lines_per_level_title" />
+        
+        <com.tpcstld.jetris.TextPreference
+            android:defaultValue="1"
+            android:inputType="number"
+            android:key="startingLevel"
+            android:summary="@string/starting_level_message"
+            android:title="@string/starting_level_title" />
 
         <com.tpcstld.jetris.CustomListPreference
             android:defaultValue="Exponential"

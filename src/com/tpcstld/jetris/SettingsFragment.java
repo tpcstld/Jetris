@@ -1,5 +1,9 @@
 package com.tpcstld.jetris;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Map;
+
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.CheckBoxPreference;
@@ -22,18 +26,20 @@ public class SettingsFragment extends PreferenceFragment {
 				.getDefaultSharedPreferences(getActivity());
 		addPreferencesFromResource(R.xml.preferences);
 
-		getPreferences(Constants.settingName, prefListName);
-		getPreferences(Constants.booleanSettingName, booleanPrefListName);
-		setSummariesString(Constants.settingName, Constants.defaultValue,
-				sharedprefs);
-		setBooleanStatus(Constants.booleanSettingName,
-				Constants.booleanSettingDefault, sharedprefs);
+		getPreferences(Constants.defaultSettings, prefListName);
+		getPreferences(Constants.defaultBooleanSettings, booleanPrefListName);
+		setSummariesString(Constants.defaultSettings, sharedprefs);
+		setBooleanStatus(Constants.defaultBooleanSettings, sharedprefs);
 	}
 
-	public void getPreferences(String[] key, String addTo) {
-		Preference[] temp = new Preference[key.length];
-		for (int xx = 0; xx < key.length; xx++) {
-			temp[xx] = findPreference(key[xx]);
+	public void getPreferences(Map<String, ?> map, String addTo) {
+		Preference[] temp = new Preference[map.size()];
+		int counter = 0;
+		ArrayList<String> settingNames = new ArrayList<String>(map.keySet());
+		Collections.sort(settingNames);
+		for (String settingName : settingNames) {
+			temp[counter] = findPreference(settingName);
+			counter++;
 		}
 		if (addTo.equals(prefListName)) {
 			prefList = temp;
@@ -42,23 +48,33 @@ public class SettingsFragment extends PreferenceFragment {
 		}
 	}
 
-	public static void setSummariesString(String[] key, String[] def,
+	public static void setSummariesString(Map<String, String> map,
 			SharedPreferences sharedprefs) {
-		for (int xx = 0; xx < key.length; xx++) {
+		int counter = 0;
+		ArrayList<String> settingNames = new ArrayList<String>(map.keySet());
+		Collections.sort(settingNames);
+		for (String key : settingNames) {
 			try {
-				Double.parseDouble(def[xx]);
-				prefList[xx].setSummary(sharedprefs.getString(key[xx], def[xx]));
+				Double.parseDouble(map.get(key));
+				prefList[counter].setSummary(sharedprefs.getString(key,
+						map.get(key)));
 			} catch (Exception e) {
-				((ListPreference) prefList[xx]).setValue(sharedprefs.getString(key[xx], def[xx]));
+				((ListPreference) prefList[counter]).setValue(sharedprefs
+						.getString(key, map.get(key)));
 			}
+			counter++;
 		}
 	}
 
-	public static void setBooleanStatus(String[] key, boolean[] def,
+	public static void setBooleanStatus(Map<String, Boolean> map,
 			SharedPreferences sharedprefs) {
-		for (int xx = 0; xx < key.length; xx++) {
-			((CheckBoxPreference) booleanPrefList[xx]).setChecked(sharedprefs
-					.getBoolean(key[xx], def[xx]));
+		int counter = 0;
+		ArrayList<String> settingNames = new ArrayList<String>(map.keySet());
+		Collections.sort(settingNames);
+		for (String key : settingNames) {
+			((CheckBoxPreference) booleanPrefList[counter])
+					.setChecked(sharedprefs.getBoolean(key, map.get(key)));
+			counter++;
 		}
 	}
 }

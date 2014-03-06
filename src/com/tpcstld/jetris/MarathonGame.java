@@ -7,12 +7,13 @@ import android.preference.PreferenceManager;
 
 public class MarathonGame extends MainGame {
 
-	static int linesCleared = 0; // The total number of lines cleared
-	static int linesClearedFloor = 0;
+	static long linesCleared = 0; // The total number of lines cleared
+	static long linesClearedFloor = 0;
 	static double gravityAddPerLevel = Constants.GRAVITY_ADD_PER_LEVEL_DEFAULT;
 	static double gravityMultiplyPerLevel = Constants.GRAVITY_MULTIPLY_PER_LEVEL_DEFAULT;
 	static int linesPerLevel = Constants.LINES_PER_LEVEL_DEFAULT;
 	static String dropSpeedMode = Constants.DROP_MODE_DEFAULT;
+	static int startingLevel = 0;
 	
 	public MarathonGame(Context context) {
 		super(context);
@@ -36,8 +37,8 @@ public class MarathonGame extends MainGame {
 	}
 
 	@Override
-	public int getHighScore(SharedPreferences settings) {
-		return settings.getInt(Constants.MARATHON_SCORE, 0);
+	public long getHighScore(SharedPreferences settings) {
+		return getLongFromSettings(highScore, Constants.MARATHON_SCORE, settings);
 	}
 
 	@Override
@@ -48,18 +49,27 @@ public class MarathonGame extends MainGame {
 
 	public void changeGravity() {
 		while (linesCleared >= linesClearedFloor + linesPerLevel) {
-			level = level + 1;
+			if (level != Integer.MAX_VALUE - 1) {
+				level = level + 1;
+			}
 			linesClearedFloor = linesClearedFloor + linesPerLevel;
 			if (gravityAdd < 20) {
-				if (dropSpeedMode.equals(Constants.GEOMETRIC_DROP_MODE)) {
-					gravityAdd = defaultGravity
-							* (Math.pow(gravityMultiplyPerLevel, level) - 1);
-				} else if (dropSpeedMode.equals(Constants.LINEAR_DROP_MODE)) {
-					gravityAdd = level * gravityAddPerLevel;
-				}
+				modifyGravityAdd();
 			}
 		}
 		auxText = "" + (level + 1);
+	}
+	
+	public void modifyGravityAdd() {
+		if (dropSpeedMode.equals(Constants.GEOMETRIC_DROP_MODE)) {
+			gravityAdd = defaultGravity
+					* (Math.pow(gravityMultiplyPerLevel, level) - 1);
+		} else if (dropSpeedMode.equals(Constants.LINEAR_DROP_MODE)) {
+			gravityAdd = level * gravityAddPerLevel;
+		}
+		if (gravityAdd > 20) {
+			gravityAdd = 20;
+		}
 	}
 
 	@Override
@@ -73,7 +83,9 @@ public class MarathonGame extends MainGame {
 	public void onNewGame() {
 		linesCleared = 0;
 		linesClearedFloor = 0;
+		level = startingLevel;
 		auxText = "" + (level + 1);
+		modifyGravityAdd();
 	}
 
 	@Override
@@ -94,6 +106,11 @@ public class MarathonGame extends MainGame {
 		}
 		linesPerLevel = getIntFromSettings(linesPerLevel, "linesPerLevel",
 				settings);
+		startingLevel = getIntFromSettings(startingLevel, "startingLevel", settings) - 1;
+		startingLevel = Math.max(0, startingLevel);
+		if (linesPerLevel < 1) {
+			linesPerLevel = 1;
+		}
 	}
 
 }

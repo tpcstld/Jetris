@@ -1,5 +1,8 @@
 package com.tpcstld.jetris;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import android.content.SharedPreferences;
 
 public class Constants {
@@ -34,6 +37,7 @@ public class Constants {
 	public final static int DRAG_SENSITIVITY_DEFAULT = 60;
 	public final static int COUNTDOWN_TIME_DEFAULT = 120;
 	public final static int LINES_PER_LEVEL_DEFAULT = 10;
+	public final static int STARTING_LEVEL_DEFAULT = 1;
 
 	public final static double DEFAULT_GRAVITY_DEFAULT = 0.033;
 	public final static double SOFT_DROP_SPEED_DEFAULT = 0.45;
@@ -53,19 +57,32 @@ public class Constants {
 			{ 0, -1, 2, -1, 2 }, { 0, 2, -1, 2, -1 }, { 0, 1, -2, 1, -2 } };
 	public final static int[][] iBlockkickY = { { 0, 0, 0, -1, 2 },
 			{ 0, 0, 0, 2, -1 }, { 0, 0, 0, 1, -2 }, { 0, 0, 0, -2, 1 } };
-	public final static String[] settingName = { "tSpinMode", "defaultGravity",
-			"softDropSpeed", "slackLength", "flickSensitivity",
-			"dragSensitivity", "countDownTime", "linesPerLevel",
-			"dropSpeedMode", "gravityAddPerLevel", "gravityMultiplyPerLevel" };
-	public final static String[] defaultValue = { CORNER_TSPIN,
-			"" + DEFAULT_GRAVITY_DEFAULT, "" + SOFT_DROP_SPEED_DEFAULT,
-			"" + SLACK_LENGTH_DEFAULT, "" + FLICK_SENSITIVITY_DEFAULT,
-			"" + DRAG_SENSITIVITY_DEFAULT, "" + COUNTDOWN_TIME_DEFAULT,
-			"" + LINES_PER_LEVEL_DEFAULT, DROP_MODE_DEFAULT,
-			"" + GRAVITY_ADD_PER_LEVEL_DEFAULT,
-			"" + GRAVITY_MULTIPLY_PER_LEVEL_DEFAULT };
-	public final static String[] booleanSettingName = { "tapToHold"};
-	public final static boolean[] booleanSettingDefault = { TAP_TO_HOLD_DEFAULT };
+	public static Map <String, String> defaultSettings = createSettings();
+	public static Map <String, Boolean> defaultBooleanSettings = createBooleanSettings();
+	
+	private static Map <String, String> createSettings() {
+		Map<String, String> answer = new HashMap<String, String>();
+		answer.put("tSpinMode", TSPIN_MODE_DEFAULT);
+		answer.put("defaultGravity", "" + DEFAULT_GRAVITY_DEFAULT);
+		answer.put("softDropSpeed", "" + SOFT_DROP_SPEED_DEFAULT);
+		answer.put("slackLength", "" + SLACK_LENGTH_DEFAULT);
+		answer.put("flickSensitivity", "" + FLICK_SENSITIVITY_DEFAULT);
+		answer.put("dragSensitivity", "" + DRAG_SENSITIVITY_DEFAULT);
+		answer.put("countDownTime", "" + COUNTDOWN_TIME_DEFAULT);
+		answer.put("linesPerLevel", "" + LINES_PER_LEVEL_DEFAULT);
+		answer.put("dropSpeedMode", DROP_MODE_DEFAULT);
+		answer.put("gravityAddPerLevel", "" + GRAVITY_ADD_PER_LEVEL_DEFAULT);
+		answer.put("gravityMultiplyPerLevel", "" + GRAVITY_MULTIPLY_PER_LEVEL_DEFAULT);
+		answer.put("startingLevel", "" + STARTING_LEVEL_DEFAULT);
+		
+		return answer;
+	}
+	
+	private static Map <String, Boolean> createBooleanSettings() {
+		Map<String, Boolean> answer = new HashMap<String, Boolean>();
+		answer.put("tapToHold", TAP_TO_HOLD_DEFAULT);
+		return answer;
+	}
 
 	public static int getTheme(SharedPreferences settings) {
 		String theme = settings.getString("theme", Constants.LIGHT_THEME);
