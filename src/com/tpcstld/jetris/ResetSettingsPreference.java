@@ -34,16 +34,19 @@ public class ResetSettingsPreference extends DialogPreference {
 					.getDefaultSharedPreferences(mContext);
 			SharedPreferences.Editor editor = settings.edit();
 			// Changing hold to tap
-			for(String key: Constants.defaultBooleanSettings.keySet()) {
+			for (String key : Constants.defaultBooleanSettings.keySet()) {
 				editor.putBoolean(key,
 						Constants.defaultBooleanSettings.get(key));
 			}
-			for (String settingName: Constants.defaultSettings.keySet()) {
-				editor.putString(settingName, Constants.defaultSettings.get(settingName));
+			for (String settingName : Constants.defaultSettings.keySet()) {
+				editor.putString(settingName,
+						Constants.defaultSettings.get(settingName));
 			}
 			editor.commit();
-			SettingsFragment.setSummariesString(Constants.defaultSettings, settings);
-			SettingsFragment.setBooleanStatus(Constants.defaultBooleanSettings, settings);
+			SettingsFragment.setSummariesString(Constants.defaultSettings,
+					settings);
+			SettingsFragment.setBooleanStatus(Constants.defaultBooleanSettings,
+					settings);
 		}
 	}
 }

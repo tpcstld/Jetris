@@ -36,10 +36,19 @@ public abstract class MainGame extends View {
 	public static double defaultGravity = Constants.DEFAULT_GRAVITY_DEFAULT;
 	// The default gravity of the game value
 	public static int flickSensitivity = Constants.FLICK_SENSITIVITY_DEFAULT;
-	// The Sensitivity is the flick gesture 
-	public static long slackLength = Constants.SLACK_LENGTH_DEFAULT * 1000000; // How long the stack goes on
-													// for in milliseconds
-	public static double softDropSpeed = Constants.SOFT_DROP_SPEED_DEFAULT; // How fast soft dropping is
+	// The Sensitivity is the flick gesture
+	public static long slackLength = Constants.SLACK_LENGTH_DEFAULT * 1000000; // How
+																				// long
+																				// the
+																				// stack
+																				// goes
+																				// on
+	// for in milliseconds
+	public static double softDropSpeed = Constants.SOFT_DROP_SPEED_DEFAULT; // How
+																			// fast
+																			// soft
+																			// dropping
+																			// is
 	public static int dragSensitivity = Constants.DRAG_SENSITIVITY_DEFAULT;
 	// The sensitivity of the drag gesture
 	public static int textColor = Color.BLACK;
@@ -172,15 +181,15 @@ public abstract class MainGame extends View {
 	}
 
 	public abstract void onTick();
-	
+
 	public abstract void onShapeLocked();
-	
+
 	public abstract void onNewGame();
-	
+
 	public abstract void onScore(int currentDrop);
-	
+
 	public abstract void onGetSettings(SharedPreferences settings);
-	
+
 	public void tick() {
 		if (!lose && !pause && !win) {
 			long temp = System.nanoTime();
@@ -195,11 +204,11 @@ public abstract class MainGame extends View {
 			ghostShape();
 		}
 	}
-	
+
 	public abstract void printAuxText(Canvas canvas);
-	
+
 	public abstract long getHighScore(SharedPreferences settings);
-	
+
 	@Override
 	public void onDraw(Canvas canvas) {
 
@@ -284,10 +293,14 @@ public abstract class MainGame extends View {
 			}
 		}
 
-		drawBoxShape(canvas, holdShape, holdBlocks, holdShapeXStarting + mainFieldShiftX, holdShapeYStarting + mainFieldShiftY);
-		drawBoxShape(canvas, nextShape, nextBlocks, holdShapeXStarting + mainFieldShiftX, nextShapeYStarting + mainFieldShiftY);
-		drawBoxShape(canvas, next2Shape, next2Blocks, holdShapeXStarting + mainFieldShiftX, nextShapeY2Starting + mainFieldShiftY);
-		drawBoxShape(canvas, next3Shape, next3Blocks, holdShapeXStarting + mainFieldShiftX, nextShapeY3Starting + mainFieldShiftY);
+		drawBoxShape(canvas, holdShape, holdBlocks, holdShapeXStarting
+				+ mainFieldShiftX, holdShapeYStarting + mainFieldShiftY);
+		drawBoxShape(canvas, nextShape, nextBlocks, holdShapeXStarting
+				+ mainFieldShiftX, nextShapeYStarting + mainFieldShiftY);
+		drawBoxShape(canvas, next2Shape, next2Blocks, holdShapeXStarting
+				+ mainFieldShiftX, nextShapeY2Starting + mainFieldShiftY);
+		drawBoxShape(canvas, next3Shape, next3Blocks, holdShapeXStarting
+				+ mainFieldShiftX, nextShapeY3Starting + mainFieldShiftY);
 
 		// Displaying the big text if needed
 		// When the game is lost
@@ -301,24 +314,24 @@ public abstract class MainGame extends View {
 				// Change the font settings
 				paint.setColor(Color.RED);
 				// Display and align the needed text
-				canvas.drawText("GAME", width / 2, mainFieldShiftY + length / 3,
-						paint);
-				canvas.drawText("OVER", width / 2,
-						mainFieldShiftY + length * 2 / 3, paint);
+				canvas.drawText("GAME", width / 2,
+						mainFieldShiftY + length / 3, paint);
+				canvas.drawText("OVER", width / 2, mainFieldShiftY + length * 2
+						/ 3, paint);
 				// Revert text settings to normal
 			} else if (win) {
 				// Change the font settings
 				paint.setColor(Color.GREEN);
 				// Display and align the needed text
-				canvas.drawText("FINISH", width / 2, mainFieldShiftY + length / 2,
-						paint);
+				canvas.drawText("FINISH", width / 2, mainFieldShiftY + length
+						/ 2, paint);
 				// Revert text settings to normal
 			} else if (pause) {
 				// Change the font settings
 				paint.setColor(textColor);
 				// Display and align the needed text
-				canvas.drawText("PAUSED", width / 2, mainFieldShiftY + length / 2,
-						paint);
+				canvas.drawText("PAUSED", width / 2, mainFieldShiftY + length
+						/ 2, paint);
 				// Revert text settings to normal
 			}
 			changePaintSettings("big off");
@@ -326,18 +339,20 @@ public abstract class MainGame extends View {
 		invalidate();
 	}
 
-	public void drawBoxShape(Canvas canvas, int targetShape, int[][] targetBlocks, int shiftX, int shiftY) {
+	public void drawBoxShape(Canvas canvas, int targetShape,
+			int[][] targetBlocks, int shiftX, int shiftY) {
 		paint.setColor(chooseColor(targetShape));
 		for (int xx = 0; xx < numberOfHoldShapeWidth; xx++) {
 			for (int yy = 0; yy < numberOfHoldShapeLength; yy++) {
 				if (targetBlocks[xx][yy] == 1) {
-					canvas.drawRect(xx * squareSide + shiftX, yy * squareSide + shiftY,
-									(xx + 1) * squareSide + shiftX, (yy + 1)* squareSide + shiftY, paint);
+					canvas.drawRect(xx * squareSide + shiftX, yy * squareSide
+							+ shiftY, (xx + 1) * squareSide + shiftX, (yy + 1)
+							* squareSide + shiftY, paint);
 				}
 			}
 		}
 	}
-	
+
 	public void changePaintSettings(String setting) {
 		if (setting.equals("info")) {
 			paint.setTextSize((float) (squareSide * textScaleSize));
@@ -377,7 +392,7 @@ public abstract class MainGame extends View {
 		if (startNewGame) {
 			getScreenSize = true;
 		}
-		
+
 		highScore = getHighScore(settings);
 
 		// Get the theme to set the textcolor
@@ -412,7 +427,7 @@ public abstract class MainGame extends View {
 		}
 		return variable;
 	}
-	
+
 	public long getLongFromSettings(long variable, String text,
 			SharedPreferences settings) {
 		try {
@@ -607,7 +622,7 @@ public abstract class MainGame extends View {
 
 			scoring(currentDrop, tSpin);
 			// Scoring System end.
-			
+
 			onShapeLocked();
 			pickShape();
 		} else if (move) {
@@ -813,7 +828,7 @@ public abstract class MainGame extends View {
 		if (addScore > 0) {
 			clearInfo.add("+" + addScore);
 		}
-		
+
 		score = score + addScore;
 		onScore(currentDrop);
 	}
@@ -840,8 +855,7 @@ public abstract class MainGame extends View {
 
 	public abstract void updateHighScore();
 
-	public void editHighScore(SharedPreferences settings,
-			String scoreType) {
+	public void editHighScore(SharedPreferences settings, String scoreType) {
 		if (score > getLongFromSettings(highScore, scoreType, settings)) {
 			SharedPreferences.Editor editor = settings.edit();
 			editor.putString(scoreType, String.valueOf(score));
@@ -1100,7 +1114,8 @@ public abstract class MainGame extends View {
 								gravity = softDropSpeed;
 								softDrop = true;
 								turn = false;
-							} else if (startingY - y > dragSensitivity / 2 & !ignoreInputs) {
+							} else if (startingY - y > dragSensitivity / 2
+									& !ignoreInputs) {
 								startingY = y;
 								gravity = defaultGravity;
 								softDrop = false;
@@ -1190,7 +1205,9 @@ public abstract class MainGame extends View {
 	}
 
 	public void newGame() {
-		updateHighScore();
+		if (!startNewGame) {
+			updateHighScore();
+		}
 		getSettings();
 		// Reset Variables
 		for (int xx = 0; xx < numberOfBlocksWidth; xx++) {
@@ -1237,6 +1254,7 @@ public abstract class MainGame extends View {
 		onNewGame();
 		// Pick the new shape
 		pickShape();
+		startNewGame = false;
 	}
 
 }

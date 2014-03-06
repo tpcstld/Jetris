@@ -15,7 +15,6 @@
     <string name="settings">Settings</string>
     <string name="new_game">New Game</string>
     <string name="about">About Jetris</string>
-    <string name="update_text">If you first installed this game before March 7th, 2014, it is highly recommended that you reset your settings even if you\'ve never changed them. You can do so by going to Settings -> Scroll Down -> Reset All Settings. This message will disappear the next time you start this app.</string>
     <string name="action_pause">Pause</string>
     <string name="action_unpause">Unpause</string>
     <string name="controls_title">Controls</string>

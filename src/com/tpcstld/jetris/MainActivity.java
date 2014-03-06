@@ -1,6 +1,9 @@
 package com.tpcstld.jetris;
 
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -9,9 +12,11 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
-import android.widget.TextView;
+import android.widget.Toast;
 
 public class MainActivity extends Activity {
+
+	Context mContext;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -20,7 +25,8 @@ public class MainActivity extends Activity {
 				.getDefaultSharedPreferences(this);
 		setTheme(Constants.getTheme(settings));
 		setContentView(R.layout.activity_main);
-		removeText();
+		mContext = this;
+		achieveParityWithNewVersion();
 	}
 
 	@Override
@@ -90,20 +96,59 @@ public class MainActivity extends Activity {
 		}
 	}
 
-	public void removeText() {
+	public void achieveParityWithNewVersion() {
 		SharedPreferences settings = PreferenceManager
 				.getDefaultSharedPreferences(this);
 		String resetVersion = settings.getString("resetVersion", "0.0.0");
-		if (resetVersion.equals(Constants.CURRENT_VERSION)) {
-			TextView textBox = (TextView) this.findViewById(R.id.updateInfo);
-			textBox.setText("");
+		if (!resetVersion.equals(Constants.CURRENT_VERSION)) {
+			new AlertDialog.Builder(this)
+					.setTitle("For Returning Players")
+					.setMessage(
+							"Due to the new update, it is highly recommended that you reset your settings even if you've never changed them. Do you wish to reset them now?")
+					.setPositiveButton(android.R.string.yes,
+							new DialogInterface.OnClickListener() {
+								public void onClick(DialogInterface dialog,
+										int which) {
+									SharedPreferences settings = PreferenceManager
+											.getDefaultSharedPreferences(mContext);
+									SharedPreferences.Editor editor = settings
+											.edit();
+									// Changing hold to tap
+									for (String key : Constants.defaultBooleanSettings
+											.keySet()) {
+										editor.putBoolean(
+												key,
+												Constants.defaultBooleanSettings
+														.get(key));
+									}
+									for (String settingName : Constants.defaultSettings
+											.keySet()) {
+										editor.putString(settingName,
+												Constants.defaultSettings
+														.get(settingName));
+									}
+									editor.commit();
+									Toast.makeText(getApplicationContext(),
+											"Settings reset", Toast.LENGTH_LONG)
+											.show();
+								}
+							})
+					.setNegativeButton(android.R.string.cancel,
+							new DialogInterface.OnClickListener() {
+								public void onClick(DialogInterface dialog,
+										int which) {
+									// do nothing
+								}
+							}).show();
 		}
 
 		try {
 			settings.getString(Constants.MARATHON_SCORE, "0");
 		} catch (Exception e) {
-			String marathon = String.valueOf(settings.getInt(Constants.MARATHON_SCORE, 0));
-			String timeAttack = String.valueOf(settings.getInt(Constants.TIME_ATTACK_SCORE, 0));
+			String marathon = String.valueOf(settings.getInt(
+					Constants.MARATHON_SCORE, 0));
+			String timeAttack = String.valueOf(settings.getInt(
+					Constants.TIME_ATTACK_SCORE, 0));
 			SharedPreferences.Editor editor = settings.edit();
 			editor.remove(Constants.MARATHON_SCORE);
 			editor.remove(Constants.TIME_ATTACK_SCORE);
