@@ -15,6 +15,7 @@
     <string name="settings">Settings</string>
     <string name="new_game">New Game</string>
     <string name="about">About Jetris</string>
+    <string name="update_text">If you first installed this game before March 7th, 2014, it is highly recommended that you reset your settings even if you\'ve never changed them. You can do so by going to Settings -> Scroll Down -> Reset All Settings. This message will disappear the next time you start this app.</string>
     <string name="action_pause">Pause</string>
     <string name="action_unpause">Unpause</string>
     <string name="controls_title">Controls</string>
@@ -26,10 +27,8 @@
     <string name="timer_variables_title">Timer Variables</string>
     <string name="sensitivity_title">Sensitivity Variables</string>
     <string name="misc_title">Miscellaneous</string>
-    
     <string name="tap_hold_title">Tap to Hold</string>
     <string name="tap_hold_summary">Current piece is held when the hold box is tapped.</string>
-    
     <string name="tspin_title">T-Spin System</string>
     <string name="tspin_summary">The t-spin recognition system used for scoring.</string>
     <string name="default_grav_title">Base Drop Speed</string>
@@ -39,11 +38,17 @@
     <string name="lines_per_level_title">Lines Per Level</string>
     <string name="lines_per_level_message">The number of lines needed to clear to advance a level.
         \nUnits: Lines
-        \nFrom 1 to Infinity (Default: 10)</string>
-    <string name="gravity_add_per_level_title">Drop Speed per Level</string>
+        \nFrom 1 to 2147483647 (Default: 10)</string>
+    <string name="dropspeed_title">Drop Speed System</string>
+    <string name="gravity_multiply_per_level_title">Geometric Drop Speed per Level</string>
+    <string name="gravity_multiply_per_level_message">The ratio at which the drop speed increases by per level.
+        \nFrom 0.0 to 20.0 (Default: 2)</string>
+    <string name="gravity_add_per_level_title">Linear Drop Speed per Level</string>
     <string name="gravity_add_per_level_message">The speed added to the base drop speed per level.
         \nUnits: Lines/33 Milliseconds
         \nFrom 0.0 to 20.0 (Default: 0.025)</string>
+    <string name="change_slack_length_title">Variable Delay</string>
+    <string name="change_slack_length_summary">Delay decreases once max dropspeed is reached.</string>
     <string name="FPS_title">Frame Rate</string>
     <string name="FPS_message">The frame rate of the game.
         \nNote: A faster frame rate increases the base drop speed of the blocks.
@@ -52,11 +57,11 @@
     <string name="flick_sensitivity_title">Flick Sensitivity</string>
     <string name="flick_sensitivity_message">The sensitivity threshold of the flick gestures.
 		\nUnits: Velocity of Swipe (Pixels/Detection Cycle)
-        \nFrom 1 to Infinity (Default: 30) </string>
+        \nFrom 1 to 2147483647 (Default: 30) </string>
     <string name="slack_length_title">Delay</string>
     <string name="slack_length_message">The delay before a block locks in place.
         \nUnits: Milliseconds
-        \nFrom 0 to Infinity (Default: 1000) </string>
+        \nFrom 0 to 2147483647 (Default: 1000) </string>
     <string name="soft_drop_speed_title">Soft Drop Speed</string>
     <string name="soft_drop_speed_message">The drop speed of the block while soft dropping.
         \nUnits: Lines/Frame
@@ -64,11 +69,11 @@
     <string name="drag_sensitivity_title">Drag Sensitivity</string>
     <string name="drag_sensitivity_message">The length needed to drag before the "drag gesture" is recognized.
         \nUnits: Pixels
-        \nFrom 0 to Infinity (Default: 60) </string>
+        \nFrom 0 to 2147483647 (Default: 60) </string>
     <string name="count_down_time_title">Time Attack</string>
     <string name="count_down_time_message">The starting time of Time Attack.
        	\nUnits: Seconds
-       	\nFrom 0 to Infinity (Default: 120) </string>
+       	\nFrom 0 to 2147483647 (Default: 120) </string>
     <string name="theme_title">Theme</string>
     <string name="theme_summary">App will be restart when you return to the previous screen.</string>
     <string name="dark_background_title">Black Background for Dark Theme</string>

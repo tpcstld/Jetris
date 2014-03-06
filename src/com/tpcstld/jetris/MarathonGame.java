@@ -7,10 +7,12 @@ import android.preference.PreferenceManager;
 
 public class MarathonGame extends MainGame {
 
-	int linesCleared = 0; // The total number of lines cleared
-	int linesClearedFloor = 0;
-	public double gravityAddPerLevel = 0.025;
-	public int linesPerLevel = 10;
+	static int linesCleared = 0; // The total number of lines cleared
+	static int linesClearedFloor = 0;
+	static double gravityAddPerLevel = Constants.GRAVITY_ADD_PER_LEVEL_DEFAULT;
+	static double gravityMultiplyPerLevel = Constants.GRAVITY_MULTIPLY_PER_LEVEL_DEFAULT;
+	static int linesPerLevel = Constants.LINES_PER_LEVEL_DEFAULT;
+	static String dropSpeedMode = Constants.DROP_MODE_DEFAULT;
 	
 	public MarathonGame(Context context) {
 		super(context);
@@ -40,6 +42,7 @@ public class MarathonGame extends MainGame {
 
 	@Override
 	public void onShapeLocked() {
+		System.out.println(gravity + gravityAdd);
 		changeGravity();
 	}
 
@@ -48,7 +51,12 @@ public class MarathonGame extends MainGame {
 			level = level + 1;
 			linesClearedFloor = linesClearedFloor + linesPerLevel;
 			if (gravityAdd < 20) {
-				gravityAdd = level * gravityAddPerLevel;
+				if (dropSpeedMode.equals(Constants.GEOMETRIC_DROP_MODE)) {
+					gravityAdd = defaultGravity
+							* (Math.pow(gravityMultiplyPerLevel, level) - 1);
+				} else if (dropSpeedMode.equals(Constants.LINEAR_DROP_MODE)) {
+					gravityAdd = level * gravityAddPerLevel;
+				}
 			}
 		}
 		auxText = "" + (level + 1);
@@ -75,8 +83,15 @@ public class MarathonGame extends MainGame {
 
 	@Override
 	public void onGetSettings(SharedPreferences settings) {
-		gravityAddPerLevel = getDoubleFromSettings(gravityAddPerLevel,
-				"gravityAddPerLevel", settings);
+		dropSpeedMode = settings.getString("dropSpeedMode", dropSpeedMode);
+		if (dropSpeedMode.equals(Constants.GEOMETRIC_DROP_MODE)) {
+			gravityMultiplyPerLevel = getDoubleFromSettings(
+					gravityMultiplyPerLevel, "gravityMultiplyPerLevel",
+					settings);
+		} else if (dropSpeedMode.equals(Constants.LINEAR_DROP_MODE)) {
+			gravityAddPerLevel = getDoubleFromSettings(gravityAddPerLevel,
+					"gravityAddPerLevel", settings);
+		}
 		linesPerLevel = getIntFromSettings(linesPerLevel, "linesPerLevel",
 				settings);
 	}

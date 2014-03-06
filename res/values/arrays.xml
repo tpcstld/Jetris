@@ -8,5 +8,9 @@
         <item>3-corner T</item>
         <item>Immobile</item>
     </string-array>
+    <string-array name="dropspeed_value">
+        <item>Exponential</item>
+        <item>Linear</item>
+    </string-array>
 
 </resources>

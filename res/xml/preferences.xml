@@ -24,6 +24,20 @@
             android:summary="@string/lines_per_level_message"
             android:title="@string/lines_per_level_title" />
 
+        <com.tpcstld.jetris.CustomListPreference
+            android:defaultValue="Exponential"
+            android:entries="@array/dropspeed_value"
+            android:entryValues="@array/dropspeed_value"
+            android:key="dropSpeedMode"
+            android:title="@string/dropspeed_title" />
+        
+        <com.tpcstld.jetris.TextPreference
+            android:defaultValue="1.38"
+            android:inputType="numberDecimal"
+            android:key="gravityMultiplyPerLevel"
+            android:summary="@string/gravity_multiply_per_level_message"
+            android:title="@string/gravity_multiply_per_level_title" />
+        
         <com.tpcstld.jetris.TextPreference
             android:defaultValue="0.025"
             android:inputType="numberDecimal"

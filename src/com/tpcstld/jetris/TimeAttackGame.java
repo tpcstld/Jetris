@@ -7,7 +7,7 @@ import android.preference.PreferenceManager;
 
 public class TimeAttackGame extends MainGame {
 	
-	public static long countDownTime = 120;
+	public static long countDownTime = Constants.COUNTDOWN_TIME_DEFAULT;
 	static long currentCountDownTime = countDownTime * 1000000000;
 	public TimeAttackGame(Context context) {
 		super(context);

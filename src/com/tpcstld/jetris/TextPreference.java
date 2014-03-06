@@ -62,9 +62,6 @@ public class TextPreference extends DialogPreference {
 
 	public void onDialogClosed(boolean positiveResult) {
 		if (positiveResult) {
-			System.out.println(inputType);
-			System.out.println(InputType.TYPE_NUMBER_FLAG_DECIMAL);
-			System.out.println(InputType.TYPE_CLASS_NUMBER);
 			if (inputType == (InputType.TYPE_CLASS_NUMBER | InputType.TYPE_NUMBER_FLAG_DECIMAL)) {
 				try {
 					double temp = Double
@@ -79,10 +76,8 @@ public class TextPreference extends DialogPreference {
 					}
 				}
 			} else if (inputType == (InputType.TYPE_CLASS_NUMBER | InputType.TYPE_NUMBER_VARIATION_NORMAL)) {
-				System.out.println(input.getText().toString());
 				try {
 					int temp = Integer.parseInt(input.getText().toString());
-					System.out.println(temp);
 					temp = Math.min(temp, Integer.MAX_VALUE);
 					mNewValue = String.valueOf(temp);
 				} catch (NumberFormatException e) {

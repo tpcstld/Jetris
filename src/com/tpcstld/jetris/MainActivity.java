@@ -9,6 +9,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.TextView;
 
 public class MainActivity extends Activity {
 
@@ -19,6 +20,7 @@ public class MainActivity extends Activity {
 				.getDefaultSharedPreferences(this);
 		setTheme(Constants.getTheme(settings));
 		setContentView(R.layout.activity_main);
+		removeText();
 	}
 
 	@Override
@@ -87,5 +89,18 @@ public class MainActivity extends Activity {
 		} else {
 			button.setEnabled(true);
 		}
+	}
+	
+	public void removeText() {
+		SharedPreferences settings = PreferenceManager
+				.getDefaultSharedPreferences(this);
+		String resetVersion = settings.getString("resetVersion", "0.0.0");
+		if (resetVersion.equals(Constants.CURRENT_VERSION)) {
+			TextView textBox = (TextView) this.findViewById(R.id.updateInfo);
+			textBox.setText("");
+		}
+		SharedPreferences.Editor editor = settings.edit();
+		editor.putString("resetVersion", Constants.CURRENT_VERSION);
+		editor.commit();
 	}
 }

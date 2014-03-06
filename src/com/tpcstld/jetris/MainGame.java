@@ -31,16 +31,16 @@ public abstract class MainGame extends View {
 	static Context mContext;
 
 	// EXTERNAL OPTIONS:
-	public static boolean tapToHold = true;
-	public static String tSpinMode = "3-corner T";
-	public static double defaultGravity = 0.033;
+	public static boolean tapToHold = Constants.TAP_TO_HOLD_DEFAULT;
+	public static String tSpinMode = Constants.TSPIN_MODE_DEFAULT;
+	public static double defaultGravity = Constants.DEFAULT_GRAVITY_DEFAULT;
 	// The default gravity of the game value
-	public static int flickSensitivity = 30;
-	// The Sensitivity is the flick gesture
-	public static long slackLength = 1000000000; // How long the stack goes on
+	public static int flickSensitivity = Constants.FLICK_SENSITIVITY_DEFAULT;
+	// The Sensitivity is the flick gesture 
+	public static long slackLength = Constants.SLACK_LENGTH_DEFAULT * 1000000; // How long the stack goes on
 													// for in milliseconds
-	public static double softDropSpeed = 0.45; // How fast soft dropping is
-	public static int dragSensitivity = 100;
+	public static double softDropSpeed = Constants.SOFT_DROP_SPEED_DEFAULT; // How fast soft dropping is
+	public static int dragSensitivity = Constants.DRAG_SENSITIVITY_DEFAULT;
 	// The sensitivity of the drag gesture
 	public static int textColor = Color.BLACK;
 
@@ -158,10 +158,8 @@ public abstract class MainGame extends View {
 	// Loading the game
 	public MainGame(Context context) {
 		super(context);
-		SharedPreferences settings = PreferenceManager
-				.getDefaultSharedPreferences(context);
-
-		getSettings(settings);
+		mContext = context;
+		getSettings();
 		gravity = defaultGravity;
 		mContext = context;
 		// Setting the orange color since there is no default
@@ -334,13 +332,6 @@ public abstract class MainGame extends View {
 		for (int xx = 0; xx < numberOfHoldShapeWidth; xx++) {
 			for (int yy = 0; yy < numberOfHoldShapeLength; yy++) {
 				if (targetBlocks[xx][yy] == 1) {
-					/*canvas.drawRect(xx * squareSide + holdShapeXStarting
-							+ mainFieldShiftX, yy * squareSide
-							+ nextShapeYStarting + mainFieldShiftY, xx
-							* squareSide + holdShapeXStarting + squareSide
-							+ mainFieldShiftX,
-							yy * squareSide + nextShapeYStarting + squareSide
-									+ mainFieldShiftY, paint);*/
 					canvas.drawRect(xx * squareSide + shiftX, yy * squareSide + shiftY,
 									(xx + 1) * squareSide + shiftX, (yy + 1)* squareSide + shiftY, paint);
 				}
@@ -368,7 +359,9 @@ public abstract class MainGame extends View {
 		}
 	}
 
-	public void getSettings(SharedPreferences settings) {
+	public void getSettings() {
+		SharedPreferences settings = PreferenceManager
+				.getDefaultSharedPreferences(mContext);
 		tapToHold = settings.getBoolean("tapToHold", tapToHold);
 		tSpinMode = settings.getString("tSpinMode", tSpinMode);
 		defaultGravity = getDoubleFromSettings(defaultGravity,
@@ -445,6 +438,7 @@ public abstract class MainGame extends View {
 			updateBoxShape(nextBlocks, nextShape);
 			updateBoxShape(next2Blocks, next2Shape);
 			updateBoxShape(next3Blocks, next3Shape);
+			slackOnce = false;
 			shapeDown();
 			holdOnce = false;
 		}
@@ -1187,6 +1181,7 @@ public abstract class MainGame extends View {
 
 	public void newGame() {
 		updateHighScore();
+		getSettings();
 		// Reset Variables
 		for (int xx = 0; xx < numberOfBlocksWidth; xx++) {
 			for (int yy = 0; yy < numberOfBlocksLength; yy++) {

@@ -1,9 +1,13 @@
 1.0.4
+	If you first installed this game before March 7th, 2014, it is highly recommended that you reset your settings even if you've never changed them. You can do so by going to Settings -> Scroll Down -> Reset All Settings.
 	You can now tap the hold box to hold your current Tetrimino.
 		You are able to turn this feature off in the settings.
 	Dragging up now cancels soft dropping.
 	Jetris now follows the Super Rotation System exactly!
 	Jetris now implements Infinity exactly!
+	Jetris now implements an exponential speed curve.
+		You can choose between this system and the original (linear) system in the settings.
+		As always, you are able to customize the curve.
 	Jetris now has the 3-corner T t-spin system.
 		You can choose between this system and the original (Immobile) system in the settings.
 	"T-spin" have been renamed to "Twist" to account for spins that are not with the T-Tetrimino in Immobile mode.
