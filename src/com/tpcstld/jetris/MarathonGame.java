@@ -108,9 +108,7 @@ public class MarathonGame extends MainGame {
 				settings);
 		startingLevel = getIntFromSettings(startingLevel, "startingLevel", settings) - 1;
 		startingLevel = Math.max(0, startingLevel);
-		if (linesPerLevel < 1) {
-			linesPerLevel = 1;
-		}
+		linesPerLevel = Math.max(1, linesPerLevel);
 	}
 
 }

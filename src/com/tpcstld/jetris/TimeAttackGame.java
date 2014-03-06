@@ -31,8 +31,8 @@ public class TimeAttackGame extends MainGame {
 	}
 
 	@Override
-	public int getHighScore(SharedPreferences settings) {
-		return settings.getInt(Constants.TIME_ATTACK_SCORE, 0);
+	public long getHighScore(SharedPreferences settings) {
+		return getLongFromSettings(highScore, Constants.TIME_ATTACK_SCORE, settings);
 	}
 
 	@Override
@@ -48,6 +48,7 @@ public class TimeAttackGame extends MainGame {
 
 	@Override
 	public void onNewGame() {
+		level = 0;
 		currentCountDownTime = countDownTime * 1000000000 + FPS;
 		countDown();
 	}

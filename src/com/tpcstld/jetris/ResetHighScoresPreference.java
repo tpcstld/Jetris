@@ -57,10 +57,10 @@ public class ResetHighScoresPreference extends DialogPreference {
 			SharedPreferences.Editor editor = settings.edit();
 
 			if (marathonCB.isChecked()) {
-				editor.putInt(Constants.MARATHON_SCORE, 0);
+				editor.putString(Constants.MARATHON_SCORE, "0");
 			}
 			if (timeAttackCB.isChecked()) {
-				editor.putInt(Constants.TIME_ATTACK_SCORE, 0);
+				editor.putString(Constants.TIME_ATTACK_SCORE, "0");
 			}
 			editor.commit();
 		}

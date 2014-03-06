@@ -133,8 +133,8 @@ public abstract class MainGame extends View {
 	// Whether or not a clear was considered to be "hard"
 	static boolean lastDifficult = false;
 	// Whether or not the last clear was considered to be "hard"
-	static int score = 0; // The current score
-	static int highScore = 0; // The highscore of the current gamemode
+	static long score = 0; // The current score
+	static long highScore = 0; // The highscore of the current gamemode
 	static int level = 0; // The current level (marathon mode) level 0 = level 1
 							// displayed
 	static String lastMove = "Nothing";
@@ -159,17 +159,16 @@ public abstract class MainGame extends View {
 	public MainGame(Context context) {
 		super(context);
 		mContext = context;
-		getSettings();
-		gravity = defaultGravity;
-		mContext = context;
 		// Setting the orange color since there is no default
 		ORANGE = getResources().getColor(R.color.orange);
 		// Create the object to receive touch input
 		setOnTouchListener(getOnTouchListener());
 		if (startNewGame) {
 			newGame();
+		} else {
+			getSettings();
 		}
-
+		gravity = defaultGravity;
 	}
 
 	public abstract void onTick();
@@ -199,7 +198,7 @@ public abstract class MainGame extends View {
 	
 	public abstract void printAuxText(Canvas canvas);
 	
-	public abstract int getHighScore(SharedPreferences settings);
+	public abstract long getHighScore(SharedPreferences settings);
 	
 	@Override
 	public void onDraw(Canvas canvas) {
@@ -406,6 +405,18 @@ public abstract class MainGame extends View {
 			SharedPreferences settings) {
 		try {
 			return Double.parseDouble(settings.getString(text,
+					String.valueOf(variable)));
+		} catch (Exception e) {
+			System.err.println("Error getting " + text
+					+ ". Reverting to default value.");
+		}
+		return variable;
+	}
+	
+	public long getLongFromSettings(long variable, String text,
+			SharedPreferences settings) {
+		try {
+			return Long.parseLong(settings.getString(text,
 					String.valueOf(variable)));
 		} catch (Exception e) {
 			System.err.println("Error getting " + text
@@ -751,7 +762,7 @@ public abstract class MainGame extends View {
 		}
 
 		// Scoring System
-		int addScore = 0;
+		long addScore = 0;
 
 		if (currentDrop > 0) {
 			lastDifficult = difficult;
@@ -784,16 +795,15 @@ public abstract class MainGame extends View {
 			addScore = 800;
 			difficult = true;
 		}
-		addScore = addScore * (level + 1);
 		if (lastDifficult & difficult & currentDrop > 0) {
-			addScore = (int) (addScore * 1.5);
+			addScore = (long) (addScore * 1.5);
 			clearInfo.add(Constants.backToBackText);
 		}
 
 		if (currentDrop > 0) {
 			if (combo > 0) {
 				clearInfo.add(combo + " Chain");
-				addScore = addScore + 50 * combo * (level + 1);
+				addScore = addScore + 50 * combo;
 			}
 			combo = combo + 1;
 		} else {
@@ -832,9 +842,9 @@ public abstract class MainGame extends View {
 
 	public void editHighScore(SharedPreferences settings,
 			String scoreType) {
-		if (score > settings.getInt(scoreType, 0)) {
+		if (score > getLongFromSettings(highScore, scoreType, settings)) {
 			SharedPreferences.Editor editor = settings.edit();
-			editor.putInt(scoreType, score);
+			editor.putString(scoreType, String.valueOf(score));
 			editor.commit();
 			highScore = score;
 		}
@@ -1216,7 +1226,6 @@ public abstract class MainGame extends View {
 		lastMove = "Nothing";
 		gravityTicker = 0;
 		gravityAdd = 0;
-		level = 0;
 		clearInfo.clear();
 		difficult = false;
 		lastDifficult = false;

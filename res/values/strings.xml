@@ -65,8 +65,8 @@
     <string name="slack_length_message">The delay before a block locks in place.
         \nUnits: Milliseconds
         \nFrom 0 to 2147483647 (Default: 1000) </string>
-    <string name="soft_drop_speed_title">Soft Drop Speed</string>
-    <string name="soft_drop_speed_message">The drop speed of the block while soft dropping.
+    <string name="soft_drop_speed_title">Base Soft Drop Speed</string>
+    <string name="soft_drop_speed_message">The base drop speed of the block while soft dropping.
         \nUnits: Lines/Frame
         \nFrom 0.0 to 20.0 (Default: 0.45) </string>
     <string name="drag_sensitivity_title">Drag Sensitivity</string>

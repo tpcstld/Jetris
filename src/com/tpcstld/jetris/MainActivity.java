@@ -79,18 +79,17 @@ public class MainActivity extends Activity {
 		Intent intent = new Intent(this, AboutActivity.class);
 		startActivity(intent);
 	}
-	
-	protected void onResume()
-	{
+
+	protected void onResume() {
 		super.onResume();
-		Button button = (Button)findViewById(R.id.loadgame);
+		Button button = (Button) findViewById(R.id.loadgame);
 		if (MainGame.gameMode.equals("")) {
 			button.setEnabled(false);
 		} else {
 			button.setEnabled(true);
 		}
 	}
-	
+
 	public void removeText() {
 		SharedPreferences settings = PreferenceManager
 				.getDefaultSharedPreferences(this);
@@ -98,6 +97,20 @@ public class MainActivity extends Activity {
 		if (resetVersion.equals(Constants.CURRENT_VERSION)) {
 			TextView textBox = (TextView) this.findViewById(R.id.updateInfo);
 			textBox.setText("");
+		}
+
+		try {
+			settings.getString(Constants.MARATHON_SCORE, "0");
+		} catch (Exception e) {
+			String marathon = String.valueOf(settings.getInt(Constants.MARATHON_SCORE, 0));
+			String timeAttack = String.valueOf(settings.getInt(Constants.TIME_ATTACK_SCORE, 0));
+			SharedPreferences.Editor editor = settings.edit();
+			editor.remove(Constants.MARATHON_SCORE);
+			editor.remove(Constants.TIME_ATTACK_SCORE);
+			editor.commit();
+			editor.putString(Constants.MARATHON_SCORE, marathon);
+			editor.putString(Constants.TIME_ATTACK_SCORE, timeAttack);
+			editor.commit();
 		}
 		SharedPreferences.Editor editor = settings.edit();
 		editor.putString("resetVersion", Constants.CURRENT_VERSION);
