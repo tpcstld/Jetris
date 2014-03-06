@@ -5,9 +5,10 @@
 	Dragging up now cancels soft dropping.
 	Jetris now follows the Super Rotation System exactly!
 	Jetris now implements Infinity exactly!
-	Jetris now implements an exponential speed curve.
+	Jetris now implements an exponential speed curve in Marathon Mode.
 		You can choose between this system and the original (linear) system in the settings.
 		As always, you are able to customize the curve.
+	You can now choose which level to start at in Marathon Mode.
 	Jetris now has the 3-corner T t-spin system.
 		You can choose between this system and the original (Immobile) system in the settings.
 	"T-spin" have been renamed to "Twist" to account for spins that are not with the T-Tetrimino in Immobile mode.
