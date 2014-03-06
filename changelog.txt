@@ -2,7 +2,7 @@
 	If you first installed this game before March 7th, 2014, it is highly recommended that you reset your settings even if you've never changed them. You can do so by going to Settings -> Scroll Down -> Reset All Settings.
 	You can now tap the hold box to hold your current Tetrimino.
 		You are able to turn this feature off in the settings.
-	Dragging up now cancels soft dropping.
+	Dragging up now cancels soft dropping. 
 	Jetris now follows the Super Rotation System exactly!
 	Jetris now implements Infinity exactly!
 	Jetris now implements an exponential speed curve in Marathon Mode.
