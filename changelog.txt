@@ -23,6 +23,7 @@
 	Improved performance for loading the game.
 	Default "Default Gravity" has been adjusted to 0.033. 
 		You may want to change this setting manually (or press reset all settings).
+	Reverted setting layout for integers.
 	Fixed bug: Some settings are able to be changed such that it exceeds the cap.
 	Fixed bug: Low timing resolution causing Tetriminos to fall erratically.
 	Fixed bug: First block falling faster than normal on new game. 

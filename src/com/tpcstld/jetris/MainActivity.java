@@ -104,7 +104,7 @@ public class MainActivity extends Activity {
 			new AlertDialog.Builder(this)
 					.setTitle("For Returning Players")
 					.setMessage(
-							"Due to the new update, it is highly recommended that you reset your settings even if you've never changed them. Do you wish to reset them now?")
+							"Due to the new update, it is highly recommended that you reset your settings even if you've never changed them. \nDo you wish to reset them now?")
 					.setPositiveButton(android.R.string.yes,
 							new DialogInterface.OnClickListener() {
 								public void onClick(DialogInterface dialog,

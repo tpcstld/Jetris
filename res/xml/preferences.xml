@@ -83,13 +83,13 @@
             android:title="@string/slack_length_title" />
     </PreferenceCategory>
     <PreferenceCategory android:title="@string/sensitivity_title" >
-        <com.tpcstld.jetris.NumberPickerPreference
+        <com.tpcstld.jetris.TextPreference
             android:defaultValue="30"
             android:inputType="number"
             android:key="flickSensitivity"
             android:summary="@string/flick_sensitivity_message"
             android:title="@string/flick_sensitivity_title" />
-        <com.tpcstld.jetris.NumberPickerPreference
+        <com.tpcstld.jetris.TextPreference
             android:defaultValue="60"
             android:inputType="number"
             android:key="dragSensitivity"
