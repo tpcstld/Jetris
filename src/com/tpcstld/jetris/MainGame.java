@@ -856,7 +856,7 @@ public abstract class MainGame extends View {
 	public abstract void updateHighScore();
 
 	public void editHighScore(SharedPreferences settings, String scoreType) {
-		if (score > getLongFromSettings(highScore, scoreType, settings)) {
+		if (score > getLongFromSettings(-1, scoreType, settings)) {
 			SharedPreferences.Editor editor = settings.edit();
 			editor.putString(scoreType, String.valueOf(score));
 			editor.commit();

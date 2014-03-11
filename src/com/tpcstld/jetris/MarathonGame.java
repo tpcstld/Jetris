@@ -38,12 +38,11 @@ public class MarathonGame extends MainGame {
 
 	@Override
 	public long getHighScore(SharedPreferences settings) {
-		return getLongFromSettings(highScore, Constants.MARATHON_SCORE, settings);
+		return getLongFromSettings(-1, Constants.MARATHON_SCORE, settings);
 	}
 
 	@Override
 	public void onShapeLocked() {
-		System.out.println(gravity + gravityAdd);
 		changeGravity();
 	}
 

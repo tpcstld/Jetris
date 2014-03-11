@@ -141,9 +141,9 @@ public class MainActivity extends Activity {
 								}
 							}).show();
 		}
-
+		
 		try {
-			settings.getString(Constants.MARATHON_SCORE, "0");
+			settings.getString(Constants.MARATHON_SCORE, "-1");
 		} catch (Exception e) {
 			String marathon = String.valueOf(settings.getInt(
 					Constants.MARATHON_SCORE, 0));

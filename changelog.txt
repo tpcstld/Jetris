@@ -1,3 +1,5 @@
+1.0.4a
+	Fixed a bug where highscores would not save for a new install.
 1.0.4
 	If you first installed this game before March 7th, 2014, it is highly recommended that you reset your settings even if you've never changed them. You can do so by going to Settings -> Scroll Down -> Reset All Settings.
 	You can now tap the hold box to hold your current Tetrimino.

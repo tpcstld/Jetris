@@ -32,7 +32,7 @@ public class TimeAttackGame extends MainGame {
 
 	@Override
 	public long getHighScore(SharedPreferences settings) {
-		return getLongFromSettings(highScore, Constants.TIME_ATTACK_SCORE, settings);
+		return getLongFromSettings(-1, Constants.TIME_ATTACK_SCORE, settings);
 	}
 
 	@Override
