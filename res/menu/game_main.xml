@@ -4,13 +4,11 @@
         android:id="@+id/newgame"
         android:orderInCategory="0"
         android:showAsAction="never"
-        android:title="@string/new_game"
-        android:onClick="newGame"/>
+        android:title="@string/new_game"/>
     <item
         android:id="@+id/pause"
         android:orderInCategory="1"
         android:showAsAction="never"
-        android:title="@string/action_pause"
-        android:onClick="pauseGame"/>
+        android:title="@string/action_pause"/>
 
 </menu>

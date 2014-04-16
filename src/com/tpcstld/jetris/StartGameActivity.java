@@ -88,25 +88,24 @@ public class StartGameActivity extends Activity {
 	public boolean onOptionsItemSelected(MenuItem item) {
 		switch (item.getItemId()) {
 		case android.R.id.home:
-			// This ID represents the Home or Up button. In the case of this
-			// activity, the Up button is shown. Use NavUtils to allow users
-			// to navigate up one level in the application structure. For
-			// more details, see the Navigation pattern on Android Design:
-			//
-			// http://developer.android.com/design/patterns/navigation.html#up-vs-back
-			//
 			NavUtils.navigateUpFromSameTask(this);
+			return true;
+		case R.id.newgame:
+			newGame();
+			return true;
+		case R.id.pause:
+			pauseGame();
 			return true;
 		}
 		return super.onOptionsItemSelected(item);
 	}
 
-	public void pauseGame(MenuItem item) {
+	public void pauseGame() {
 		mainView.pauseGame(!MainGame.pause);
 		updatePauseMessage();
 	}
 
-	public void newGame(MenuItem item) {
+	public void newGame() {
 		mainView.newGame();
 		updatePauseMessage();
 	}
